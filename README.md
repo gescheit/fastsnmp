@@ -23,3 +23,8 @@ host=127.0.0.1 oid=ifDescr.1 value=lo
 host=127.0.0.1 oid=ifInOctets.2 value=1397428486
 host=127.0.0.1 oid=ifDescr.2 value=eth0
 ```
+Another python SNMP libraries:
+
+* [PySNMP](http://pysnmp.sourceforge.net/) - very good SNMP library
+* [libsnmp](https://pypi.python.org/pypi/libsnmp) - SNMP coder/decoder (abandoned project)
+* [Bindings to Net-SNMP](http://net-snmp.sourceforge.net/wiki/index.php/Python_Bindings)
