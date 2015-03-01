@@ -7,8 +7,10 @@ from Cython.Distutils import build_ext
 classifiers = [
     'Development Status :: 4 - Beta',
     'Environment :: Console',
-    'Operating System :: Linux',
-    'Programming Language :: Python',
+    'Operating System :: POSIX :: Linux',
+    'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+    'Programming Language :: Python :: 3 :: Only',
+    'Topic :: System :: Networking :: Monitoring',
 ],
 
 cmdclass = {}
