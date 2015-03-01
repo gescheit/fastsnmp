@@ -1,4 +1,6 @@
+# cython: embedsignature=True
 # cython: language_level=3
+# adds doc-strings for sphinx
 # -*- coding: utf-8 -*-
 # based on https://pypi.python.org/pypi/libsnmp/
 import binascii
