@@ -16,13 +16,12 @@ from fastsnmp import snmp_parser
 from time import time
 
 DEBUG = False
-logging.basicConfig(format='%(asctime)s.%(msecs)d %(module)s:%(lineno)d :%(levelname)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG)
+logger = logging.getLogger('fastsnmp.snmp_poller')
 MAX_SOCKETS_COUNT = 100
 
 
 def make_base_reqid(value, mask_len):
-    """
-    Return value with last set_len numbers set to zero
+    """Return value with last set_len numbers set to zero
 
     :param value: target value
     :param mask_len: length of mask
@@ -30,7 +29,6 @@ def make_base_reqid(value, mask_len):
     :type mask_len: int
     :return: value
     :rtype: int
-
     :Example:
     >>> make_base_reqid(123456789, 3)
     123456000
@@ -80,7 +78,7 @@ def poller(hosts, oids_groups, community):
         try:
             host_ip = socket.gethostbyname(host)  # TODO: bottleneck
         except socket.gaierror:
-            logging.warning("unable to resolve %s. skiping this host" % host)
+            logger.warning("unable to resolve %s. skiping this host" % host)
             bad_hosts.append(host)
             continue
         target_info[host_ip] = host
@@ -124,7 +122,7 @@ def poller(hosts, oids_groups, community):
                         pending_query[(host, pdudata_reqid)] = time()
 
                         if DEBUG:
-                            logging.debug('sendto %s %s reqid=%s' % (host, oids_to_poll, pdudata_reqid))
+                            logger.debug('sendto %s %s reqid=%s' % (host, oids_to_poll, pdudata_reqid))
                         job_queue.task_done()
                     if not job_queue.empty():
                         fdfmt = fdfmt | select.EPOLLOUT
@@ -135,9 +133,9 @@ def poller(hosts, oids_groups, community):
                     host_ip = remotehost[0]
                     pdudata_reqid, error_status, error_index, varBindList = snmp_parser.msg_decode(data)
                     if error_status:
-                        logging.error('%s get error_status %s at %s' % (host_ip, error_status, error_index))
+                        logger.error('%s get error_status %s at %s' % (host_ip, error_status, error_index))
                     if DEBUG:
-                        logging.debug('%s recv reqid=%s' % (host_ip, pdudata_reqid))
+                        logger.debug('%s recv reqid=%s' % (host_ip, pdudata_reqid))
                     oids_to_poll, main_oids = global_target_varbinds[pdudata_reqid]
                     try:
                         del pending_query[(host_ip, pdudata_reqid)]
@@ -157,7 +155,7 @@ def poller(hosts, oids_groups, community):
                                 break
                         if not found:
                             if DEBUG:
-                                logging.debug('skip %s %s=%s, reqid=%s. Not found in %s' % (host_ip, oid, value, pdudata_reqid, main_oids))
+                                logger.debug('skip %s %s=%s, reqid=%s. Not found in %s' % (host_ip, oid, value, pdudata_reqid, main_oids))
                             intrested_oids = False
                             break
                     base_req_id = make_base_reqid(pdudata_reqid, reqid_offset_len)
@@ -165,7 +163,7 @@ def poller(hosts, oids_groups, community):
                         oids_to_poll = []
                         new_req_id = base_req_id + int(str(hash(index_part))[-reqid_offset_len:])
                         if DEBUG:
-                            logging.debug('new_req_id = %s' % new_req_id)
+                            logger.debug('new_req_id = %s' % new_req_id)
                         for target_oid in main_oids:
                             new_target_oid = "%s.%s" % (target_oid, index_part)
                             oids_to_poll.append(new_target_oid)
@@ -174,11 +172,11 @@ def poller(hosts, oids_groups, community):
                         job_queue.put((host_ip, new_req_id))
                     else:
                         if DEBUG:
-                            logging.error('found not intrested in oid=%s host=%s' % (oid, host_ip))
+                            logger.error('found not intrested in oid=%s host=%s' % (oid, host_ip))
 
                     epoll.modify(fileno, select.EPOLLOUT | select.EPOLLIN)
                 elif event & select.EPOLLERR:
-                    logging.critical('socket error')
+                    logger.critical('socket error')
                     raise
             if not events and job_queue.empty() and not pending_query:
                 break
@@ -189,14 +187,14 @@ def poller(hosts, oids_groups, community):
                 for query, query_time in pending_query.items():
                     if cur_time - query_time > check_timeout:
                         timeouted_querys.append(query)
-                        logging.info('timeout %s %s' % (query))
+                        logger.info('timeout %s %s' % (query))
                 for timeouted_query in timeouted_querys:
                     if timeouted_query not in retried_req or retried_req[timeouted_query] < check_retry:
-                        logging.debug('resend %s %s' % (timeouted_query))
+                        logger.debug('resend %s %s' % (timeouted_query))
                         job_queue.put(timeouted_query)
                         retried_req[timeouted_query] += 1
                     else:
-                        logging.warning('stop timeout %s %s' % (timeouted_query))
+                        logger.warning('stop timeout %s %s' % (timeouted_query))
                     del pending_query[timeouted_query]
             if not job_queue.empty():
                 sockets_write_count = min(job_queue.qsize(), len(socket_map))
