@@ -1,6 +1,8 @@
 # fastsnmp
 SNMP poller oriented to poll bunch of hosts in short time. Package include poller and SNMP coder/encoder library.
 
+[Reference manual] (http://fastsnmp.readthedocs.org/)
+
 Example:
 ```python
 from fastsnmp import snmp_poller
