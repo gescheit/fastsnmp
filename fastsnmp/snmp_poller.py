@@ -88,7 +88,7 @@ def poller(hosts, oids_groups, community):
             if host in bad_hosts:
                 continue
             host_ip = target_info_r[host]
-            job_queue.put((target_info_r[host], reqid))
+            job_queue.put((host_ip, reqid))
 
     # preparation of sockets
     socket_map = {}
