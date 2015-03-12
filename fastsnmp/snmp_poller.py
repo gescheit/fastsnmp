@@ -194,7 +194,7 @@ def poller(hosts, oids_groups, community):
                         job_queue.put(timeouted_query)
                         retried_req[timeouted_query] += 1
                     else:
-                        logger.warning('stop timeout %s %s' % (timeouted_query))
+                        logger.warning("%s SNMP query timeout for OID's: %s", target_info[timeouted_query[0]], global_target_varbinds[timeouted_query[1]])
                     del pending_query[timeouted_query]
             if not job_queue.empty():
                 sockets_write_count = min(job_queue.qsize(), len(socket_map))
