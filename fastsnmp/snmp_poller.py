@@ -78,22 +78,22 @@ def poller(hosts, oids_groups, community):
         try:
             host_ip = socket.gethostbyname(host)  # TODO: bottleneck
         except socket.gaierror:
-            logger.warning("unable to resolve %s. skiping this host" % host)
+            logger.error("unable to resolve %s. skiping this host" % host)
             bad_hosts.append(host)
             continue
         target_info[host_ip] = host
         target_info_r[host] = host_ip
-    for bad_host in bad_hosts:
-        hosts.remove(bad_host)
     for reqid in global_target_varbinds.keys():
         for host in hosts:
+            if host in bad_hosts:
+                continue
             host_ip = target_info_r[host]
             job_queue.put((target_info_r[host], reqid))
 
     # preparation of sockets
     socket_map = {}
     epoll = select.epoll()
-    socket_count = min((MAX_SOCKETS_COUNT, len(hosts)))
+    socket_count = min((MAX_SOCKETS_COUNT, len(hosts) - len(bad_hosts)))
     for _ in range(socket_count):
         new_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         new_sock.bind(('0.0.0.0', 0))
