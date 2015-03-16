@@ -172,7 +172,7 @@ def poller(hosts, oids_groups, community):
                         job_queue.put((host_ip, new_req_id))
                     else:
                         if DEBUG:
-                            logger.error('found not intrested in oid=%s host=%s' % (oid, host_ip))
+                            logger.error('found not interested in oid=%s host=%s' % (oid, host_ip))
 
                     epoll.modify(fileno, select.EPOLLOUT | select.EPOLLIN)
                 elif event & select.EPOLLERR:
