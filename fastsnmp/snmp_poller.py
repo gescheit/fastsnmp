@@ -78,7 +78,7 @@ def poller(hosts, oids_groups, community):
         try:
             host_ip = socket.gethostbyname(host)  # TODO: bottleneck
         except socket.gaierror:
-            logger.error("unable to resolve %s. skiping this host" % host)
+            logger.error("unable to resolve %s. skipping this host" % host)
             bad_hosts.append(host)
             continue
         target_info[host_ip] = host
