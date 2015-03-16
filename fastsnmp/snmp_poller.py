@@ -141,10 +141,10 @@ def poller(hosts, oids_groups, community):
                         del pending_query[(host_ip, pdudata_reqid)]
                     except KeyError:
                         continue  # dup
-                    intrested_oids = True
+                    interested_oids = True
                     for oid, value in varBindList:
                         if value is None:
-                            intrested_oids = False
+                            interested_oids = False
                             break
                         found = False
                         for main_oid in main_oids:
@@ -156,10 +156,10 @@ def poller(hosts, oids_groups, community):
                         if not found:
                             if DEBUG:
                                 logger.debug('skip %s %s=%s, reqid=%s. Not found in %s' % (host_ip, oid, value, pdudata_reqid, main_oids))
-                            intrested_oids = False
+                            interested_oids = False
                             break
                     base_req_id = make_base_reqid(pdudata_reqid, reqid_offset_len)
-                    if intrested_oids:
+                    if interested_oids:
                         oids_to_poll = []
                         new_req_id = base_req_id + int(str(hash(index_part))[-reqid_offset_len:])
                         if DEBUG:
