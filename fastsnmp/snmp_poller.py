@@ -190,7 +190,7 @@ def poller(hosts, oids_groups, community):
                         logger.info('timeout %s %s' % (query))
                 for timeouted_query in timeouted_querys:
                     if timeouted_query not in retried_req or retried_req[timeouted_query] < check_retry:
-                        logger.debug('resend %s %s' % (timeouted_query))
+                        logger.debug('resend %s %s' % timeouted_query)
                         job_queue.put(timeouted_query)
                         retried_req[timeouted_query] += 1
                     else:
