@@ -131,7 +131,7 @@ def poller(hosts, oids_groups, community):
                 elif event & select.EPOLLIN:
                     data, remotehost = socket_map[fileno].recvfrom(socksize)
                     host_ip = remotehost[0]
-                    pdudata_reqid, error_status, error_index, varBindList = snmp_parser.msg_decode(data)
+                    pdudata_reqid, error_status, error_index, var_bind_list = snmp_parser.msg_decode(data)
                     if error_status:
                         logger.error('%s get error_status %s at %s' % (host_ip, error_status, error_index))
                     if DEBUG:
@@ -142,7 +142,7 @@ def poller(hosts, oids_groups, community):
                     except KeyError:
                         continue  # dup
                     interested_oids = True
-                    for oid, value in varBindList:
+                    for oid, value in var_bind_list:
                         if value is None:
                             interested_oids = False
                             break
