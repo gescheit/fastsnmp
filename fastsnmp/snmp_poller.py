@@ -109,13 +109,12 @@ def poller(hosts, oids_groups, community):
                     fdfmt = select.EPOLLIN
                     if not job_queue.empty():
                         host, pdudata_reqid = job_queue.get()
-                        if pdudata_reqid:
-                            oids_to_poll, main_oids = global_target_varbinds[pdudata_reqid]
-                            if pdudata_reqid in reqid_to_msg:
-                                message = reqid_to_msg[pdudata_reqid]
-                            else:
-                                message = snmp_parser.msg_encode(pdudata_reqid, community, oids_to_poll, max_repetitions=20)
-                                reqid_to_msg[pdudata_reqid] = message
+                        oids_to_poll, main_oids = global_target_varbinds[pdudata_reqid]
+                        if pdudata_reqid in reqid_to_msg:
+                            message = reqid_to_msg[pdudata_reqid]
+                        else:
+                            message = snmp_parser.msg_encode(pdudata_reqid, community, oids_to_poll, max_repetitions=20)
+                            reqid_to_msg[pdudata_reqid] = message
                         socket_map[fileno].sendto(message, (host, 161))
                         pending_querys[host].append(pdudata_reqid)
 
