@@ -176,7 +176,7 @@ def poller(hosts, oids_groups, community):
                     epoll.modify(fileno, select.EPOLLOUT | select.EPOLLIN)
                 elif event & select.EPOLLERR:
                     logger.critical('socket error')
-                    raise
+                    raise Exception('epoll error')
             if not events and job_queue.empty() and not pending_query:
                 break
 
