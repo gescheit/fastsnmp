@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import unittest
-import snmp_parser
+from fastsnmp import snmp_parser
 
 
 class TestSnmpParser(unittest.TestCase):
