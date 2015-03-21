@@ -147,7 +147,7 @@ def poller(hosts, oids_groups, community):
                             break
                         found = False
                         for main_oid in main_oids:
-                            if oid.startswith(main_oid):
+                            if oid.startswith(main_oid + '.'):
                                 found = True
                                 index_part = oid[len(main_oid) + 1:]
                                 yield (target_info[host_ip], main_oid, index_part, value)
