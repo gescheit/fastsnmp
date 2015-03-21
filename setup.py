@@ -40,7 +40,7 @@ if __name__ == "__main__":
           version=__version__,
           author="Aleksandr Balezin",
           packages=['fastsnmp'],
-          package_data = {'lib': ['*.pyx', '*.c', 'README.md', 'examples/*.py']},
+          package_data={'lib': ['*.pyx', '*.c', 'README.md', 'examples/*.py']},
           license='GPLv2',
           url='https://github.com/gescheit/fastsnmp',
           author_email='gescheit12@gmail.com',
@@ -48,6 +48,7 @@ if __name__ == "__main__":
           platforms=['Linux'],
           long_description=read_md('README.md'),
           keywords="SNMP poller parser library coder decoder",
-          description="SNMP poller oriented to poll bunch of hosts in short time. Package include poller and SNMP library",
-          requires = ["Cython"],
+          description="SNMP poller oriented to poll bunch of hosts in short time. "
+                      "Package include poller and SNMP library",
+          requires=["Cython"],
           )
