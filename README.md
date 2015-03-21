@@ -25,6 +25,11 @@ host=127.0.0.1 oid=ifDescr.1 value=lo
 host=127.0.0.1 oid=ifInOctets.2 value=1397428486
 host=127.0.0.1 oid=ifDescr.2 value=eth0
 ```
+
+Known issue:
+
+1. In some cases poller can return duplicated data.
+
 Another python SNMP libraries:
 
 * [PySNMP](http://pysnmp.sourceforge.net/) - very good SNMP library
