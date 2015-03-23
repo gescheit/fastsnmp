@@ -38,7 +38,7 @@ def make_base_reqid(value, mask_len):
     return res
 
 
-def poller(hosts, oids_groups, community):
+def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
     """
     A generator that yields SNMP data
 
@@ -54,9 +54,7 @@ def poller(hosts, oids_groups, community):
     job_queue = queue.Queue()
     reqid_offset_len = 6  # last nth rank used for offset
     start_reqid = 1000000000
-    check_timeout = 10
     socksize = 0x200000
-    check_retry = 1
     pending_querys = collections.defaultdict(list)
     retried_req = collections.defaultdict(int)
     global_target_varbinds = {}
