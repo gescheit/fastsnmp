@@ -132,7 +132,10 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
                     host_ip = remotehost[0]
                     pdudata_reqid, error_status, error_index, var_bind_list = snmp_parser.msg_decode(data)
                     if error_status:
-                        logger.error('%s get error_status %s at %s' % (host_ip, error_status, error_index))
+                        logger.error('%s get error_status %s at %s. query=%s',
+                                     target_info[host_ip],
+                                     error_status, error_index,
+                                     global_target_varbinds[pdudata_reqid][0])
                     if DEBUG:
                         logger.debug('%s recv reqid=%s' % (host_ip, pdudata_reqid))
                     oids_to_poll, main_oids = global_target_varbinds[pdudata_reqid]
@@ -193,7 +196,9 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
                         job_queue.put(timeouted_query)
                         retried_req[timeouted_query] += 1
                     else:
-                        logger.warning("%s SNMP query timeout for OID's: %s", target_info[timeouted_query[0]], global_target_varbinds[timeouted_query[1]])
+                        logger.warning("%s query timeout for OID's: %s",
+                                       target_info[timeouted_query[0]],
+                                       global_target_varbinds[timeouted_query[1]][0])
                     del pending_query[timeouted_query]
             if not job_queue.empty():
                 sockets_write_count = min(job_queue.qsize(), len(socket_map))
