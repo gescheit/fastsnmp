@@ -14,6 +14,7 @@ import queue
 import collections
 from fastsnmp import snmp_parser
 from time import time
+import random
 
 DEBUG = False
 logger = logging.getLogger('fastsnmp.snmp_poller')
@@ -53,7 +54,8 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
     """
     job_queue = queue.Queue()
     reqid_offset_len = 6  # last nth rank used for offset
-    start_reqid = 1000000000
+    rand_number = random.randint(1, 999)
+    start_reqid = rand_number * (10 ** reqid_offset_len)
     socksize = 0x200000
     pending_querys = collections.defaultdict(list)
     retried_req = collections.defaultdict(int)
