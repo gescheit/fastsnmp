@@ -21,27 +21,29 @@ asnTagFormats = {
     'CONSTRUCTED': 0x20
 }
 
-asnTagNumbers = {
+ASN_TYPES = {
     'Integer': 0x02,
     'OctetString': 0x04,
     'Null': 0x05,
     'ObjectID': 0x06,
     'Sequence': 0x10,
+}
 
-    # Application types
+ASN_SNMP_APPLICATION = {
     'IPAddress': 0x00,
     'Counter': 0x01,
     'Guage': 0x02,
     'TimeTicks': 0x03,
     'Opaque': 0x04,
+}
 
-    # SNMP
-    'GetBulk': 0x05,
+ASN_SNMP_MSG_TYPES ={
     'Get': 0x00,
     'GetNext': 0x01,
     'Response': 0x02,
     'Set': 0x03,
     'Trap': 0x04,
+    'GetBulk': 0x05,
 }
 
 # caches
@@ -56,8 +58,7 @@ length_cache[1] = b'\x01'
 
 
 def pdu_response_decode(stream):
-    objectList = sequence_decode(stream)
-    return objectList
+    return sequence_decode(stream)
 
 
 def objectid_decode(stream):
@@ -210,7 +211,6 @@ def integer_encode(integer):
 
         if result[0] & 0x80:
             result.insert(0, 0)
-        # logging.critical('got -- %s' % result)
         return bytes(result)
     else:
         result = []
@@ -220,7 +220,6 @@ def integer_encode(integer):
 
         if result[0] & 0x80 != 0x80:
             result.insert(0, 0)
-        # logging.critical('got -- %s' % result)
         return bytes(bytes)
 
 
@@ -344,10 +343,10 @@ def length_encode(length):
         numOctets = 0
         while length > 0:
             resultlist.insert(0, length & 0xff)
-            length = length >> 8
+            length >>= 8
             numOctets += 1
         # Add a 1 to the front of the octet
-        numOctets = numOctets | 0x80
+        numOctets |= 0x80
         resultlist.insert(0, numOctets & 0xff)
         result = resultlist
     return result
@@ -383,22 +382,22 @@ def tag_decode(stream):
     return tag, stream[n:]
 
 
-def tag_encode(asnTagClass, asnTagFormat, asnTagNumber):
+def tag_encode(asn_tag_class, asn_tag_format, asn_tag_number):
     """
     Returns encoded identifier octets for
     this object.  Section 6.3 of ITU-T-X.209
 
-    :param asnTagClass: asn tag class
-    :type asnTagClass: int
-    :param asnTagFormat: asn tag format
-    :type asnTagFormat: int
-    :param asnTagNumber: asn tag number
-    :type asnTagNumber: int
+    :param asn_tag_class: asn tag class
+    :type asn_tag_class: int
+    :param asn_tag_format: asn tag format
+    :type asn_tag_format: int
+    :param asn_tag_number: asn tag number
+    :type asn_tag_number: int
     :returns: tag
     :rtype: bytes
     """
-    if asnTagNumber < 0x1F:
-        result = bytes([asnTagClass | asnTagFormat | asnTagNumber])
+    if asn_tag_number < 0x1F:
+        result = bytes([asn_tag_class | asn_tag_format | asn_tag_number])
     else:
         # # Encode each number of the asnTagNumber from 31 upwards
         # # as a sequence of 7-bit numbers with bit 8 set to 1 for
