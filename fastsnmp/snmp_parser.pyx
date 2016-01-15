@@ -405,34 +405,69 @@ def tag_encode(asn_tag_class, asn_tag_format, asn_tag_number):
         # # last octet of the Identifier octets
         # encode the first octet
         resultlist = bytearray()
-        resultlist.append(asnTagClass | asnTagFormat | 0x1F)
+        resultlist.append(asn_tag_class | asn_tag_format | 0x1F)
 
         # encode each subsequent octet
-        integer = asnTagNumber
+        integer = asn_tag_number
         while integer != -1:
             resultlist.append(integer & 0xFF)
-            integer = integer >> 8
+            integer >>= 8
         result = resultlist
     return result
 
 
 # TODO: implement more encoders
-def value_encode(val):
+def value_encode(value=None, value_type='Null'):
     """
     Encoded value by ASN.1
-
-    :param val: val
-    :type val: int
-    :returns: tag
-    :rtype: bytes
     """
-    if val is None:
+    if value_type == 'Null':
+        if value is not None:
+            raise Exception('value must be None for Null type!')
         return b''
+    elif value_type == "Integer":
+        return integer_encode(value)
+    elif value_type == "OctetString":
+        return value.encode()
     else:
-        raise NotImplementedError('not implement coder for %s' % type(val))
+        raise NotImplementedError('not implement coder for %s' % type(value))
 
 
-def msg_encode(req_id, community, varbinds, max_repetitions=10, non_repeaters=0):
+def encode_varbind(oid, value_type='Null', value=None):
+    if value is None:
+        value_type = 'Null'
+    obj_id = objectid_encode(oid)
+    obj_id_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['ObjectID'])
+    obj_id_len = length_encode(len(obj_id))
+
+    obj_value = value_encode(value, value_type)
+    obj_value_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES[value_type])
+    obj_value_len = length_encode(len(obj_value))
+
+    varbinds_obj = obj_id_id + obj_id_len + obj_id + obj_value_id + obj_value_len + obj_value
+
+    seq_tag = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
+    varbind_enc = seq_tag + length_encode(len(varbinds_obj)) + varbinds_obj
+    return varbind_enc
+
+
+def varbinds_encode(varbinds):
+    res = bytearray()
+    for varbind in varbinds:
+        if len(varbind) == 3:
+            oid, value_type, value = varbind
+        elif len(varbind) == 2:
+            oid, value_type = varbind
+            value = None
+        else:
+            oid = varbind
+            value = None
+            value_type = "Null"
+        res += encode_varbind(oid, value_type, value)
+    return res
+
+
+def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=10, non_repeaters=0):
     """
     Build SNMP-message
 
@@ -442,6 +477,8 @@ def msg_encode(req_id, community, varbinds, max_repetitions=10, non_repeaters=0)
     :type community: string
     :param varbinds: list of oid to encode
     :type varbinds: tuple
+    :param msg_type: index of ASN_SNMP_MSG_TYPES
+    :type msg_type: str
     :param max_repetitions: max repetitions
     :type community: int
     :param non_repeaters: non repeaters
@@ -449,61 +486,39 @@ def msg_encode(req_id, community, varbinds, max_repetitions=10, non_repeaters=0)
     :returns: encoded message
     :rtype: bytes
     """
-    varbinds_data = bytearray()
-    for varbind in varbinds:
-        if len(varbind) == 2:
-            oid, value = varbind
-        else:
-            oid, value = varbind, None
-        obj_id = objectid_encode(oid)
-        obj_id_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], asnTagNumbers['ObjectID'])
-        obj_id_len = length_encode(len(obj_id))
-        obj_value = value_encode(value)
-        obj_value_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], asnTagNumbers['Null'])
-        obj_value_len = length_encode(len(obj_value))
-        varbinds_obj = obj_id_id + obj_id_len + obj_id + obj_value_id + obj_value_len + obj_value
-
-        varbind_enc = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], asnTagNumbers['Sequence']) + length_encode(len(varbinds_obj)) + varbinds_obj
-        varbinds_data += varbind_enc
-    # logging.critical('varbinds_data=%s' % byte_to_hex(varbinds_data))
-    varbinds_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], asnTagNumbers['Sequence'])
+    varbinds_data = varbinds_encode(varbinds)
+    varbinds_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
     varbinds_len = length_encode(len(varbinds_data))
-    # logging.critical('varbinds_len=%s' % byte_to_hex(varbinds_len))
 
-    requestID_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], asnTagNumbers['Integer'])
+    requestID_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
     requestID = integer_encode(req_id)
     requestID_len = length_encode(len(requestID))
 
     nonRepeaters = integer_encode(non_repeaters)
-    nonRepeaters_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], asnTagNumbers['Integer'])
+    nonRepeaters_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
     nonRepeaters_len = length_encode(len(nonRepeaters))
 
     maxRepetitions = integer_encode(max_repetitions)
-    maxRepetitions_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], asnTagNumbers['Integer'])
+    maxRepetitions_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
     maxRepetitions_len = length_encode(len(maxRepetitions))
 
     pdu = requestID_id + requestID_len + requestID + \
             nonRepeaters_id + nonRepeaters_len + nonRepeaters + \
             maxRepetitions_id + maxRepetitions_len + maxRepetitions + \
             varbinds_id + varbinds_len + varbinds_data
-    # pduseq_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], asnTagNumbers['Sequence'])
-    # pduseq_len = length_encode(len(pduseq))
 
-    # pdu = varbinds_id + varbinds_len + varbinds_obj
-
-    pdu_id = tag_encode(asnTagClasses['CONTEXT'], asnTagFormats['CONSTRUCTED'], asnTagNumbers['GetBulk'])
+    pdu_id = tag_encode(asnTagClasses['CONTEXT'], asnTagFormats['CONSTRUCTED'], ASN_SNMP_MSG_TYPES[msg_type])
     pdu_len = length_encode(len(pdu))
 
     community = octetstring_encode(community)
-    community_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], asnTagNumbers['OctetString'])
+    community_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['OctetString'])
     community_len = length_encode(len(community))
+
     version = integer_encode(1)
-    version_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], asnTagNumbers['Integer'])
+    version_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
     version_len = length_encode(len(version))
 
-
-
-    snmp_message_seq_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], asnTagNumbers['Sequence'])
+    snmp_message_seq_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
     snmp_message_len = length_encode(len(version_id + version_len + version + \
                    community_id + community_len + community + \
                    pdu_id + pdu_len + pdu))
