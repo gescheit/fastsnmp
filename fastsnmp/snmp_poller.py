@@ -140,10 +140,8 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
                     if DEBUG:
                         logger.debug('%s recv reqid=%s' % (host_ip, pdudata_reqid))
                     oids_to_poll, main_oids = global_target_varbinds[pdudata_reqid]
-                    try:
-                        del pending_query[(host_ip, pdudata_reqid)]
-                    except KeyError:
-                        continue  # dup
+                    # can be received packets after timeout
+                    pending_query.pop((host_ip, pdudata_reqid), None)
                     interested_oids = True
 
                     main_oids_positions = cycle(range(0, len(main_oids)))
