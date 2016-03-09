@@ -15,6 +15,7 @@ import collections
 from fastsnmp import snmp_parser
 from time import time
 import random
+from itertools import cycle
 
 DEBUG = False
 logger = logging.getLogger('fastsnmp.snmp_poller')
@@ -144,17 +145,24 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
                     except KeyError:
                         continue  # dup
                     interested_oids = True
+
+                    main_oids_positions = cycle(range(0, len(main_oids)))
+
                     for oid, value in var_bind_list:
                         if value is None:
                             interested_oids = False
                             break
+
+                        # oids in received var_bind_list in round-robin order respectively query
+                        main_oids_pos = next(main_oids_positions)
+                        main_oid = main_oids[main_oids_pos]
+                        index_part = oid[len(main_oid) + 1:]
                         found = False
-                        for main_oid in main_oids:
-                            if oid.startswith(main_oid + '.'):
-                                found = True
-                                index_part = oid[len(main_oid) + 1:]
-                                yield (target_info[host_ip], main_oid, index_part, value)
-                                break
+                        if oid.startswith(main_oid + '.'):
+                            found = True
+                            index_part = oid[len(main_oid) + 1:]
+                            yield (target_info[host_ip], main_oid, index_part, value)
+
                         if not found:
                             if DEBUG:
                                 logger.debug('skip %s %s=%s, reqid=%s. Not found in %s' % (host_ip, oid, value, pdudata_reqid, main_oids))
