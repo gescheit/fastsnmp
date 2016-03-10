@@ -142,32 +142,38 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
                     oids_to_poll, main_oids = global_target_varbinds[pdudata_reqid]
                     # can be received packets after timeout
                     pending_query.pop((host_ip, pdudata_reqid), None)
-                    interested_oids = True
+                    get_next = True
 
-                    main_oids_positions = cycle(range(0, len(main_oids)))
-
-                    for oid, value in var_bind_list:
+                    main_oids_len = len(main_oids)
+                    main_oids_positions = cycle(range(0, main_oids_len))
+                    var_bind_list_len = len(var_bind_list)
+                    for var_bind_pos in range(var_bind_list_len):
+                        oid, value = var_bind_list[var_bind_pos]
                         if value is None:
-                            interested_oids = False
+                            get_next = False
                             break
 
                         # oids in received var_bind_list in round-robin order respectively query
                         main_oids_pos = next(main_oids_positions)
                         main_oid = main_oids[main_oids_pos]
                         index_part = oid[len(main_oid) + 1:]
-                        found = False
                         if oid.startswith(main_oid + '.'):
-                            found = True
                             index_part = oid[len(main_oid) + 1:]
                             yield (target_info[host_ip], main_oid, index_part, value)
-
-                        if not found:
+                        else:
                             if DEBUG:
                                 logger.debug('skip %s %s=%s, reqid=%s. Not found in %s' % (host_ip, oid, value, pdudata_reqid, main_oids))
-                            interested_oids = False
+                            get_next = False
                             break
+
+                        if main_oids_pos == 0 and var_bind_list_len - var_bind_pos < main_oids_len:
+                            # skip rest oids because they not aligned by main_oids
+                            # can be use rest oids, but this break logic with reqid
+                            # and next query must be with different indexes
+                            break
+
                     base_req_id = make_base_reqid(pdudata_reqid, reqid_offset_len)
-                    if interested_oids:
+                    if get_next:
                         oids_to_poll = []
                         new_req_id = base_req_id + int(str(hash(index_part))[-reqid_offset_len:])
                         if DEBUG:
