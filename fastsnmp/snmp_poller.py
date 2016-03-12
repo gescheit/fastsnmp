@@ -17,6 +17,11 @@ from time import time
 import random
 from itertools import cycle
 
+try:
+    import mass_resolver
+except ImportError:
+    mass_resolver = None
+
 DEBUG = False
 logger = logging.getLogger('fastsnmp.snmp_poller')
 MAX_SOCKETS_COUNT = 100
@@ -37,6 +42,23 @@ def make_base_reqid(value, mask_len):
     """
     offset = 10 ** mask_len
     res = value // offset * offset
+    return res
+
+
+def resolve(hosts):
+    if mass_resolver:
+        res = mass_resolver.resolve(hosts)
+    else:
+        # slow way
+        res = dict()
+        for host in hosts:
+            host_ips = res.setdefault(host, list())
+            try:
+                host_ip = socket.gethostbyname(host)
+            except socket.gaierror:
+                logger.error("unable to resolve %s. skipping this host" % host)
+                continue
+            host_ips.append(host_ip)
     return res
 
 
@@ -69,21 +91,23 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
         oids_to_poll = main_oids = oids_group
         global_target_varbinds[query_reqid] = (oids_to_poll, main_oids)
         query_reqid += 1000000
-
     reqid_to_msg = {}
-    target_info = {}
     pending_query = {}
     target_info_r = {}
     bad_hosts = []
-    for host in hosts:
-        try:
-            host_ip = socket.gethostbyname(host)  # TODO: bottleneck
-        except socket.gaierror:
-            logger.error("unable to resolve %s. skipping this host" % host)
-            bad_hosts.append(host)
-            continue
-        target_info[host_ip] = host
-        target_info_r[host] = host_ip
+
+    target_info = resolve(hosts)
+
+    for fqdn, ips in target_info.items():
+        if not ips:
+            bad_hosts.append(fqdn)
+            logger.error("unable to resolve %s. skipping this host" % fqdn)
+        else:
+            target_info_r[fqdn] = ips[0]
+
+    for bad_host in bad_hosts:
+        del target_info[bad_host]
+
     for reqid in global_target_varbinds.keys():
         for host in hosts:
             if host in bad_hosts:
