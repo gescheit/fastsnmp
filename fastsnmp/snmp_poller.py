@@ -202,16 +202,21 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
                             skip_column[main_oids_pos] = True
                             if len(skip_column) == var_bind_list_len:
                                 break
-
-                    oids_to_poll_pos = list(filter(lambda x: x not in skip_column, range(main_oids_len)))
-                    if oids_to_poll_pos:
-                        oids_to_poll = list()
-                        new_main_oids = list()
-                        for pos in oids_to_poll_pos:
-                            oids_to_poll.append("%s.%s" % (main_oids[pos], last_seen_index[pos]))
-                            new_main_oids.append(main_oids[pos])
-                        oids_to_poll = tuple(oids_to_poll)
-                        new_main_oids = tuple(new_main_oids)
+                    # TODO: не пересчитвать main_oids  если нет skip_column
+                    if len(skip_column) < main_oids_len:
+                        if len(skip_column):
+                            oids_to_poll = list()
+                            new_main_oids = list()
+                            for pos in range(main_oids_len):
+                                if pos in skip_column:
+                                    continue
+                                oids_to_poll.append("%s.%s" % (main_oids[pos], last_seen_index[pos]))
+                                new_main_oids.append(main_oids[pos])
+                            oids_to_poll = tuple(oids_to_poll)
+                            new_main_oids = tuple(new_main_oids)
+                        else:
+                            oids_to_poll = tuple("%s.%s" % (main_oids[pos], last_seen_index[pos]) for pos in range(main_oids_len))
+                            new_main_oids = main_oids
 
                         oid_group = (oids_to_poll, new_main_oids)
 
