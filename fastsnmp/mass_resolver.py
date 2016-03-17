@@ -6,7 +6,7 @@ import socket
 def async_resolve(host, loop):
     ips = set()
     try:
-        addrinfo = yield from loop.getaddrinfo(host, 0)
+        addrinfo = yield from loop.getaddrinfo(host, 0, family=socket.AF_INET, type=socket.SOCK_DGRAM)
         for addr in addrinfo:
             ips.add(addr[4][0])
     except socket.gaierror:
