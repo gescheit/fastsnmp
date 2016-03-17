@@ -177,14 +177,12 @@ def poller(hosts, oids_groups, community, check_timeout=10, check_retry=1):
 
                     for var_bind_pos in range(var_bind_list_len):
                         oid, value = var_bind_list[var_bind_pos]
-
+                        # oids in received var_bind_list in round-robin order respectively query
+                        main_oids_pos = next(main_oids_positions)
                         if value is None:
                             if DEBUG:
                                 logger.error('found none value %s %s %s' % (host_ip, oid, value))
-                            break
-
-                        # oids in received var_bind_list in round-robin order respectively query
-                        main_oids_pos = next(main_oids_positions)
+                            skip_column[main_oids_pos] = True
                         if main_oids_pos in skip_column:
                             continue
                         main_oid = main_oids[main_oids_pos]
