@@ -27,24 +27,6 @@ logger = logging.getLogger('fastsnmp.snmp_poller')
 MAX_SOCKETS_COUNT = 100
 
 
-def make_base_reqid(value, mask_len):
-    """Return value with last set_len numbers set to zero
-
-    :param value: target value
-    :param mask_len: length of mask
-    :type value: int
-    :type mask_len: int
-    :return: value
-    :rtype: int
-    :Example:
-    >>> make_base_reqid(123456789, 3)
-    123456000
-    """
-    offset = 10 ** mask_len
-    res = value // offset * offset
-    return res
-
-
 def resolve(hosts):
     if mass_resolver:
         res = mass_resolver.resolve(hosts)
