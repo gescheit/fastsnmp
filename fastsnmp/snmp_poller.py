@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import sys
+
 if sys.version_info[0] < 3:
     print >> sys.stderr, "This program work only with python3. Sorry."
     sys.exit(1)
 import select
+
 if not hasattr(select, 'epoll'):
     print("The current platform does not support epoll", file=sys.stderr)
     sys.exit(1)
@@ -132,7 +134,6 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2):
                         job_queue.task_done()
                     if not job_queue.empty():
                         fdfmt = fdfmt | select.EPOLLOUT
-                    #fdfmt = fdfmt | select.EPOLLOUT
                     epoll.modify(fileno, fdfmt)
                 elif event & select.EPOLLIN:
                     data, remotehost = socket_map[fileno].recvfrom(socksize)
@@ -187,13 +188,15 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2):
                             yield (target_info[host_ip], main_oid, index_part, value)
                         else:
                             if DEBUG:
-                                logger.debug('host_ip=%s column_pos=%s skip oid %s=%s, reqid=%s. Not found in %s' % (host_ip,
-                                                                                                         main_oids_pos,
-                                                                                                         oid,
-                                                                                                         value,
-                                                                                                         pdudata_reqid,
-                                                                                                         main_oids))
-                                logger.debug('vp=%s oid=%s main_oid=%s main_oids_pos=%s main_oids=%s', var_bind_pos, oid, main_oid, main_oids_pos, main_oids)
+                                logger.debug(
+                                    'host_ip=%s column_pos=%s skip oid %s=%s, reqid=%s. Not found in %s' % (host_ip,
+                                                                                                            main_oids_pos,
+                                                                                                            oid,
+                                                                                                            value,
+                                                                                                            pdudata_reqid,
+                                                                                                            main_oids))
+                                logger.debug('vp=%s oid=%s main_oid=%s main_oids_pos=%s main_oids=%s', var_bind_pos,
+                                             oid, main_oid, main_oids_pos, main_oids)
                             skip_column[main_oids_pos] = True
                             if len(skip_column) == var_bind_list_len:
                                 break
@@ -209,7 +212,8 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2):
                             oids_to_poll = tuple(oids_to_poll)
                             new_main_oids = tuple(new_main_oids)
                         else:
-                            oids_to_poll = tuple("%s.%s" % (main_oids[p], last_seen_index[p]) for p in range(main_oids_len))
+                            oids_to_poll = tuple(
+                                "%s.%s" % (main_oids[p], last_seen_index[p]) for p in range(main_oids_len))
                             new_main_oids = main_oids
 
                         oid_group = (oids_to_poll, new_main_oids)
@@ -223,7 +227,8 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2):
                         job_queue.put((host_ip, next_reqid))
                     else:
                         if DEBUG:
-                            logger.debug('found not interested in oid=%s value=%s host=%s reqid=%s' % (oid, value, host_ip, pdudata_reqid))
+                            logger.debug('found not interested in oid=%s value=%s host=%s reqid=%s' % (
+                            oid, value, host_ip, pdudata_reqid))
 
                     epoll.modify(fileno, select.EPOLLOUT | select.EPOLLIN)
                 elif event & select.EPOLLERR:
@@ -241,7 +246,8 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2):
                     if cur_time - query_time > query_timeout:
                         timeouted_querys.append(query)
                         if DEBUG:
-                            logger.warning('timeout %s > %s. attempt=%s, %s', cur_time - query_time, query_timeout,attempt, query)
+                            logger.warning('timeout %s > %s. attempt=%s, %s', cur_time - query_time, query_timeout,
+                                           attempt, query)
                 for timeouted_query in timeouted_querys:
                     if timeouted_query not in retried_req or retried_req[timeouted_query] < retry:
                         if DEBUG:
