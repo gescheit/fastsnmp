@@ -244,6 +244,7 @@ def sequence_decode(stream):
         objectData = stream[:length]
         stream = stream[length:]
         parsed_objectData = tagDecodeDict[tag](objectData)
+        # print(tag, length, objectData,parsed_objectData)
         objects.append(parsed_objectData)
     return objects
 
