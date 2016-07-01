@@ -558,7 +558,7 @@ def parse_varbind(var_bind_list, orig_main_oids, oids_to_poll):
                 if pos in skip_column:
                     continue
                 next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
-            next_oids = tuple(oids_to_poll)
+            next_oids = tuple(next_oids)
         else:
             next_oids = tuple(
                 "%s.%s" % (orig_main_oids[p], last_seen_index[p]) for p in rest_oids_positions)
