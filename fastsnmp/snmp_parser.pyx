@@ -4,7 +4,16 @@
 # -*- coding: utf-8 -*-
 # based on https://pypi.python.org/pypi/libsnmp/
 import binascii
+from itertools import cycle
+DEBUG = True
 
+
+class SNMPException(Exception):
+    pass
+
+
+class VarBindUnpackException(SNMPException):
+    pass
 
 # X.690
 # http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf
@@ -538,3 +547,52 @@ def msg_decode(stream):
     snmp_ver, community, data = tagDecodeDict[tag](objectData)
     req_id, error_status, error_index, varbinds = data
     return req_id, error_status, error_index, varbinds
+
+
+def parse_varbind(var_bind_list, orig_main_oids, oids_to_poll):
+    result = []
+    next_oids = None
+    rest_oids_positions = [x for x in range(len(oids_to_poll)) if oids_to_poll[x]]
+    main_oids_len = len(rest_oids_positions)
+    main_oids_positions = cycle(rest_oids_positions)
+    var_bind_list_len = len(var_bind_list)
+
+    skip_column = {}
+    # if some oid in requested oids is not supported, column with it is index will
+    # be filled with another oid. need to skip
+    last_seen_index = {}
+
+    for var_bind_pos in range(var_bind_list_len):
+        item = var_bind_list[var_bind_pos]
+        try:
+            oid, value = item
+        except ValueError as e:
+            raise VarBindUnpackException("ValueError='%s' item=%s" % (e, item))
+        # oids in received var_bind_list in round-robin order respectively query
+        main_oids_pos = next(main_oids_positions)
+        if value is None:
+            skip_column[main_oids_pos] = True
+        if main_oids_pos in skip_column:
+            continue
+        main_oid = orig_main_oids[main_oids_pos]
+        if oid.startswith(main_oid + '.'):
+            index_part = oid[len(main_oid) + 1:]
+            last_seen_index[main_oids_pos] = index_part
+            result.append((main_oid, index_part, value))
+        else:
+            skip_column[main_oids_pos] = True
+            if len(skip_column) == var_bind_list_len:
+                break
+    if len(skip_column) < main_oids_len:
+        if len(skip_column):
+            next_oids = [None for _ in range(len(orig_main_oids))]
+            for pos in rest_oids_positions:
+                if pos in skip_column:
+                    continue
+                next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
+            next_oids = tuple(oids_to_poll)
+        else:
+            next_oids = tuple(
+                "%s.%s" % (orig_main_oids[p], last_seen_index[p]) for p in rest_oids_positions)
+
+    return result, next_oids
