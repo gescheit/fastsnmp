@@ -58,7 +58,8 @@ ASN_SNMP_MSG_TYPES ={
 # caches
 id_cache = {}
 tag_cache = {}
-integer_cache = {b'\x00': 0, b'\x01': 1}
+integer_decode_cache = {b'\x00': 0, b'\x01': 1}
+integer_encode_cache = {0: b'\x00', 1: b'\x01'}
 sequence_cache = {}
 
 length_cache = {}
@@ -206,59 +207,25 @@ def integer_encode(integer):
     :returns: integer
     :rtype: bytes
     """
-    if integer == 0:
-        return b'\000'
-
-    elif integer == -1:
-        return b'\377'
-
+    if integer in integer_encode_cache:
+        return integer_encode_cache[integer]
     elif integer > 0:
-        result = []
-        while integer != 0:
-            result.insert(0, integer & 0xff)
-            integer >>= 8
-
-        if result[0] & 0x80:
-            result.insert(0, 0)
-        return bytes(result)
-    else:
-        result = []
-        while integer != -1:
-            result.insert(0, integer & 0xff)
-            integer >>= 8
-
-        if result[0] & 0x80 != 0x80:
-            result.insert(0, 0)
-        return bytes(bytes)
+        return integer.to_bytes(integer.bit_length() // 8 + 1, byteorder='big', signed=True)
 
 
 def integer_decode(stream):
     """
-    Decode input stream into a signed ASN.1 integer
+    Decode input stream into a integer
 
     :param stream: encoded integer
     :type stream: bytes
     :returns: decoded integer
     :rtype: int
     """
-    if stream in integer_cache:
-        return integer_cache[stream]
-    value = 0
-    byte = stream[0]
-    if (byte & 0x80) == 0x80:
-        negbit = 0x80
-        value = byte & 0x7f
-
-        for i in range(1, len(stream)):
-            negbit <<= 8
-            value = (value << 8) | stream[i]
-
-        value = value - negbit
+    if stream in integer_encode_cache:
+        return integer_decode_cache[stream]
     else:
-        value = int(byte)
-        for i in range(1, len(stream)):
-            value = (value << 8) | stream[i]
-    return value
+        return int.from_bytes(stream, byteorder='big', signed=True)
 
 
 def sequence_decode(stream):
