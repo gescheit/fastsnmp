@@ -444,6 +444,13 @@ def varbinds_encode(varbinds):
     return res
 
 
+def varbinds_encode_tlv(varbinds):
+    varbinds_data = varbinds_encode(varbinds)
+    varbinds_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
+    varbinds_len = length_encode(len(varbinds_data))
+    return varbinds_id + varbinds_len + varbinds_data
+
+
 def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=10, non_repeaters=0):
     """
     Build SNMP-message
@@ -452,7 +459,7 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
     :type req_id: int
     :param community: snmp community
     :type community: string
-    :param varbinds: list of oid to encode
+    :param varbinds: list of oid to encode or bytes if encoded
     :type varbinds: tuple
     :param msg_type: index of ASN_SNMP_MSG_TYPES
     :type msg_type: str
@@ -463,9 +470,10 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
     :returns: encoded message
     :rtype: bytes
     """
-    varbinds_data = varbinds_encode(varbinds)
-    varbinds_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
-    varbinds_len = length_encode(len(varbinds_data))
+    if isinstance(varbinds, (list, tuple)):
+        varbinds_tlv = varbinds_encode_tlv(varbinds)
+    else:
+        varbinds_tlv = varbinds
 
     requestID_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
     requestID = integer_encode(req_id)
@@ -482,7 +490,7 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
     pdu = requestID_id + requestID_len + requestID + \
             nonRepeaters_id + nonRepeaters_len + nonRepeaters + \
             maxRepetitions_id + maxRepetitions_len + maxRepetitions + \
-            varbinds_id + varbinds_len + varbinds_data
+            varbinds_tlv
 
     pdu_id = tag_encode(asnTagClasses['CONTEXT'], asnTagFormats['CONSTRUCTED'], ASN_SNMP_MSG_TYPES[msg_type])
     pdu_len = length_encode(len(pdu))
