@@ -46,7 +46,7 @@ def resolve(hosts):
     return res
 
 
-def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2):
+def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, max_bytes=1500):
     """
     A generator that yields SNMP data
 
@@ -242,7 +242,10 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2):
                 timeouted_querys = []
                 for query, query_time in pending_query.items():
                     attempt = retried_req.get(query, 1)
-                    query_timeout = attempt * backoff * timeout
+                    if attempt == 1:
+                        query_timeout = attempt * timeout
+                    else:
+                        query_timeout = attempt * backoff * timeout
                     if cur_time - query_time > query_timeout:
                         timeouted_querys.append(query)
                         if DEBUG:
