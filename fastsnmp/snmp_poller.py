@@ -46,7 +46,7 @@ def resolve(hosts):
     return res
 
 
-def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, max_bytes=1500):
+def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_type="GetBulk"):
     """
     A generator that yields SNMP data
 
@@ -123,7 +123,8 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, max_byt
                         if q in reqid_to_msg:
                             message = reqid_to_msg[q]
                         else:
-                            message = snmp_parser.msg_encode(pdudata_reqid, community, oids_to_poll, max_repetitions=20)
+                            message = snmp_parser.msg_encode(pdudata_reqid, community, oids_to_poll, max_repetitions=20,
+                                                             msg_type=msg_type)
                             reqid_to_msg[q] = message
                         socket_map[fileno].sendto(message, (host, 161))
 
