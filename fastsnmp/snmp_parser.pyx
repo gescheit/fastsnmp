@@ -140,18 +140,20 @@ def objectid_encode(oid):
     :returns: stream
     :rtype: bytearray
     """
-    value = oid.strip('.')
-    subidlist = value.split('.')
-    value = []
-
-    for subid in subidlist:
-        number = int(subid)
+    cdef unsigned int number
+    cdef unsigned int subid
+    cdef str subid_c
+    cdef list idlist = []
+    cdef list subidlist
+    subidlist = oid.strip('.').split('.')
+    # asn_parse_objid(bufp, Length, &ASNType, objid, &PDU->enterprise_length);
+    for subid_c in subidlist:
+        number = int(subid_c)
         if number < 0 or number > 0x7FFFFFFF:
             raise ValueError("SubID out of range")
-        value.append(number)
+        idlist.append(number)
 
     result = bytearray()
-    idlist = value[:]
 
     # Do the bit with the first 2 subids
     # section 22.4 of X.209
@@ -167,10 +169,10 @@ def objectid_encode(oid):
             position = len(result)
             result.append(subid & 0x7f)
 
-            subid = subid >> 7
+            subid >>= 7
             while subid > 0:
                 result.insert(position, 0x80 | (subid & 0x7f))
-                subid = subid >> 7
+                subid >>= 7
 
     return result
 
