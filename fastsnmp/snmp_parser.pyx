@@ -130,7 +130,6 @@ def objectid_decode(stream):
     id_cache[stream] = value
     return value
 
-
 def objectid_encode(oid):
     """
     encode an ObjectID into stream
@@ -485,18 +484,31 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
     requestID = integer_encode(req_id)
     requestID_len = length_encode(len(requestID))
 
-    nonRepeaters = integer_encode(non_repeaters)
-    nonRepeaters_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-    nonRepeaters_len = length_encode(len(nonRepeaters))
 
-    maxRepetitions = integer_encode(max_repetitions)
-    maxRepetitions_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-    maxRepetitions_len = length_encode(len(maxRepetitions))
 
-    pdu = requestID_id + requestID_len + requestID + \
-            nonRepeaters_id + nonRepeaters_len + nonRepeaters + \
-            maxRepetitions_id + maxRepetitions_len + maxRepetitions + \
-            varbinds_tlv
+    if msg_type == "GetBulk":
+        nonRepeaters = integer_encode(non_repeaters)
+        nonRepeaters_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
+        nonRepeaters_len = length_encode(len(nonRepeaters))
+
+        maxRepetitions = integer_encode(max_repetitions)
+        maxRepetitions_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
+        maxRepetitions_len = length_encode(len(maxRepetitions))
+        pdu = requestID_id + requestID_len + requestID + \
+                nonRepeaters_id + nonRepeaters_len + nonRepeaters + \
+                maxRepetitions_id + maxRepetitions_len + maxRepetitions + \
+                varbinds_tlv
+    else:
+        error_status = integer_encode(0)
+        error_status_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
+        error_status_len = length_encode(len(error_status))
+        error_index = integer_encode(0)
+        error_index_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
+        error_index_len = length_encode(len(error_index))
+        pdu = requestID_id + requestID_len + requestID + \
+                error_status_id + error_status_len + error_status + \
+                error_index_id + error_index_len + error_index + \
+                varbinds_tlv
 
     pdu_id = tag_encode(asnTagClasses['CONTEXT'], asnTagFormats['CONSTRUCTED'], ASN_SNMP_MSG_TYPES[msg_type])
     pdu_len = length_encode(len(pdu))
