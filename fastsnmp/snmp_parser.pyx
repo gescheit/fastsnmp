@@ -15,6 +15,10 @@ class SNMPException(Exception):
 class VarBindUnpackException(SNMPException):
     pass
 
+
+class VarBindContentException(SNMPException):
+    pass
+
 # X.690
 # http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf
 
@@ -540,10 +544,14 @@ def parse_varbind(var_bind_list, orig_main_oids, oids_to_poll):
 
     for var_bind_pos in range(var_bind_list_len):
         item = var_bind_list[var_bind_pos]
+        if item is None:
+            raise VarBindUnpackException("bad value in %s at %s" % (var_bind_list, var_bind_pos))
         try:
             oid, value = item
-        except ValueError as e:
-            raise VarBindUnpackException("ValueError='%s' item=%s" % (e, item))
+        except (ValueError, TypeError) as e:
+            raise VarBindUnpackException("Exception='%s' item=%s" % (e, item))
+        if not isinstance(oid, str):
+            raise VarBindContentException("expected oid in str. got %r" % oid)
         # oids in received var_bind_list in round-robin order respectively query
         main_oids_pos = next(main_oids_positions)
         if value is None:
