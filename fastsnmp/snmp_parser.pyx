@@ -576,7 +576,7 @@ def parse_varbind(var_bind_list, orig_main_oids, oids_to_poll):
         if oid.startswith(main_oid + '.'):
             index_part = oid[len(main_oid) + 1:]
             last_seen_index[main_oids_pos] = index_part
-            result.append((main_oid, index_part, value))
+            result.append([main_oid, index_part, value])
         else:
             skip_column[main_oids_pos] = True
             if len(skip_column) == var_bind_list_len:
