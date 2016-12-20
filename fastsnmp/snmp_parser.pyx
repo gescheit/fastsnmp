@@ -1,12 +1,30 @@
-# cython: embedsignature=True
-# cython: language_level=3
+# cython: nonecheck=False, boundscheck=False, wraparound=False, language_level=3
+# cython: c_string_type=str, c_string_encoding=ascii
+## cython: profile=True
 # adds doc-strings for sphinx
 # -*- coding: utf-8 -*-
 # based on https://pypi.python.org/pypi/libsnmp/
 import binascii
+import cython
+from cpython.tuple cimport PyTuple_New, PyTuple_SET_ITEM
+from cpython.int cimport PyInt_FromLong
+from cpython.ref cimport Py_INCREF
+from libc.stdio cimport sprintf
+from libc.string cimport memcpy
 from itertools import cycle
-DEBUG = True
 
+# X.690
+# http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf
+
+cdef extern from "stdint.h" nogil:
+    ctypedef signed int int8_t
+    ctypedef signed int int16_t
+    ctypedef signed int int32_t
+    ctypedef signed int int64_t
+    ctypedef unsigned int uint8_t
+    ctypedef unsigned int uint16_t
+    ctypedef unsigned int uint32_t
+    ctypedef unsigned int uint64_t
 
 class SNMPException(Exception):
     pass
@@ -19,8 +37,6 @@ class VarBindUnpackException(SNMPException):
 class VarBindContentException(SNMPException):
     pass
 
-# X.690
-# http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf
 
 asnTagClasses = {
     'UNIVERSAL': 0x00,
@@ -75,105 +91,223 @@ def pdu_response_decode(stream):
     return sequence_decode(stream)
 
 
+cdef inline int primitive_decode(char *stream, size_t stream_len, uint64_t *result, size_t *result_len):
+    cdef size_t i
+    cdef uint8_t sid
+    cdef int retval = 0
+    result_len[0] = 0
+    result[0] = 0
+
+    for i in range(stream_len):
+        result[result_len[0]] <<= 7
+        sid = <uint8_t>stream[i]
+        result[result_len[0]] |= sid & 0x7f
+        if sid & 0x80 == 0:
+            result_len[0] +=1
+            result[result_len[0]] = 0
+
+    return retval
+
+# sub id 1 and 2 bytes
+cdef struct SID12_t:
+    size_t strlen
+    char *str
+
+def objectid_decode_str(bytes stream):
+    cdef SID12_t *sid12 = [{'str': b'0.0\x00', 'strlen': 3},{'str': b'0.1\x00', 'strlen': 3},{'str': b'0.2\x00', 'strlen': 3},{'str': b'0.3\x00', 'strlen': 3},{'str': b'0.4\x00', 'strlen': 3},{'str': b'0.5\x00', 'strlen': 3},{'str': b'0.6\x00', 'strlen': 3},{'str': b'0.7\x00', 'strlen': 3},{'str': b'0.8\x00', 'strlen': 3},{'str': b'0.9\x00', 'strlen': 3},{'str': b'0.10', 'strlen': 4},{'str': b'0.11', 'strlen': 4},{'str': b'0.12', 'strlen': 4},{'str': b'0.13', 'strlen': 4},{'str': b'0.14', 'strlen': 4},{'str': b'0.15', 'strlen': 4},{'str': b'0.16', 'strlen': 4},{'str': b'0.17', 'strlen': 4},{'str': b'0.18', 'strlen': 4},{'str': b'0.19', 'strlen': 4},{'str': b'0.20', 'strlen': 4},{'str': b'0.21', 'strlen': 4},{'str': b'0.22', 'strlen': 4},{'str': b'0.23', 'strlen': 4},{'str': b'0.24', 'strlen': 4},{'str': b'0.25', 'strlen': 4},{'str': b'0.26', 'strlen': 4},{'str': b'0.27', 'strlen': 4},{'str': b'0.28', 'strlen': 4},{'str': b'0.29', 'strlen': 4},{'str': b'0.30', 'strlen': 4},{'str': b'0.31', 'strlen': 4},{'str': b'0.32', 'strlen': 4},{'str': b'0.33', 'strlen': 4},{'str': b'0.34', 'strlen': 4},{'str': b'0.35', 'strlen': 4},{'str': b'0.36', 'strlen': 4},{'str': b'0.37', 'strlen': 4},{'str': b'0.38', 'strlen': 4},{'str': b'0.39', 'strlen': 4},{'str': b'1.0\x00', 'strlen': 3},{'str': b'1.1\x00', 'strlen': 3},{'str': b'1.2\x00', 'strlen': 3},{'str': b'1.3\x00', 'strlen': 3},{'str': b'1.4\x00', 'strlen': 3},{'str': b'1.5\x00', 'strlen': 3},{'str': b'1.6\x00', 'strlen': 3},{'str': b'1.7\x00', 'strlen': 3},{'str': b'1.8\x00', 'strlen': 3},{'str': b'1.9\x00', 'strlen': 3},{'str': b'1.10', 'strlen': 4},{'str': b'1.11', 'strlen': 4},{'str': b'1.12', 'strlen': 4},{'str': b'1.13', 'strlen': 4},{'str': b'1.14', 'strlen': 4},{'str': b'1.15', 'strlen': 4},{'str': b'1.16', 'strlen': 4},{'str': b'1.17', 'strlen': 4},{'str': b'1.18', 'strlen': 4},{'str': b'1.19', 'strlen': 4},{'str': b'1.20', 'strlen': 4},{'str': b'1.21', 'strlen': 4},{'str': b'1.22', 'strlen': 4},{'str': b'1.23', 'strlen': 4},{'str': b'1.24', 'strlen': 4},{'str': b'1.25', 'strlen': 4},{'str': b'1.26', 'strlen': 4},{'str': b'1.27', 'strlen': 4},{'str': b'1.28', 'strlen': 4},{'str': b'1.29', 'strlen': 4},{'str': b'1.30', 'strlen': 4},{'str': b'1.31', 'strlen': 4},{'str': b'1.32', 'strlen': 4},{'str': b'1.33', 'strlen': 4},{'str': b'1.34', 'strlen': 4},{'str': b'1.35', 'strlen': 4},{'str': b'1.36', 'strlen': 4},{'str': b'1.37', 'strlen': 4},{'str': b'1.38', 'strlen': 4},{'str': b'1.39', 'strlen': 4},{'str': b'2.0\x00', 'strlen': 3},{'str': b'2.1\x00', 'strlen': 3},{'str': b'2.2\x00', 'strlen': 3},{'str': b'2.3\x00', 'strlen': 3},{'str': b'2.4\x00', 'strlen': 3},{'str': b'2.5\x00', 'strlen': 3},{'str': b'2.6\x00', 'strlen': 3},{'str': b'2.7\x00', 'strlen': 3},{'str': b'2.8\x00', 'strlen': 3},{'str': b'2.9\x00', 'strlen': 3},{'str': b'2.10', 'strlen': 4},{'str': b'2.11', 'strlen': 4},{'str': b'2.12', 'strlen': 4},{'str': b'2.13', 'strlen': 4},{'str': b'2.14', 'strlen': 4},{'str': b'2.15', 'strlen': 4},{'str': b'2.16', 'strlen': 4},{'str': b'2.17', 'strlen': 4},{'str': b'2.18', 'strlen': 4},{'str': b'2.19', 'strlen': 4},{'str': b'2.20', 'strlen': 4},{'str': b'2.21', 'strlen': 4},{'str': b'2.22', 'strlen': 4},{'str': b'2.23', 'strlen': 4},{'str': b'2.24', 'strlen': 4},{'str': b'2.25', 'strlen': 4},{'str': b'2.26', 'strlen': 4},{'str': b'2.27', 'strlen': 4},{'str': b'2.28', 'strlen': 4},{'str': b'2.29', 'strlen': 4},{'str': b'2.30', 'strlen': 4},{'str': b'2.31', 'strlen': 4},{'str': b'2.32', 'strlen': 4},{'str': b'2.33', 'strlen': 4},{'str': b'2.34', 'strlen': 4},{'str': b'2.35', 'strlen': 4},{'str': b'2.36', 'strlen': 4},{'str': b'2.37', 'strlen': 4},{'str': b'2.38', 'strlen': 4},{'str': b'2.39', 'strlen': 4},]
+    cdef uint64_t result[122]
+    cdef char result_str[240]
+    cdef char *result_str_ptr = result_str
+    cdef size_t n, ret_len, sid12_enc_len, result_len=0, stream_len=len(stream), out_len
+    cdef SID12_t tmp_sid
+
+    if <size_t>stream[0] > 127:
+        raise Exception("bad objectid")
+
+    tmp_sid = sid12[<size_t>stream[0]]
+
+    sid12_enc_len = tmp_sid.strlen
+
+    memcpy(result_str_ptr, tmp_sid.str, sid12_enc_len)
+    result_str_ptr += sid12_enc_len
+    out_len = sid12_enc_len
+
+    primitive_decode((<char *>stream)+1, stream_len-1, result, &result_len)
+
+    for i in range(result_len):
+        n = sprintf(result_str_ptr, ".%ld", result[i])
+        result_str_ptr += n
+        out_len+=n
+
+    return result_str[:out_len]
+
+cdef struct SID12_ti:
+    uint64_t SID1
+    uint64_t SID2
+
+cdef SID12_ti *sid12 = [{'SID1': 0, 'SID2': 0},{'SID1': 0, 'SID2': 1},{'SID1': 0, 'SID2': 2},{'SID1': 0, 'SID2': 3},{'SID1': 0, 'SID2': 4},{'SID1': 0, 'SID2': 5},{'SID1': 0, 'SID2': 6},{'SID1': 0, 'SID2': 7},{'SID1': 0, 'SID2': 8},{'SID1': 0, 'SID2': 9},{'SID1': 0, 'SID2': 10},{'SID1': 0, 'SID2': 11},{'SID1': 0, 'SID2': 12},{'SID1': 0, 'SID2': 13},{'SID1': 0, 'SID2': 14},{'SID1': 0, 'SID2': 15},{'SID1': 0, 'SID2': 16},{'SID1': 0, 'SID2': 17},{'SID1': 0, 'SID2': 18},{'SID1': 0, 'SID2': 19},{'SID1': 0, 'SID2': 20},{'SID1': 0, 'SID2': 21},{'SID1': 0, 'SID2': 22},{'SID1': 0, 'SID2': 23},{'SID1': 0, 'SID2': 24},{'SID1': 0, 'SID2': 25},{'SID1': 0, 'SID2': 26},{'SID1': 0, 'SID2': 27},{'SID1': 0, 'SID2': 28},{'SID1': 0, 'SID2': 29},{'SID1': 0, 'SID2': 30},{'SID1': 0, 'SID2': 31},{'SID1': 0, 'SID2': 32},{'SID1': 0, 'SID2': 33},{'SID1': 0, 'SID2': 34},{'SID1': 0, 'SID2': 35},{'SID1': 0, 'SID2': 36},{'SID1': 0, 'SID2': 37},{'SID1': 0, 'SID2': 38},{'SID1': 0, 'SID2': 39},{'SID1': 1, 'SID2': 0},{'SID1': 1, 'SID2': 1},{'SID1': 1, 'SID2': 2},{'SID1': 1, 'SID2': 3},{'SID1': 1, 'SID2': 4},{'SID1': 1, 'SID2': 5},{'SID1': 1, 'SID2': 6},{'SID1': 1, 'SID2': 7},{'SID1': 1, 'SID2': 8},{'SID1': 1, 'SID2': 9},{'SID1': 1, 'SID2': 10},{'SID1': 1, 'SID2': 11},{'SID1': 1, 'SID2': 12},{'SID1': 1, 'SID2': 13},{'SID1': 1, 'SID2': 14},{'SID1': 1, 'SID2': 15},{'SID1': 1, 'SID2': 16},{'SID1': 1, 'SID2': 17},{'SID1': 1, 'SID2': 18},{'SID1': 1, 'SID2': 19},{'SID1': 1, 'SID2': 20},{'SID1': 1, 'SID2': 21},{'SID1': 1, 'SID2': 22},{'SID1': 1, 'SID2': 23},{'SID1': 1, 'SID2': 24},{'SID1': 1, 'SID2': 25},{'SID1': 1, 'SID2': 26},{'SID1': 1, 'SID2': 27},{'SID1': 1, 'SID2': 28},{'SID1': 1, 'SID2': 29},{'SID1': 1, 'SID2': 30},{'SID1': 1, 'SID2': 31},{'SID1': 1, 'SID2': 32},{'SID1': 1, 'SID2': 33},{'SID1': 1, 'SID2': 34},{'SID1': 1, 'SID2': 35},{'SID1': 1, 'SID2': 36},{'SID1': 1, 'SID2': 37},{'SID1': 1, 'SID2': 38},{'SID1': 1, 'SID2': 39},{'SID1': 2, 'SID2': 0},{'SID1': 2, 'SID2': 1},{'SID1': 2, 'SID2': 2},{'SID1': 2, 'SID2': 3},{'SID1': 2, 'SID2': 4},{'SID1': 2, 'SID2': 5},{'SID1': 2, 'SID2': 6},{'SID1': 2, 'SID2': 7},{'SID1': 2, 'SID2': 8},{'SID1': 2, 'SID2': 9},{'SID1': 2, 'SID2': 10},{'SID1': 2, 'SID2': 11},{'SID1': 2, 'SID2': 12},{'SID1': 2, 'SID2': 13},{'SID1': 2, 'SID2': 14},{'SID1': 2, 'SID2': 15},{'SID1': 2, 'SID2': 16},{'SID1': 2, 'SID2': 17},{'SID1': 2, 'SID2': 18},{'SID1': 2, 'SID2': 19},{'SID1': 2, 'SID2': 20},{'SID1': 2, 'SID2': 21},{'SID1': 2, 'SID2': 22},{'SID1': 2, 'SID2': 23},{'SID1': 2, 'SID2': 24},{'SID1': 2, 'SID2': 25},{'SID1': 2, 'SID2': 26},{'SID1': 2, 'SID2': 27},{'SID1': 2, 'SID2': 28},{'SID1': 2, 'SID2': 29},{'SID1': 2, 'SID2': 30},{'SID1': 2, 'SID2': 31},{'SID1': 2, 'SID2': 32},{'SID1': 2, 'SID2': 33},{'SID1': 2, 'SID2': 34},{'SID1': 2, 'SID2': 35},{'SID1': 2, 'SID2': 36},{'SID1': 2, 'SID2': 37},{'SID1': 2, 'SID2': 38},{'SID1': 2, 'SID2': 39}]
+
 def objectid_decode(stream):
-    """Decode a stream into an ObjectID.
+    cdef char *stream_char = stream
+    cdef size_t stream_len = len(stream)
+    return objectid_decode_tuple(stream_char, stream_len)
 
-    :param stream: stream with OID
-    :type stream: bytes
-    :returns: OID
-    :rtype: str
+cdef inline tuple objectid_decode_tuple(char *stream, size_t stream_len):
+    cdef size_t result_len=0
+    cdef uint64_t result[120]
+
+    objectid_decode_c(stream, stream_len, result, &result_len)
+    ret = PyTuple_New(result_len)
+
+    for i in range(result_len):
+        val = PyInt_FromLong(result[i])
+        Py_INCREF(val)
+        PyTuple_SET_ITEM(ret, i, val)
+    return ret
+
+cdef inline int objectid_decode_c(char *stream, size_t stream_len, uint64_t *result, size_t *result_len):
+    cdef object value
+    cdef SID12_ti *sid12_ptr
+    cdef size_t i, enc_len=0
+    cdef tuple ret
+    sid12_ptr = &sid12[<size_t>stream[0]]
+    result[0] = sid12_ptr.SID1
+    result[1] = sid12_ptr.SID2
+    result_len[0] = 2
+
+    if stream_len > 1:
+        primitive_decode(stream+1, stream_len-1, result+2, &enc_len)
+        result_len[0] += enc_len
+
+    return 0
+
+@cython.cdivision(True)
+cdef inline int primitive_encode(uint64_t *value, char *result_ptr) except -1:
     """
-    if not stream:
-        raise ValueError('stream of zero length in')
-    if stream in id_cache:
-        return id_cache[stream]
-    value = list()
-    # #
-    # # Do the funky decode of the first octet
-    # #
+    Primitive encoding
+    """
+    cdef unsigned int size = 0
 
-    if stream[0] < 128:
-        value.append(stream[0] // 40)
-        value.append(stream[0] % 40)
+    if value[0] < <uint64_t>0x80:  # 7 bit
+        result_ptr[0] = value[0]
+        size = 1
+    elif value[0] < <uint64_t>0x4000:  # 14 bit
+        result_ptr[0] = value[0] >> 7 | 0x80
+        result_ptr[1] = value[0] & 0x7f
+        size = 2
+    elif value[0] < <uint64_t>0x200000:  # 21 bit
+        result_ptr[0] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 7 | 0x80
+        result_ptr[2] = value[0] & 0x7f
+        size = 3
+    elif value[0] < <uint64_t>0x10000000:  # 28 bit
+        result_ptr[0] = value[0] >> 21 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[2] = value[0] >> 7 | 0x80
+        result_ptr[3] = value[0] & 0x7f
+        size = 4
+    elif value[0] < <uint64_t>0x800000000:  # 35 bit
+        result_ptr[0] = value[0] >> 28 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 21 & 0x7f | 0x80
+        result_ptr[2] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[3] = value[0] >> 7 | 0x80
+        result_ptr[4] = value[0] & 0x7f
+        size = 5
+    elif value[0] < <uint64_t>0x40000000000:  # 42 bit
+        result_ptr[0] = value[0] >> 35 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 28 & 0x7f | 0x80
+        result_ptr[2] = value[0] >> 21 & 0x7f | 0x80
+        result_ptr[3] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[4] = value[0] >> 7 | 0x80
+        result_ptr[5] = value[0] & 0x7f
+        size = 6
+    elif value[0] < <uint64_t>0x2000000000000:  # 49 bit
+        result_ptr[0] = value[0] >> 42 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 35 & 0x7f | 0x80
+        result_ptr[2] = value[0] >> 28 & 0x7f | 0x80
+        result_ptr[3] = value[0] >> 21 & 0x7f | 0x80
+        result_ptr[4] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[5] = value[0] >> 7 | 0x80
+        result_ptr[6] = value[0] & 0x7f
+        size = 7
+    elif value[0] < <uint64_t>0x100000000000000:  # 56 bit
+        result_ptr[0] = value[0] >> 49 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 42 & 0x7f | 0x80
+        result_ptr[2] = value[0] >> 35 & 0x7f | 0x80
+        result_ptr[3] = value[0] >> 28 & 0x7f | 0x80
+        result_ptr[4] = value[0] >> 21 & 0x7f | 0x80
+        result_ptr[5] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[6] = value[0] >> 7 | 0x80
+        result_ptr[7] = value[0] & 0x7f
+        size = 7
     else:
-        # # I haven't bothered putting in the convoluted logic here
-        # # because the highest likely assignment for the first
-        # # octet is 83 according to Annex B of X.208 Those X.209
-        # # does give as an example 2.100.3, which is kinda stupid.
-        # # Actually, a lot of the space-saving encodings, like
-        # # this first octet, are a real PITA later on.  So yeah,
-        # # stuff it, we'll just raise an exception.
-        raise ValueError('stream of zero length in objectid_decode()')
-    # #
-    # # Decode the rest of the octets
-    # #
-    n = 1
-    bytes_len = len(stream)
-    while n < bytes_len:
-        subid = stream[n]
-        n += 1
-        # #
-        # # If bit 8 is not set, this is the last octet of this subid
-        # # If bit 8 is set, the subid spans this octet and the ones
-        # # afterwards, up until bit 8 isn't set.
-        # #
-        if subid & 0x80 == 0x80:
-            val = subid & 0x7f
-            while (subid & 0x80) == 0x80:
-                subid = stream[n]
-                n += 1
-                val = (val << 7) | (subid & 0x7f)
-            value.append(val)
-        else:
-            value.append(subid)
-    value = ".".join(map(str, value))
-    id_cache[stream] = value
-    return value
+        # TODO: implement iterative calculation
+        return -1
+        # raise NotImplementedError("to big value %s" % value[0])
+
+    return size
+
+
+@cython.cdivision(True)
+cdef inline int objectid_encode_array(uint64_t *subids, uint32_t subids_len,
+                                      char *result, size_t *object_len):
+    cdef uint32_t clen
+    cdef uint64_t subid
+    cdef size_t i
+    cdef int retval = 0
+    cdef size_t sid_len = 0
+    cdef char *result_ptr
+
+    if subids[0] == 2 and subids[1] > 39:
+        return -3  # long SID1 is not supported
+
+    if subids[0] > 2:
+        return -1  # wrong SID1
+
+    if subids[1] > 39:
+        return -2  # wrong SID2
+
+    result[0] = subids[0]*40 + subids[1]
+    object_len[0] = 1
+    result_ptr = result+1
+
+    for i in range(2, subids_len):
+        subid = subids[i]
+        sid_len = primitive_encode(&subid, result_ptr)
+        object_len[0] += sid_len
+        result_ptr = result_ptr+sid_len
+    return retval
 
 def objectid_encode(oid):
     """
     encode an ObjectID into stream
-
+    X.690, chapter 8.19
     :param oid: OID
     :type oid: str
     :returns: stream
     :rtype: bytearray
     """
     cdef unsigned int number
-    cdef unsigned int subid
-    cdef str subid_c
-    cdef list idlist = []
+    cdef uint64_t idlist[128]
     cdef list subidlist
-    subidlist = oid.strip('.').split('.')
-    # asn_parse_objid(bufp, Length, &ASNType, objid, &PDU->enterprise_length);
-    for subid_c in subidlist:
-        number = int(subid_c)
-        if number < 0 or number > 0x7FFFFFFF:
-            raise ValueError("SubID out of range")
-        idlist.append(number)
+    cdef size_t pos = 0
+    cdef size_t object_len = 0
+    cdef char result[256]
+    cdef str subid
+    for subid in oid.strip('.').split('.'):
+        idlist[pos] = int(subid)
+        pos += 1
+    ret = objectid_encode_array(idlist, pos, result, &object_len)
 
-    result = bytearray()
+    if ret != 0:
+        if ret == -1:
+            raise Exception("wrong SID1")
+        elif ret == -2:
+            raise Exception("wrong SID2")
+        elif ret == -3:
+            raise Exception("long SID1 is not supported")
 
-    # Do the bit with the first 2 subids
-    # section 22.4 of X.209
-    idlist.reverse()
-    subid1 = (idlist.pop() * 40) + idlist.pop()
-    idlist.reverse()
-    idlist.insert(0, subid1)
-
-    for subid in idlist:
-        if subid < 128:
-            result.append(subid & 0x7f)
-        else:
-            position = len(result)
-            result.append(subid & 0x7f)
-
-            subid >>= 7
-            while subid > 0:
-                result.insert(position, 0x80 | (subid & 0x7f))
-                subid >>= 7
-
-    return result
+    return <bytes>result[:object_len]
 
 
 def octetstring_decode(stream):
@@ -203,7 +337,7 @@ def octetstring_encode(string):
     return bytes(string.encode('ascii'))
 
 
-def integer_encode(integer):
+def integer_encode2(integer):
     """
     encode an integer
 
@@ -217,8 +351,34 @@ def integer_encode(integer):
     elif integer > 0:
         return integer.to_bytes(integer.bit_length() // 8 + 1, byteorder='big', signed=True)
 
+cdef inline size_t ber_encode_integer_size(const int64_t value):
+    cdef size_t len = 1
+    cdef int64_t tmp = value
+    cdef bint is_most_sig_set = tmp & 0x80
+    tmp >>= 8
+    # how many bytes are used in value
+    while tmp != 0:
+        len += 1
+        is_most_sig_set = tmp & 0x80
+        tmp >>= 8
+    # in unsigned number most significant bit must be not set
+    if is_most_sig_set:
+        return len + 1
+    else:
+        return len
 
-def integer_decode(stream):
+def integer_encode(const int64_t value):
+    # little -> big
+    cdef size_t slen, i
+    cdef char[8] res
+    slen = ber_encode_integer_size(value)
+
+    # copy the bytes from value to data backwards
+    for i in range(0, slen):
+        res[slen-i-1] = (<char *> &value)[i]
+    return res[:slen]
+
+def integer_decode(bytes stream not None):
     """
     Decode input stream into a integer
 
@@ -227,13 +387,46 @@ def integer_decode(stream):
     :returns: decoded integer
     :rtype: int
     """
-    if stream in integer_encode_cache:
-        return integer_decode_cache[stream]
-    else:
-        return int.from_bytes(stream, byteorder='big', signed=True)
+    cdef uint64_t value = 0
+    cdef uint8_t i
+    cdef size_t stream_len = len(stream)
+    cdef char *stream_char = stream
+    for i in range(stream_len):
+        value <<= 8
+        value |= <uint8_t>stream_char[i]
+    return value
 
+def integer_decode(bytes stream not None):
+    """
+    Decode input stream into a integer
 
-def sequence_decode(stream):
+    :param stream: encoded integer
+    :type stream: bytes
+    :returns: decoded integer
+    :rtype: int
+    """
+    cdef uint64_t value = 0
+    cdef uint8_t i
+    cdef size_t stream_len = len(stream)
+    cdef char *stream_char = stream
+    return integer_decode_c(stream_char, &stream_len)
+
+cdef inline uint64_t integer_decode_c(char *stream, size_t *stream_len):
+    cdef uint64_t value = 0
+    cdef uint8_t i
+    for i in range(stream_len[0]):
+        value <<= 8
+        value |= <uint8_t>stream[i]
+    return value
+
+def sequence_decode(bytes stream not None) -> list:
+    cdef char * stream_char = stream
+    cdef size_t stream_len = len(stream)
+    cdef list ret
+    ret = sequence_decode_c(stream_char, stream_len)
+    return ret
+
+cdef list sequence_decode_c(char *stream, size_t stream_len):
     """
     Decode input stream into as sequence
 
@@ -242,15 +435,43 @@ def sequence_decode(stream):
     :returns: decoded sequence
     :rtype: list
     """
-    objects = []
-    while stream:
-        (tag, stream) = tag_decode(stream)
-        (length, stream) = length_decode(stream)
-        objectData = stream[:length]
-        stream = stream[length:]
-        parsed_objectData = tagDecodeDict[tag](objectData)
-        # print(tag, length, objectData,parsed_objectData)
-        objects.append(parsed_objectData)
+    cdef uint64_t tag=0, tmp_int_val
+    cdef size_t encode_length, length, offset=0
+    cdef bytes str_val
+    cdef char * stream_char = stream
+    cdef list objects=[], tmp_list_val
+    cdef tuple tmp_tuple_val
+
+    while offset<stream_len:
+        tag_decode_c(stream_char, &tag, &encode_length)
+        stream_char += encode_length
+        offset += encode_length
+
+        length_decode_c(stream_char, &length, &encode_length)
+        stream_char+=encode_length
+        offset += encode_length
+
+        if tag in [0x02, 0x40, 0x41, 0x42, 0x46, 0x43]:
+            tmp_int_val = integer_decode_c(stream_char, &length)
+            objects.append(tmp_int_val)
+        elif tag == 0x06:
+            tmp_tuple_val = objectid_decode_tuple(stream_char, length)
+            objects.append(tmp_tuple_val)
+        elif tag in [0x80, 0x81, 0x82]:
+            objects.append(None)
+        elif tag in [0x30, 0xa2, 0xa5]:
+            tmp_list_val = sequence_decode_c(stream_char, length)
+            objects.append(tmp_list_val)
+        elif tag in [0x04, 0x40]:
+            str_val = stream_char[:length]
+            objects.append(str_val)
+        else:
+            raise NotImplementedError(tag)
+            #parsed_objectData = tagDecodeDict[tag](objectData)
+            #objects.append(parsed_objectData)
+
+        offset += length
+        stream_char += length
     return objects
 
 tagDecodeDict = {
@@ -268,34 +489,32 @@ tagDecodeDict = {
     0x43: integer_decode,  # TimeTicks,
 
     0xa2: pdu_response_decode,
+    0xa5: pdu_response_decode,  # GetBulkRequest
     0x80: lambda x: None,  # NoSuchObject_TAG
     0x81: lambda x: None,  # NoSuchInstance_TAG
     0x82: lambda x: None,  # EndOfMibView_TAG
 }
 
 
-def length_decode(stream):
+cdef int length_decode_c(char *stream, size_t *length, size_t *enc_len):
     """
-    Decode a BER length field, returing the length and the
-    remainder of the stream
+    X.690 8,1,3
+    """
+    length[0] = <uint8_t>stream[0]
+    enc_len[0] = 1
 
-    :param stream: sequence
-    :type stream: bytes
-    :returns: (length, remaining stream)
-    :rtype: tuple
-    """
-    length = stream[0]
-    n = 1
-    if length & 0x80:
-        # Multi-Octet length encoding.  The first octet
-        # represents the run-length (the number of octets used to
-        # build the length)
-        run = length & 0x7F
-        length = 0
-        for i in range(run):
-            length = (length << 8) | stream[n]
-            n += 1
-    return length, stream[n:]
+    if length[0] & 0x80 == 0x80:  # 8.1.3.5
+        enc_len[0] = length[0] & 0x7f
+        length[0] = integer_decode_c(stream+1, enc_len)
+        enc_len[0] += 1
+
+    return 0
+
+
+def length_decode(bytes data):
+    cdef size_t encode_length, length
+    length_decode_c(data, &length, &encode_length)
+    return length, encode_length
 
 
 def length_encode(length):
@@ -333,35 +552,26 @@ def length_encode(length):
         result = resultlist
     return result
 
-
-def tag_decode(stream):
+cdef inline int tag_decode_c(char *stream, uint64_t *tag, size_t *enc_len) except -1:
     """
+    X.690 8.1.2
+
     Decode a BER tag field, returning the tag and the remainder
     of the stream
-
-    :param stream: stream
-    :type stream: bytes
-    :returns: (tag, remaining stream)
-    :rtype: tuple
     """
-    tag = stream[0]
-    n = 1
-    if tag & 0x1F == 0x1F:
 
-        # # A large tag is encoded using concatenated 7-bit values
-        # # over the following octets, ignoring the initial 5 bits
-        # # in the first octet.  The 8th bit represents a
-        # # follow-on.
+    tag[0] = <uint8_t>stream[0]  # low-tag-number form
+    enc_len[0] = 1
+    if tag[0] & 0x1F == 0x1F:  # high-tag-number form
+        return -1
 
-        tag = 0
-        while 1:
-            byte = ord(stream[n])
-            tag = (tag << 7) | (byte & 0x7F)
-            n += 1
-            if not byte & 0x80:
-                break
+    return 0
 
-    return tag, stream[n:]
+def tag_decode(bytes stream not None):
+    cdef uint64_t tag=0
+    cdef size_t encode_length
+    tag_decode_c(stream, &tag, &encode_length)
+    return tag, encode_length
 
 
 def tag_encode(asn_tag_class, asn_tag_format, asn_tag_number):
@@ -534,11 +744,18 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
 
 
 def msg_decode(stream):
-    (tag, stream) = tag_decode(stream)
-    (length, stream) = length_decode(stream)
-    objectData = stream[:length]
-    stream = stream[length:]
-    snmp_ver, community, data = tagDecodeDict[tag](objectData)
+    cdef uint64_t tag=0
+    cdef size_t encode_length, length
+    cdef char* stream_char = stream
+    cdef char* stream_ptr = stream_char
+    cdef size_t stream_len = len(stream)
+    cdef list data
+
+    tag_decode_c(stream_ptr, &tag, &encode_length)
+    stream_ptr += encode_length
+    length_decode_c(stream_ptr, &length, &encode_length)
+    stream_ptr += encode_length
+    snmp_ver, community, data = sequence_decode_c(stream_ptr, length)
     req_id, error_status, error_index, varbinds = data
     return req_id, error_status, error_index, varbinds
 
@@ -573,6 +790,7 @@ def parse_varbind(var_bind_list, orig_main_oids, oids_to_poll):
         if main_oids_pos in skip_column:
             continue
         main_oid = orig_main_oids[main_oids_pos]
+        print(oid)
         if oid.startswith(main_oid + '.'):
             index_part = oid[len(main_oid) + 1:]
             last_seen_index[main_oids_pos] = index_part
