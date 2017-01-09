@@ -75,10 +75,6 @@ ASN_SNMP_MSG_TYPES ={
 }
 
 # caches
-id_cache = {}
-tag_cache = {}
-integer_decode_cache = {b'\x00': 0, b'\x01': 1}
-integer_encode_cache = {0: b'\x00', 1: b'\x01'}
 sequence_cache = {}
 
 length_cache = {}
