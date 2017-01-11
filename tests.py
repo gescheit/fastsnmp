@@ -7,6 +7,10 @@ from fastsnmp import snmp_parser
 
 
 class TestSnmpParser(unittest.TestCase):
+    strs = [
+        ['56', b'\x35\x36'],  # str
+        [b'\x00\x80\xeaB^7', b'\x00\x80\xea\x42\x5e\x37'],  # bytes
+    ]
     ints = [
         [0, b'\x00'],
         [1, b'\x01'],
@@ -51,6 +55,11 @@ class TestSnmpParser(unittest.TestCase):
         for i, enc in self.ints:
             int_decoded = snmp_parser.integer_decode(enc)
             self.assertEqual(int_decoded, i)
+
+    def test_str_decode(self):
+        for i, enc in self.strs:
+            str_decoded = snmp_parser.octetstring_decode(enc)
+            self.assertEqual(str_decoded, i)
 
     def test_oid_encoder(self):
         for str_oid, enc in self.object_ids:
