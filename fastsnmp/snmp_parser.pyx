@@ -435,7 +435,7 @@ cdef list sequence_decode_c(char *stream, size_t stream_len):
         elif tag == 0x06:
             tmp_objectid = objectid_decode_str(stream_char, length)
             objects.append(tmp_objectid)
-        elif tag in [0x80, 0x81, 0x82]:
+        elif tag in [0x80, 0x81, 0x82, 0x05]:
             objects.append(None)
         elif tag in [0x30, 0xa2, 0xa5]:
             tmp_list_val = sequence_decode_c(stream_char, length)
