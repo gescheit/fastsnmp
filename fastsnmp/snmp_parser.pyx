@@ -15,16 +15,9 @@ from cpython.ref cimport Py_INCREF
 from libc.stdio cimport sprintf
 from libc.string cimport memcpy
 from itertools import cycle
+from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t
 
 DEF MAX_OID_LEN_STR=500
-
-cdef extern from "stdint.h" nogil:
-    ctypedef signed int int8_t
-    ctypedef signed int int32_t
-    ctypedef signed int int64_t
-    ctypedef unsigned int uint8_t
-    ctypedef unsigned int uint32_t
-    ctypedef unsigned int uint64_t
 
 class SNMPException(Exception):
     pass
