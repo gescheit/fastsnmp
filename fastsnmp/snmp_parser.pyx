@@ -594,15 +594,15 @@ def encode_varbind(oid, value_type='Null', value=None):
 def varbinds_encode(varbinds):
     res = bytearray()
     for varbind in varbinds:
-        if len(varbind) == 3:
+        if isinstance(varbind, str):
+            oid = varbind
+            value = None
+            value_type = "Null"
+        elif len(varbind) == 3:
             oid, value_type, value = varbind
         elif len(varbind) == 2:
             oid, value_type = varbind
             value = None
-        else:
-            oid = varbind
-            value = None
-            value_type = "Null"
         res += encode_varbind(oid, value_type, value)
     return res
 
@@ -645,6 +645,8 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
 
 
     if msg_type == "GetBulk":
+        if max_repetitions < 1:
+            raise Exception("max_repetitions must be higher than %s" % max_repetitions)
         nonRepeaters = integer_encode(non_repeaters)
         nonRepeaters_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
         nonRepeaters_len = length_encode(len(nonRepeaters))
