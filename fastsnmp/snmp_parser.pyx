@@ -15,7 +15,7 @@ from cpython.ref cimport Py_INCREF
 from libc.stdio cimport sprintf
 from libc.string cimport memcpy
 from itertools import cycle
-from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t
+from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t, int64_t, int8_t, INT64_MAX
 
 DEF MAX_OID_LEN_STR=500
 
@@ -45,6 +45,8 @@ asnTagFormats = {
 
 ASN_TYPES = {
     'Integer': 0x02,
+    'Counter32': 0x40,
+    'Counter64': 0x46,
     'OctetString': 0x04,
     'Null': 0x05,
     'ObjectID': 0x06,
@@ -105,7 +107,7 @@ cdef inline int primitive_decode(char *stream, size_t stream_len, uint64_t *resu
     return retval
 
 
-cdef inline objectid_decode_str(char *stream, size_t stream_len):
+cdef inline objectid_decode_str(const unsigned char *stream, size_t stream_len):
     cdef uint64_t result[122]
     cdef char result_str[MAX_OID_LEN_STR]
     cdef char *result_str_ptr = result_str
@@ -134,7 +136,7 @@ cdef inline objectid_decode_str(char *stream, size_t stream_len):
 
 
 def objectid_decode(stream):
-    cdef char *stream_char = stream
+    cdef const unsigned char *stream_char = stream
     cdef size_t stream_len = len(stream)
     return objectid_decode_str(stream_char, stream_len)
 
@@ -227,10 +229,29 @@ cdef inline int primitive_encode(uint64_t *value, char *result_ptr) except -1:
         result_ptr[6] = value[0] >> 7 | 0x80
         result_ptr[7] = value[0] & 0x7f
         size = 7
-    else:
-        # TODO: implement iterative calculation
-        return -1
-
+    elif value[0] < <uint64_t>0x8000000000000000:  # 63 bit
+        result_ptr[0] = value[0] >> 56 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 49 & 0x7f | 0x80
+        result_ptr[2] = value[0] >> 42 & 0x7f | 0x80
+        result_ptr[3] = value[0] >> 35 & 0x7f | 0x80
+        result_ptr[4] = value[0] >> 28 & 0x7f | 0x80
+        result_ptr[5] = value[0] >> 21 & 0x7f | 0x80
+        result_ptr[6] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[7] = value[0] >> 7 | 0x80
+        result_ptr[8] = value[0] & 0x7f
+        size = 8
+    else:  # 64 bit
+        result_ptr[0] = value[0] >> 56 & 0x7f | 0x80
+        result_ptr[1] = value[0] >> 49 & 0x7f | 0x80
+        result_ptr[2] = value[0] >> 42 & 0x7f | 0x80
+        result_ptr[3] = value[0] >> 35 & 0x7f | 0x80
+        result_ptr[4] = value[0] >> 28 & 0x7f | 0x80
+        result_ptr[5] = value[0] >> 21 & 0x7f | 0x80
+        result_ptr[6] = value[0] >> 14 & 0x7f | 0x80
+        result_ptr[7] = value[0] >> 7 | 0x80
+        result_ptr[8] = value[0] & 0x7f
+        result_ptr[9] = 0
+        size = 9
     return size
 
 
@@ -295,7 +316,7 @@ def objectid_encode(oid):
 
     return <bytes>result[:object_len]
 
-cdef inline object c_octetstring_decode(char *data, size_t data_len, bint auto_str=1):
+cdef inline object c_octetstring_decode(const unsigned char *data, size_t data_len, bint auto_str=1):
     cdef object ret
     if auto_str:
         for i in range(data_len):
@@ -320,35 +341,33 @@ def octetstring_encode(string):
     """
     return bytes(string.encode('ascii'))
 
-
-cdef inline size_t ber_encode_integer_size(const int64_t value):
-    cdef size_t len = 1
-    cdef int64_t tmp = value
-    cdef bint is_most_sig_set = tmp & 0x80
-    tmp >>= 8
-    # how many bytes are used in value
-    while tmp != 0:
-        len += 1
-        is_most_sig_set = tmp & 0x80
-        tmp >>= 8
-    # in unsigned number most significant bit must be not set
-    if is_most_sig_set:
-        return len + 1
-    else:
-        return len
-
-def integer_encode(const uint64_t value):
+def integer_encode(const int64_t value):
     # little -> big
-    cdef size_t slen, i
-    cdef char[8] res
-    slen = ber_encode_integer_size(value)
+    cdef unsigned int slen, i
+    cdef char[10] res
+    cdef uint64_t mod_value = value
+    if value < 0:
+        mod_value = ~value + 1
+
+    slen = primitive_encode(<uint64_t*>&mod_value, res)
 
     # copy the bytes from value to data backwards
     for i in range(0, slen):
         res[slen-i-1] = (<char *> &value)[i]
     return <bytes> res[:slen]
 
-def integer_decode(bytes stream not None):
+def uinteger_encode(uint64_t value):
+    # little -> big
+    cdef size_t slen, i
+    cdef char[10] res
+    slen = primitive_encode(&value, res)
+
+    # copy the bytes from value to data backwards
+    for i in range(0, slen):
+        res[slen - i - 1] = (<char *> &value)[i]
+    return <bytes> res[:slen]
+
+def uinteger_decode(bytes stream not None):
     """
     Decode input stream into a integer
 
@@ -358,13 +377,9 @@ def integer_decode(bytes stream not None):
     :rtype: int
     """
     cdef uint64_t value = 0
-    cdef uint8_t i
     cdef size_t stream_len = len(stream)
-    cdef char *stream_char = stream
-    for i in range(stream_len):
-        value <<= 8
-        value |= <uint8_t>stream_char[i]
-    return value
+    cdef const unsigned char *stream_char = stream
+    return uinteger_decode_c(stream_char, &stream_len)
 
 def integer_decode(bytes stream not None):
     """
@@ -375,13 +390,23 @@ def integer_decode(bytes stream not None):
     :returns: decoded integer
     :rtype: int
     """
-    cdef uint64_t value = 0
-    cdef uint8_t i
+    cdef int64_t value = 0
     cdef size_t stream_len = len(stream)
-    cdef char *stream_char = stream
+    cdef const unsigned char *stream_char = stream
     return integer_decode_c(stream_char, &stream_len)
 
-cdef inline uint64_t integer_decode_c(char *stream, size_t *stream_len):
+cdef inline int64_t integer_decode_c(const unsigned char *stream, size_t *stream_len):
+    cdef int64_t value = 0
+    cdef size_t i
+
+    if stream[0] & 0x80:  # copy sign bit into all bytes first
+        value = INT64_MAX
+    for i in range(stream_len[0]):
+        value <<= 8
+        value |= stream[i]
+    return value
+
+cdef inline uint64_t uinteger_decode_c(const unsigned char *stream, size_t *stream_len):
     cdef uint64_t value = 0
     cdef uint8_t i
     for i in range(stream_len[0]):
@@ -390,13 +415,13 @@ cdef inline uint64_t integer_decode_c(char *stream, size_t *stream_len):
     return value
 
 def sequence_decode(bytes stream not None) -> list:
-    cdef char * stream_char = stream
+    cdef const unsigned char * stream_char = stream
     cdef size_t stream_len = len(stream)
     cdef list ret
     ret = sequence_decode_c(stream_char, stream_len)
     return ret
 
-cdef list sequence_decode_c(char *stream, size_t stream_len):
+cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
     """
     Decode input stream into as sequence
 
@@ -405,10 +430,11 @@ cdef list sequence_decode_c(char *stream, size_t stream_len):
     :returns: decoded sequence
     :rtype: list
     """
-    cdef uint64_t tag=0, tmp_int_val
+    cdef uint64_t tag = 0, tmp_uint_val
+    cdef int64_t tmp_int_val
     cdef size_t encode_length, length, offset=0
     cdef object str_val
-    cdef char * stream_char = stream
+    cdef const unsigned char *stream_char = stream
     cdef list objects=[], tmp_list_val
     cdef tuple tmp_tuple_val
     cdef str tmp_objectid
@@ -422,9 +448,12 @@ cdef list sequence_decode_c(char *stream, size_t stream_len):
         stream_char+=encode_length
         offset += encode_length
 
-        if tag in [0x02, 0x40, 0x41, 0x42, 0x46, 0x43]:
+        if tag == 0x02:
             tmp_int_val = integer_decode_c(stream_char, &length)
             objects.append(tmp_int_val)
+        elif tag in [0x40, 0x41, 0x42, 0x43, 0x46]:
+            tmp_uint_val = uinteger_decode_c(stream_char, &length)
+            objects.append(tmp_uint_val)
         elif tag == 0x06:
             tmp_objectid = objectid_decode_str(stream_char, length)
             objects.append(tmp_objectid)
@@ -433,7 +462,7 @@ cdef list sequence_decode_c(char *stream, size_t stream_len):
         elif tag in [0x30, 0xa2, 0xa5]:
             tmp_list_val = sequence_decode_c(stream_char, length)
             objects.append(tmp_list_val)
-        elif tag in [0x04, 0x40]:
+        elif tag in [0x04]:
             str_val = c_octetstring_decode(stream_char, length, 1)
             objects.append(str_val)
         else:
@@ -444,7 +473,7 @@ cdef list sequence_decode_c(char *stream, size_t stream_len):
     return objects
 
 
-cdef int length_decode_c(char *stream, size_t *length, size_t *enc_len):
+cdef int length_decode_c(const unsigned char *stream, size_t *length, size_t *enc_len):
     """
     X.690 8,1,3
     """
@@ -453,7 +482,7 @@ cdef int length_decode_c(char *stream, size_t *length, size_t *enc_len):
 
     if length[0] & 0x80 == 0x80:  # 8.1.3.5
         enc_len[0] = length[0] & 0x7f
-        length[0] = integer_decode_c(stream+1, enc_len)
+        length[0] = uinteger_decode_c(stream+1, enc_len)
         enc_len[0] += 1
 
     return 0
@@ -465,11 +494,9 @@ def length_decode(bytes data):
     return length, encode_length
 
 
-def length_encode(length):
+def length_encode(uint64_t length):
     """
-    Function takes the length of the contents and
-    produces the encoding for that length.  Section 6.3 of
-    ITU-T-X.209
+    Function takes the length of the contents and produces the encoding for that length.  Section 6.3 of ITU-T-X.209
 
     :param length: length
     :type length: int
@@ -478,8 +505,8 @@ def length_encode(length):
     """
     if length in length_cache:
         return length_cache[length]
-
-    if length < 127:
+    cdef uint64_t tmp_length = length
+    if length <= 127:
         result = bytes([length & 0xff])
     else:
         # Long form - Octet one is the number of octets used to
@@ -490,17 +517,18 @@ def length_encode(length):
 
         resultlist = bytearray()
         numOctets = 0
-        while length > 0:
-            resultlist.insert(0, length & 0xff)
-            length >>= 8
+        while tmp_length > 0:
+            resultlist.insert(0, tmp_length & 0xff)
+            tmp_length >>= 8
             numOctets += 1
         # Add a 1 to the front of the octet
         numOctets |= 0x80
         resultlist.insert(0, numOctets & 0xff)
-        result = resultlist
+        result = bytes(resultlist)
+    length_cache[length] = result
     return result
 
-cdef inline int tag_decode_c(char *stream, uint64_t *tag, size_t *enc_len) except -1:
+cdef inline int tag_decode_c(const unsigned char *stream, uint64_t *tag, size_t *enc_len) except -1:
     """
     X.690 8.1.2
 
@@ -567,6 +595,8 @@ def value_encode(value=None, value_type='Null'):
         return b''
     elif value_type == "Integer":
         return integer_encode(value)
+    elif value_type == "Counter64":
+        return uinteger_encode(value)
     elif value_type == "OctetString":
         return value.encode()
     else:
@@ -696,8 +726,8 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
 def msg_decode(stream):
     cdef uint64_t tag=0
     cdef size_t encode_length, length
-    cdef char* stream_char = stream
-    cdef char* stream_ptr = stream_char
+    cdef const unsigned char *stream_char = stream
+    cdef const unsigned char *stream_ptr = stream_char
     cdef size_t stream_len = len(stream)
     cdef list data
 
