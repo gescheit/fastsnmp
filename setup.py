@@ -21,7 +21,7 @@ else:
     cmdclass.update({'build_ext': build_ext})
 
 ext = '.pyx' if USE_CYTHON else '.c'
-extensions = [Extension("fastsnmp/snmp_parser", ["fastsnmp/snmp_parser" + ext])]
+extensions = [Extension("fastsnmp.snmp_parser", ["fastsnmp/snmp_parser" + ext])]
 
 
 try:
