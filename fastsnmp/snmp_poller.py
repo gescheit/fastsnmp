@@ -155,6 +155,7 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                                      target_info[host_ip],
                                      error_status, error_index,
                                      varbinds_cache[host_ip][pdudata_reqid][0])
+                        continue
                     if DEBUG:
                         logger.debug('%s recv reqid=%s' % (host_ip, pdudata_reqid))
                     if pdudata_reqid not in varbinds_cache[host_ip]:
@@ -183,24 +184,28 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                         if main_oids_pos in skip_column:
                             continue
                         main_oid = main_oids[main_oids_pos]
-                        if oid.startswith(main_oid + '.'):
-                            index_part = oid[len(main_oid) + 1:]
-                            last_seen_index[main_oids_pos] = index_part
-                            yield (target_info[host_ip], main_oid, index_part, value)
+                        if msg_type == "GetBulk":
+                            if oid.startswith(main_oid + '.'):
+                                index_part = oid[len(main_oid) + 1:]
+                                last_seen_index[main_oids_pos] = index_part
+                                yield (target_info[host_ip], main_oid, index_part, value)
+                            else:
+                                if DEBUG:
+                                    logger.debug(
+                                        'host_ip=%s column_pos=%s skip oid %s=%s, reqid=%s. Not found in %s' % (host_ip,
+                                                                                                                main_oids_pos,
+                                                                                                                oid,
+                                                                                                                value,
+                                                                                                                pdudata_reqid,
+                                                                                                                main_oids))
+                                    logger.debug('vp=%s oid=%s main_oid=%s main_oids_pos=%s main_oids=%s', var_bind_pos,
+                                                 oid, main_oid, main_oids_pos, main_oids)
+                                skip_column[main_oids_pos] = True
+                                if len(skip_column) == var_bind_list_len:
+                                    break
                         else:
-                            if DEBUG:
-                                logger.debug(
-                                    'host_ip=%s column_pos=%s skip oid %s=%s, reqid=%s. Not found in %s' % (host_ip,
-                                                                                                            main_oids_pos,
-                                                                                                            oid,
-                                                                                                            value,
-                                                                                                            pdudata_reqid,
-                                                                                                            main_oids))
-                                logger.debug('vp=%s oid=%s main_oid=%s main_oids_pos=%s main_oids=%s', var_bind_pos,
-                                             oid, main_oid, main_oids_pos, main_oids)
+                            yield (target_info[host_ip], main_oid, "", value)
                             skip_column[main_oids_pos] = True
-                            if len(skip_column) == var_bind_list_len:
-                                break
                     if len(skip_column) < main_oids_len:
                         if len(skip_column):
                             oids_to_poll = list()
