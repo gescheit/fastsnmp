@@ -3,13 +3,24 @@
 import sys
 
 if sys.version_info[0] < 3:
-    print >> sys.stderr, "This program work only with python3. Sorry."
+    sys.stderr.write("This program work only with python3. Sorry.")
     sys.exit(1)
 import select
 
-if not hasattr(select, 'epoll'):
+if hasattr(select, 'epoll'):
+    from select import epoll as poll
+    from select import EPOLLOUT as POLLOUT
+    from select import EPOLLIN as POLLIN
+    from select import EPOLLERR as POLLERR
+elif hasattr(select, 'poll'):
+    from select import poll
+    from select import POLLOUT
+    from select import POLLIN
+    from select import POLLERR
+else:
     print("The current platform does not support epoll", file=sys.stderr)
     sys.exit(1)
+
 import logging
 import socket
 import queue
@@ -101,21 +112,21 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
 
     # preparation of sockets
     socket_map = {}
-    epoll = select.epoll()
+    epoll = poll()
     socket_count = min((MAX_SOCKETS_COUNT, len(target_info_r)))
     for _ in range(socket_count):
         new_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         new_sock.bind(('0.0.0.0', 0))
         socket_map[new_sock.fileno()] = new_sock
-        epoll.register(new_sock, select.EPOLLOUT)
+        epoll.register(new_sock, POLLOUT)
 
     # main loop
     while True:
         try:
             events = epoll.poll(0.1)
             for fileno, event in events:
-                if event & select.EPOLLOUT:
-                    fdfmt = select.EPOLLIN
+                if event & POLLOUT:
+                    fdfmt = POLLIN
                     if not job_queue.empty():
                         host, pdudata_reqid = job_queue.get()
                         oids_to_poll, main_oids = varbinds_cache[host][pdudata_reqid]
@@ -134,9 +145,9 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                             logger.debug('sendto %s reqid=%s get oids=%s', host, pdudata_reqid, oids_to_poll)
                         job_queue.task_done()
                     if not job_queue.empty():
-                        fdfmt = fdfmt | select.EPOLLOUT
+                        fdfmt = fdfmt | POLLOUT
                     epoll.modify(fileno, fdfmt)
-                elif event & select.EPOLLIN:
+                elif event & POLLIN:
                     data, remotehost = socket_map[fileno].recvfrom(socksize)
                     host_ip = remotehost[0]
                     try:
@@ -236,8 +247,8 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                             logger.debug('found not interested in oid=%s value=%s host=%s reqid=%s' % (
                             oid, value, host_ip, pdudata_reqid))
 
-                    epoll.modify(fileno, select.EPOLLOUT | select.EPOLLIN)
-                elif event & select.EPOLLERR:
+                    epoll.modify(fileno, POLLOUT | POLLIN)
+                elif event & POLLERR:
                     logger.critical('socket error')
                     raise Exception('epoll error')
             if not events and job_queue.empty() and not pending_query:
@@ -272,7 +283,7 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
             if not job_queue.empty():
                 sockets_write_count = min(job_queue.qsize(), len(socket_map))
                 for sock in list(socket_map.values())[0:sockets_write_count]:
-                    epoll.modify(sock, select.EPOLLOUT | select.EPOLLIN)
+                    epoll.modify(sock, POLLOUT | POLLIN)
 
         except InterruptedError:  # signal in syscall. suppressed by default on python 3.5
             pass
