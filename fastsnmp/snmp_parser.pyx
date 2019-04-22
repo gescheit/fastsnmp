@@ -316,18 +316,12 @@ def objectid_encode(oid):
 
     return <bytes>result[:object_len]
 
-cdef inline object c_octetstring_decode(const unsigned char *data, size_t data_len, bint auto_str=1):
+cdef inline object c_octetstring_decode(const unsigned char *data, size_t data_len):
     cdef object ret
-    if auto_str:
-        for i in range(data_len):
-            if <uint8_t>data[i] > 127:
-                return <bytes> data[:data_len]
-        return data[:data_len]
-    else:
-        return <bytes> data[:data_len]
+    return <bytes> data[:data_len]
 
-def octetstring_decode(bytes stream not None, int auto_str=1):
-    return c_octetstring_decode(stream, len(stream), auto_str)
+def octetstring_decode(bytes stream not None):
+    return c_octetstring_decode(stream, len(stream))
 
 
 def octetstring_encode(string):
@@ -463,7 +457,7 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
             tmp_list_val = sequence_decode_c(stream_char, length)
             objects.append(tmp_list_val)
         elif tag in [0x04]:
-            str_val = c_octetstring_decode(stream_char, length, 1)
+            str_val = c_octetstring_decode(stream_char, length)
             objects.append(str_val)
         else:
             raise NotImplementedError(tag)
