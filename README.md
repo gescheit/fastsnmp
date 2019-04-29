@@ -21,14 +21,22 @@ for d in snmp_data:
 Output:
 ```
 host=127.0.0.1 oid=ifInOctets.1 value=243203744
-host=127.0.0.1 oid=ifDescr.1 value=lo
+host=127.0.0.1 oid=ifDescr.1 value=b'lo'
 host=127.0.0.1 oid=ifInOctets.2 value=1397428486
-host=127.0.0.1 oid=ifDescr.2 value=eth0
+host=127.0.0.1 oid=ifDescr.2 value=b'eth0'
 ```
+Type conversion:
 
-Known issue:
+| SNMP | Python |
+| --- | --- |
+| octetstring, ipaddress | bytes |
+| null, unknown specific | None |
+| objectid | str |
+| counter32, unsigned32, gauge32, counter64, integer | int |
 
-1. In some cases poller can return duplicated data.
+Notices:
+
+- ipaddress can be converted to string using ``str(ipaddress.IPv4Address(b"\x01\x01\x01\x01"))`` or ``socket.inet_ntoa(b"\x01\x01\x01\x01")``
 
 Another python SNMP libraries:
 

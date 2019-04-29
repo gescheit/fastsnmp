@@ -18,7 +18,7 @@ from itertools import cycle
 from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t, int64_t, int8_t, INT64_MAX
 
 DEF MAX_OID_LEN_STR=500
-
+DEF MAX_INT_LEN=30
 class SNMPException(Exception):
     pass
 
@@ -30,44 +30,91 @@ class VarBindUnpackException(SNMPException):
 class VarBindContentException(SNMPException):
     pass
 
+cdef uint32_t _UNIVERSAL = 0x00
+cdef uint32_t _APPLICATION = 0x40
+cdef uint32_t _CONTEXT_SPECIFIC = 0x80
+cdef uint32_t _PRIVATE = 0xC0
 
-asnTagClasses = {
-    'UNIVERSAL': 0x00,
-    'APPLICATION': 0x40,
-    'CONTEXT': 0x80,
-    'PRIVATE': 0xC0
+INT_1 = b'\x01'
+INT_0 = b'\x00'
+
+ASN_TAG_FORMAT_PRIMITIVE = 0x00
+ASN_TAG_FORMAT_CONSTRUCTED = 0x20
+
+cdef uint32_t ASN_SNMP_GET = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x00
+cdef uint32_t ASN_SNMP_GETNEXT = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x01
+cdef uint32_t ASN_SNMP_RESPONSE = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x02
+cdef uint32_t ASN_SNMP_SET = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x03
+cdef uint32_t ASN_SNMP_TRAP = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x04
+cdef uint32_t ASN_SNMP_GETBULK = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x05
+cdef uint32_t ASN_SNMP_INFORM = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x06
+cdef uint32_t ASN_SNMP_TRAP2 = _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_CONSTRUCTED | 0x07
+
+ASN_SNMP_GET_BYTE = bytes([ASN_SNMP_GET])
+ASN_SNMP_GETNEXT_BYTE = bytes([ASN_SNMP_GETNEXT])
+ASN_SNMP_RESPONSE_BYTE = bytes([ASN_SNMP_RESPONSE])
+ASN_SNMP_SET_BYTE = bytes([ASN_SNMP_SET])
+ASN_SNMP_TRAP_BYTE = bytes([ASN_SNMP_TRAP])
+ASN_SNMP_GETBULK_BYTE = bytes([ASN_SNMP_GETBULK])
+ASN_SNMP_INFORM_BYTE = bytes([ASN_SNMP_INFORM])
+ASN_SNMP_TRAP2_BYTE = bytes([ASN_SNMP_TRAP2])
+
+ASN_TAG_CLASS_UNIVERSAL = 0x00
+ASN_TAG_CLASS_APPLICATION = 0x40
+ASN_TAG_CLASS_CONTEXT = 0x80
+ASN_TAG_CLASS_PRIVATE = 0xC0
+
+# rfc2578
+cdef uint32_t ASN_A_IPADDRESS = _APPLICATION | 0x00
+cdef uint32_t ASN_A_COUNTER32 = _APPLICATION | 0x01
+cdef uint32_t ASN_A_UNSIGNED32 = _APPLICATION | 0x02
+cdef uint32_t ASN_A_GAUGE32 = ASN_A_UNSIGNED32
+cdef uint32_t ASN_A_TIMETICKS = _APPLICATION | 0X03
+cdef uint32_t ASN_A_OPAQUE = _APPLICATION | 0X04
+cdef uint32_t ASN_A_COUNTER64 = _APPLICATION | 0x06
+
+ASN_A_IPADDRESS_BYTE = bytes([ASN_A_IPADDRESS])
+ASN_A_COUNTER32_BYTE = bytes([ASN_A_COUNTER32])
+ASN_A_UNSIGNED32_BYTE =  bytes([ASN_A_UNSIGNED32])
+ASN_A_GAUGE32_BYTE =  bytes([ASN_A_GAUGE32])
+ASN_A_TIMETICKS_BYTE =  bytes([ASN_A_TIMETICKS])
+ASN_A_OPAQUE_BYTE =  bytes([ASN_A_OPAQUE])
+ASN_A_COUNTER64_BYTE =  bytes([ASN_A_COUNTER64])
+
+# https://www.obj-sys.com/asn1tutorial/node124.html
+cdef uint32_t ASN_U_INTEGER = _UNIVERSAL | 0x02
+cdef uint32_t ASN_U_OCTETSTRING = _UNIVERSAL | 0x04
+cdef uint32_t ASN_U_NULL = _UNIVERSAL | 0x05
+cdef uint32_t ASN_U_OBJECTID = _UNIVERSAL | 0x06
+cdef uint32_t ASN_U_ENUMERATED = _UNIVERSAL | 0x10
+cdef uint32_t ASN_U_SEQUENCE = _UNIVERSAL | ASN_TAG_FORMAT_CONSTRUCTED | 0x10
+
+ASN_U_INTEGER_BYTE = bytes([ASN_U_INTEGER])
+ASN_U_OCTETSTRING_BYTE = bytes([ASN_U_OCTETSTRING])
+ASN_U_NULL_BYTE = bytes([ASN_U_NULL])
+ASN_U_OBJECTID_BYTE = bytes([ASN_U_OBJECTID])
+ASN_U_ENUMERATED_BYTE = bytes([ASN_U_ENUMERATED])
+ASN_U_SEQUENCE_BYTE = bytes([ASN_U_SEQUENCE])
+
+
+TYPE_NAME_TO_TYPE = {
+    'Integer': ASN_U_INTEGER_BYTE,
+    'Counter32': ASN_A_COUNTER32_BYTE,
+    'Counter64': ASN_A_COUNTER64_BYTE,
+    'OctetString': ASN_U_OCTETSTRING_BYTE,
+    'Null': ASN_U_NULL_BYTE,
+    'ObjectID': ASN_U_OBJECTID_BYTE,
+    'Sequence': ASN_U_SEQUENCE_BYTE,
 }
 
-asnTagFormats = {
-    'PRIMITIVE': 0x00,
-    'CONSTRUCTED': 0x20
-}
 
-ASN_TYPES = {
-    'Integer': 0x02,
-    'Counter32': 0x40,
-    'Counter64': 0x46,
-    'OctetString': 0x04,
-    'Null': 0x05,
-    'ObjectID': 0x06,
-    'Sequence': 0x10,
-}
-
-ASN_SNMP_APPLICATION = {
-    'IPAddress': 0x00,
-    'Counter': 0x01,
-    'Guage': 0x02,
-    'TimeTicks': 0x03,
-    'Opaque': 0x04,
-}
-
-ASN_SNMP_MSG_TYPES ={
-    'Get': 0x00,
-    'GetNext': 0x01,
-    'Response': 0x02,
-    'Set': 0x03,
-    'Trap': 0x04,
-    'GetBulk': 0x05,
+ASN_SNMP_MSG_TYPES = {
+    'Get': ASN_SNMP_GET_BYTE,
+    'GetNext': ASN_SNMP_GETNEXT_BYTE,
+    'Response': ASN_SNMP_RESPONSE_BYTE,
+    'Set': ASN_SNMP_SET_BYTE,
+    'Trap': ASN_SNMP_TRAP_BYTE,
+    'GetBulk': ASN_SNMP_GETBULK_BYTE,
 }
 
 # caches
@@ -107,7 +154,7 @@ cdef inline int primitive_decode(char *stream, size_t stream_len, uint64_t *resu
     return retval
 
 
-cdef inline objectid_decode_str(const unsigned char *stream, size_t stream_len):
+cdef inline char* objectid_decode_str(const unsigned char *stream, size_t stream_len):
     cdef uint64_t result[122]
     cdef char result_str[MAX_OID_LEN_STR]
     cdef char *result_str_ptr = result_str
@@ -316,8 +363,7 @@ def objectid_encode(oid):
 
     return <bytes>result[:object_len]
 
-cdef inline object c_octetstring_decode(const unsigned char *data, size_t data_len):
-    cdef object ret
+cdef inline bytes c_octetstring_decode(const unsigned char *data, size_t data_len):
     return <bytes> data[:data_len]
 
 def octetstring_decode(bytes stream not None):
@@ -336,24 +382,28 @@ def octetstring_encode(string):
     return bytes(string.encode('ascii'))
 
 def integer_encode(const int64_t value):
+    cdef char[MAX_INT_LEN] data
+    cdef uint64_t data_len = 0
+    integer_encode_c(value, data, &data_len)
+    return <bytes> data[:data_len]
+
+cdef inline void integer_encode_c(const int64_t value, char *data, uint64_t *data_len):
     # little -> big
-    cdef unsigned int slen, i
-    cdef char[10] res
+    cdef uint64_t slen, i
     cdef uint64_t mod_value = value
     if value < 0:
         mod_value = ~value + 1
-
-    slen = primitive_encode(<uint64_t*>&mod_value, res)
-
+    slen = primitive_encode(<uint64_t*> &mod_value, data)
     # copy the bytes from value to data backwards
     for i in range(0, slen):
-        res[slen-i-1] = (<char *> &value)[i]
-    return <bytes> res[:slen]
+        data[slen - i - 1] = (<char *> &value)[i]
+    data_len[0] = slen
+
 
 def uinteger_encode(uint64_t value):
     # little -> big
     cdef size_t slen, i
-    cdef char[10] res
+    cdef char[MAX_INT_LEN] res
     slen = primitive_encode(&value, res)
 
     # copy the bytes from value to data backwards
@@ -427,7 +477,7 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
     cdef uint64_t tag = 0, tmp_uint_val
     cdef int64_t tmp_int_val
     cdef size_t encode_length, length, offset=0
-    cdef object str_val
+    cdef bytes bytes_val
     cdef const unsigned char *stream_char = stream
     cdef list objects=[], tmp_list_val
     cdef tuple tmp_tuple_val
@@ -439,26 +489,28 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
         offset += encode_length
 
         length_decode_c(stream_char, &length, &encode_length)
-        stream_char+=encode_length
+        stream_char += encode_length
         offset += encode_length
 
-        if tag == 0x02:
+        if tag == ASN_U_INTEGER:
             tmp_int_val = integer_decode_c(stream_char, &length)
             objects.append(tmp_int_val)
-        elif tag in [0x40, 0x41, 0x42, 0x43, 0x46]:
+        elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \
+                or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
             tmp_uint_val = uinteger_decode_c(stream_char, &length)
             objects.append(tmp_uint_val)
-        elif tag == 0x06:
+        elif tag == ASN_U_OBJECTID:
             tmp_objectid = objectid_decode_str(stream_char, length)
             objects.append(tmp_objectid)
-        elif tag in [0x80, 0x81, 0x82, 0x05]:
+        elif tag == ASN_U_NULL or tag & _CONTEXT_SPECIFIC == tag:
             objects.append(None)
-        elif tag in [0x30, 0xa2, 0xa5]:
+        elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
             tmp_list_val = sequence_decode_c(stream_char, length)
             objects.append(tmp_list_val)
-        elif tag in [0x04]:
-            str_val = c_octetstring_decode(stream_char, length)
-            objects.append(str_val)
+        elif tag == ASN_U_OCTETSTRING or tag == ASN_A_IPADDRESS:
+            # bytes_val = c_octetstring_decode(stream_char, length)
+            bytes_val = <bytes> stream_char[:length]
+            objects.append(bytes_val)
         else:
             raise NotImplementedError(tag)
 
@@ -543,41 +595,6 @@ def tag_decode(bytes stream not None):
     tag_decode_c(stream, &tag, &encode_length)
     return tag, encode_length
 
-
-def tag_encode(asn_tag_class, asn_tag_format, asn_tag_number):
-    """
-    Returns encoded identifier octets for
-    this object.  Section 6.3 of ITU-T-X.209
-
-    :param asn_tag_class: asn tag class
-    :type asn_tag_class: int
-    :param asn_tag_format: asn tag format
-    :type asn_tag_format: int
-    :param asn_tag_number: asn tag number
-    :type asn_tag_number: int
-    :returns: tag
-    :rtype: bytes
-    """
-    if asn_tag_number < 0x1F:
-        result = bytes([asn_tag_class | asn_tag_format | asn_tag_number])
-    else:
-        # # Encode each number of the asnTagNumber from 31 upwards
-        # # as a sequence of 7-bit numbers with bit 8 set to 1 for
-        # # all but the last octet. Bit 8 set to 0 signifies the
-        # # last octet of the Identifier octets
-        # encode the first octet
-        resultlist = bytearray()
-        resultlist.append(asn_tag_class | asn_tag_format | 0x1F)
-
-        # encode each subsequent octet
-        integer = asn_tag_number
-        while integer != -1:
-            resultlist.append(integer & 0xFF)
-            integer >>= 8
-        result = resultlist
-    return result
-
-
 # TODO: implement more encoders
 def value_encode(value=None, value_type='Null'):
     """
@@ -600,17 +617,17 @@ def value_encode(value=None, value_type='Null'):
 def encode_varbind(oid, value_type='Null', value=None):
     if value is None:
         value_type = 'Null'
-    obj_id = objectid_encode(oid)
-    obj_id_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['ObjectID'])
-    obj_id_len = length_encode(len(obj_id))
+    obj_id_value = objectid_encode(oid)
+    obj_id_type = ASN_U_OBJECTID_BYTE
+    obj_id_len = length_encode(len(obj_id_value))
 
-    obj_value = value_encode(value, value_type)
-    obj_value_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES[value_type])
-    obj_value_len = length_encode(len(obj_value))
+    obj_value_value = value_encode(value, value_type)
+    obj_value_type = TYPE_NAME_TO_TYPE[value_type]
+    obj_value_len = length_encode(len(obj_value_value))
 
-    varbinds_obj = obj_id_id + obj_id_len + obj_id + obj_value_id + obj_value_len + obj_value
+    varbinds_obj = obj_id_type + obj_id_len + obj_id_value + obj_value_type + obj_value_len + obj_value_value
 
-    seq_tag = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
+    seq_tag = ASN_U_SEQUENCE_BYTE
     varbind_enc = seq_tag + length_encode(len(varbinds_obj)) + varbinds_obj
     return varbind_enc
 
@@ -633,9 +650,9 @@ def varbinds_encode(varbinds):
 
 def varbinds_encode_tlv(varbinds):
     varbinds_data = varbinds_encode(varbinds)
-    varbinds_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
+    varbinds_type = ASN_U_SEQUENCE_BYTE
     varbinds_len = length_encode(len(varbinds_data))
-    return varbinds_id + varbinds_len + varbinds_data
+    return varbinds_type + varbinds_len + varbinds_data
 
 
 def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=10, non_repeaters=0):
@@ -661,60 +678,53 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
         varbinds_tlv = varbinds_encode_tlv(varbinds)
     else:
         varbinds_tlv = varbinds
-
-    requestID_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-    requestID = integer_encode(req_id)
-    requestID_len = length_encode(len(requestID))
-
-
+    request_id_type = ASN_U_INTEGER_BYTE
+    request_id_value = integer_encode(req_id)
+    request_id_len = length_encode(len(request_id_value))
 
     if msg_type == "GetBulk":
         if max_repetitions < 1:
             raise Exception("max_repetitions must be higher than %s" % max_repetitions)
-        nonRepeaters = integer_encode(non_repeaters)
-        nonRepeaters_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-        nonRepeaters_len = length_encode(len(nonRepeaters))
-
-        maxRepetitions = integer_encode(max_repetitions)
-        maxRepetitions_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-        maxRepetitions_len = length_encode(len(maxRepetitions))
-        pdu = requestID_id + requestID_len + requestID + \
-                nonRepeaters_id + nonRepeaters_len + nonRepeaters + \
-                maxRepetitions_id + maxRepetitions_len + maxRepetitions + \
-                varbinds_tlv
+        non_repeaters_value = integer_encode(non_repeaters)
+        non_repeaters_type = ASN_U_INTEGER_BYTE
+        non_repeaters_len = length_encode(len(non_repeaters_value))
+        max_repetitions_value = integer_encode(max_repetitions)
+        max_repetitions_type = ASN_U_INTEGER_BYTE
+        max_repetitions_len = length_encode(len(max_repetitions_value))
+        pdu = request_id_type + request_id_len + request_id_value + \
+              non_repeaters_type + non_repeaters_len + non_repeaters_value + \
+              max_repetitions_type + max_repetitions_len + max_repetitions_value + \
+              varbinds_tlv
+        pdu_type = ASN_SNMP_GETBULK_BYTE
     else:
-        error_status = integer_encode(0)
-        error_status_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-        error_status_len = length_encode(len(error_status))
-        error_index = integer_encode(0)
-        error_index_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-        error_index_len = length_encode(len(error_index))
-        pdu = requestID_id + requestID_len + requestID + \
-                error_status_id + error_status_len + error_status + \
-                error_index_id + error_index_len + error_index + \
-                varbinds_tlv
+        error_status_value = INT_0  # integer_encode(0)
+        error_status_type = ASN_U_INTEGER_BYTE
+        error_status_len = length_encode(len(error_status_value))
+        error_index_value = INT_0  # integer_encode(0)
+        error_index_type = ASN_U_INTEGER_BYTE
+        error_index_len = length_encode(len(error_index_value))
+        pdu = request_id_type + request_id_len + request_id_value + \
+              error_status_type + error_status_len + error_status_value + \
+              error_index_type + error_index_len + error_index_value + \
+              varbinds_tlv
+        pdu_type = ASN_SNMP_MSG_TYPES[msg_type]
 
-    pdu_id = tag_encode(asnTagClasses['CONTEXT'], asnTagFormats['CONSTRUCTED'], ASN_SNMP_MSG_TYPES[msg_type])
     pdu_len = length_encode(len(pdu))
 
-    community = octetstring_encode(community)
-    community_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['OctetString'])
-    community_len = length_encode(len(community))
+    community_value = octetstring_encode(community)
+    community_type = ASN_U_OCTETSTRING_BYTE
+    community_len = length_encode(len(community_value))
 
-    version = integer_encode(1)
-    version_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['PRIMITIVE'], ASN_TYPES['Integer'])
-    version_len = length_encode(len(version))
+    version_value = INT_1  # v2c
+    version_type = ASN_U_INTEGER_BYTE
+    version_len = INT_1  # length_encode(len(version_value))
 
-    snmp_message_seq_id = tag_encode(asnTagClasses['UNIVERSAL'], asnTagFormats['CONSTRUCTED'], ASN_TYPES['Sequence'])
-    snmp_message_len = length_encode(len(version_id + version_len + version + \
-                   community_id + community_len + community + \
-                   pdu_id + pdu_len + pdu))
-
-    snmp_message = snmp_message_seq_id + snmp_message_len + version_id + version_len + version + \
-                   community_id + community_len + community + \
-                   pdu_id + pdu_len + pdu
-
-    return snmp_message
+    snmp_message_type = ASN_U_SEQUENCE_BYTE
+    snmp_message_value = version_type + version_len + version_value + \
+                         community_type + community_len + community_value + \
+                         pdu_type + pdu_len + pdu
+    snmp_message_len = length_encode(len(snmp_message_value))
+    return snmp_message_type + snmp_message_len + snmp_message_value
 
 
 def msg_decode(stream):
@@ -791,3 +801,4 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
                 "%s.%s" % (orig_main_oids[p], last_seen_index[p]) for p in rest_oids_positions]
 
     return result, tuple(next_oids)
+
