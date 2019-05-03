@@ -496,7 +496,7 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
             tmp_int_val = integer_decode_c(stream_char, &length)
             objects.append(tmp_int_val)
         elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \
-                or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
+                or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:
             tmp_uint_val = uinteger_decode_c(stream_char, &length)
             objects.append(tmp_uint_val)
         elif tag == ASN_U_OBJECTID:
@@ -512,7 +512,7 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
             bytes_val = <bytes> stream_char[:length]
             objects.append(bytes_val)
         else:
-            raise NotImplementedError(tag)
+            raise NotImplementedError("unknown tag=%s" % tag)
 
         offset += length
         stream_char += length

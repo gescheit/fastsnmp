@@ -1791,6 +1791,7 @@ static const char __pyx_k_main_oids_pos[] = "main_oids_pos";
 static const char __pyx_k_non_repeaters[] = "non_repeaters";
 static const char __pyx_k_obj_value_len[] = "obj_value_len";
 static const char __pyx_k_parse_varbind[] = "parse_varbind";
+static const char __pyx_k_unknown_tag_s[] = "unknown tag=%s";
 static const char __pyx_k_var_bind_list[] = "var_bind_list";
 static const char __pyx_k_varbinds_data[] = "varbinds_data";
 static const char __pyx_k_varbinds_type[] = "varbinds_type";
@@ -2059,6 +2060,7 @@ static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_tmp_length;
 static PyObject *__pyx_n_s_uinteger_decode;
 static PyObject *__pyx_n_s_uinteger_encode;
+static PyObject *__pyx_kp_u_unknown_tag_s;
 static PyObject *__pyx_n_s_value;
 static PyObject *__pyx_n_s_value_encode;
 static PyObject *__pyx_kp_u_value_must_be_None_for_Null_type;
@@ -4739,7 +4741,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_11uinteger_encode(PyObject *__
 static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_10uinteger_encode(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_value) {
   size_t __pyx_v_slen;
   size_t __pyx_v_i;
-  char __pyx_v_res[10];
+  char __pyx_v_res[30];
   PyObject *__pyx_r = NULL;
   __Pyx_TraceDeclarations
   __Pyx_RefNannyDeclarations
@@ -4754,7 +4756,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_10uinteger_encode(CYTHON_UNUSE
 
   /* "fastsnmp/snmp_parser.pyx":407
  *     cdef size_t slen, i
- *     cdef char[10] res
+ *     cdef char[MAX_INT_LEN] res
  *     slen = primitive_encode(&value, res)             # <<<<<<<<<<<<<<
  * 
  *     # copy the bytes from value to data backwards
@@ -5500,7 +5502,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *             tmp_int_val = integer_decode_c(stream_char, &length)
  *             objects.append(tmp_int_val)             # <<<<<<<<<<<<<<
  *         elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \
- *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
+ *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:
  */
       __pyx_t_1 = __Pyx_PyInt_From_int64_t(__pyx_v_tmp_int_val); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 497, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5521,7 +5523,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *             tmp_int_val = integer_decode_c(stream_char, &length)
  *             objects.append(tmp_int_val)
  *         elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \             # <<<<<<<<<<<<<<
- *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
+ *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:
  *             tmp_uint_val = uinteger_decode_c(stream_char, &length)
  */
     __pyx_t_5 = ((__pyx_v_tag == __pyx_v_8fastsnmp_11snmp_parser_ASN_A_COUNTER32) != 0);
@@ -5534,7 +5536,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     /* "fastsnmp/snmp_parser.pyx":499
  *             objects.append(tmp_int_val)
  *         elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \
- *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:             # <<<<<<<<<<<<<<
+ *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:             # <<<<<<<<<<<<<<
  *             tmp_uint_val = uinteger_decode_c(stream_char, &length)
  *             objects.append(tmp_uint_val)
  */
@@ -5551,6 +5553,12 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
       goto __pyx_L6_bool_binop_done;
     }
     __pyx_t_5 = ((__pyx_v_tag == __pyx_v_8fastsnmp_11snmp_parser_ASN_A_COUNTER64) != 0);
+    if (!__pyx_t_5) {
+    } else {
+      __pyx_t_2 = __pyx_t_5;
+      goto __pyx_L6_bool_binop_done;
+    }
+    __pyx_t_5 = ((__pyx_v_tag == __pyx_v_8fastsnmp_11snmp_parser_ASN_A_TIMETICKS) != 0);
     __pyx_t_2 = __pyx_t_5;
     __pyx_L6_bool_binop_done:;
 
@@ -5558,14 +5566,14 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *             tmp_int_val = integer_decode_c(stream_char, &length)
  *             objects.append(tmp_int_val)
  *         elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \             # <<<<<<<<<<<<<<
- *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
+ *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:
  *             tmp_uint_val = uinteger_decode_c(stream_char, &length)
  */
     if (__pyx_t_2) {
 
       /* "fastsnmp/snmp_parser.pyx":500
  *         elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \
- *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
+ *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:
  *             tmp_uint_val = uinteger_decode_c(stream_char, &length)             # <<<<<<<<<<<<<<
  *             objects.append(tmp_uint_val)
  *         elif tag == ASN_U_OBJECTID:
@@ -5573,7 +5581,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
       __pyx_v_tmp_uint_val = __pyx_f_8fastsnmp_11snmp_parser_uinteger_decode_c(__pyx_v_stream_char, (&__pyx_v_length));
 
       /* "fastsnmp/snmp_parser.pyx":501
- *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
+ *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:
  *             tmp_uint_val = uinteger_decode_c(stream_char, &length)
  *             objects.append(tmp_uint_val)             # <<<<<<<<<<<<<<
  *         elif tag == ASN_U_OBJECTID:
@@ -5588,7 +5596,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *             tmp_int_val = integer_decode_c(stream_char, &length)
  *             objects.append(tmp_int_val)
  *         elif tag == ASN_A_COUNTER32 or tag == ASN_A_UNSIGNED32 \             # <<<<<<<<<<<<<<
- *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64:
+ *                 or tag == ASN_A_GAUGE32 or tag == ASN_A_COUNTER64 or tag == ASN_A_TIMETICKS:
  *             tmp_uint_val = uinteger_decode_c(stream_char, &length)
  */
       goto __pyx_L5;
@@ -5646,11 +5654,11 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     if (!__pyx_t_5) {
     } else {
       __pyx_t_2 = __pyx_t_5;
-      goto __pyx_L10_bool_binop_done;
+      goto __pyx_L11_bool_binop_done;
     }
     __pyx_t_5 = (((__pyx_v_tag & __pyx_v_8fastsnmp_11snmp_parser__CONTEXT_SPECIFIC) == __pyx_v_tag) != 0);
     __pyx_t_2 = __pyx_t_5;
-    __pyx_L10_bool_binop_done:;
+    __pyx_L11_bool_binop_done:;
     if (__pyx_t_2) {
 
       /* "fastsnmp/snmp_parser.pyx":506
@@ -5683,17 +5691,17 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     if (!__pyx_t_5) {
     } else {
       __pyx_t_2 = __pyx_t_5;
-      goto __pyx_L12_bool_binop_done;
+      goto __pyx_L13_bool_binop_done;
     }
     __pyx_t_5 = ((__pyx_v_tag == __pyx_v_8fastsnmp_11snmp_parser_ASN_SNMP_RESPONSE) != 0);
     if (!__pyx_t_5) {
     } else {
       __pyx_t_2 = __pyx_t_5;
-      goto __pyx_L12_bool_binop_done;
+      goto __pyx_L13_bool_binop_done;
     }
     __pyx_t_5 = ((__pyx_v_tag == __pyx_v_8fastsnmp_11snmp_parser_ASN_SNMP_GETBULK) != 0);
     __pyx_t_2 = __pyx_t_5;
-    __pyx_L12_bool_binop_done:;
+    __pyx_L13_bool_binop_done:;
     if (__pyx_t_2) {
 
       /* "fastsnmp/snmp_parser.pyx":508
@@ -5738,11 +5746,11 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     if (!__pyx_t_5) {
     } else {
       __pyx_t_2 = __pyx_t_5;
-      goto __pyx_L15_bool_binop_done;
+      goto __pyx_L16_bool_binop_done;
     }
     __pyx_t_5 = ((__pyx_v_tag == __pyx_v_8fastsnmp_11snmp_parser_ASN_A_IPADDRESS) != 0);
     __pyx_t_2 = __pyx_t_5;
-    __pyx_L15_bool_binop_done:;
+    __pyx_L16_bool_binop_done:;
     if (likely(__pyx_t_2)) {
 
       /* "fastsnmp/snmp_parser.pyx":512
@@ -5765,7 +5773,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *             bytes_val = <bytes> stream_char[:length]
  *             objects.append(bytes_val)             # <<<<<<<<<<<<<<
  *         else:
- *             raise NotImplementedError(tag)
+ *             raise NotImplementedError("unknown tag=%s" % tag)
  */
       __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, __pyx_v_bytes_val); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 513, __pyx_L1_error)
 
@@ -5782,24 +5790,27 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     /* "fastsnmp/snmp_parser.pyx":515
  *             objects.append(bytes_val)
  *         else:
- *             raise NotImplementedError(tag)             # <<<<<<<<<<<<<<
+ *             raise NotImplementedError("unknown tag=%s" % tag)             # <<<<<<<<<<<<<<
  * 
  *         offset += length
  */
     /*else*/ {
       __pyx_t_6 = __Pyx_PyInt_From_uint64_t(__pyx_v_tag); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 515, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 515, __pyx_L1_error)
+      __pyx_t_1 = PyUnicode_Format(__pyx_kp_u_unknown_tag_s, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 515, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_Raise(__pyx_t_1, 0, 0, 0);
+      __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 515, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_Raise(__pyx_t_6, 0, 0, 0);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __PYX_ERR(0, 515, __pyx_L1_error)
     }
     __pyx_L5:;
 
     /* "fastsnmp/snmp_parser.pyx":517
- *             raise NotImplementedError(tag)
+ *             raise NotImplementedError("unknown tag=%s" % tag)
  * 
  *         offset += length             # <<<<<<<<<<<<<<
  *         stream_char += length
@@ -10642,6 +10653,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_tmp_length, __pyx_k_tmp_length, sizeof(__pyx_k_tmp_length), 0, 0, 1, 1},
   {&__pyx_n_s_uinteger_decode, __pyx_k_uinteger_decode, sizeof(__pyx_k_uinteger_decode), 0, 0, 1, 1},
   {&__pyx_n_s_uinteger_encode, __pyx_k_uinteger_encode, sizeof(__pyx_k_uinteger_encode), 0, 0, 1, 1},
+  {&__pyx_kp_u_unknown_tag_s, __pyx_k_unknown_tag_s, sizeof(__pyx_k_unknown_tag_s), 0, 1, 0, 0},
   {&__pyx_n_s_value, __pyx_k_value, sizeof(__pyx_k_value), 0, 0, 1, 1},
   {&__pyx_n_s_value_encode, __pyx_k_value_encode, sizeof(__pyx_k_value_encode), 0, 0, 1, 1},
   {&__pyx_kp_u_value_must_be_None_for_Null_type, __pyx_k_value_must_be_None_for_Null_type, sizeof(__pyx_k_value_must_be_None_for_Null_type), 0, 1, 0, 0},
