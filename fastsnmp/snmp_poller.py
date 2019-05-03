@@ -154,7 +154,7 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                     try:
                         pdudata_reqid, error_status, error_index, var_bind_list = snmp_parser.msg_decode(data)
                     except Exception as e:
-                        logger.critical("%r. unable to decode PDU from %s. data=%r", e, host_ip, repr(data))
+                        logger.critical("%r. unable to decode PDU from %s. data=%r", e, host_ip, data)
                         continue
 
                     if pending_query.pop((host_ip, pdudata_reqid), None) is None:
