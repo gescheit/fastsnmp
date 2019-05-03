@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-__version__ = '0.4'
+__version__ = '0.5'
 from distutils.core import setup
 from distutils.extension import Extension
 

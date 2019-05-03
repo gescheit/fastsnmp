@@ -57,7 +57,7 @@ def resolve(hosts):
     return res
 
 
-def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_type="GetBulk"):
+def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_type="GetBulk", include_ts=False):
     """
     A generator that yields SNMP data
 
@@ -149,6 +149,7 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                     epoll.modify(fileno, fdfmt)
                 elif event & POLLIN:
                     data, remotehost = socket_map[fileno].recvfrom(socksize)
+                    ts = time()
                     host_ip = remotehost[0]
                     try:
                         pdudata_reqid, error_status, error_index, var_bind_list = snmp_parser.msg_decode(data)
@@ -199,7 +200,10 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                             if oid.startswith(main_oid + '.'):
                                 index_part = oid[len(main_oid) + 1:]
                                 last_seen_index[main_oids_pos] = index_part
-                                yield (target_info[host_ip], main_oid, index_part, value)
+                                if include_ts:
+                                    yield (target_info[host_ip], main_oid, index_part, value, ts)
+                                else:
+                                    yield (target_info[host_ip], main_oid, index_part, value)
                             else:
                                 if DEBUG:
                                     logger.debug(
