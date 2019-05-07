@@ -5550,7 +5550,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *         elif tag == ASN_U_OBJECTID:
  *             tmp_objectid = objectid_decode_str(stream_char, length)             # <<<<<<<<<<<<<<
  *             objects.append(tmp_objectid)
- *         elif tag == ASN_U_NULL: # or tag & _CONTEXT_SPECIFIC:
+ *         elif tag == ASN_U_NULL:
  */
       __pyx_t_1 = __Pyx_PyUnicode_FromString(__pyx_f_8fastsnmp_11snmp_parser_objectid_decode_str(__pyx_v_stream_char, __pyx_v_length)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 516, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5561,7 +5561,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *         elif tag == ASN_U_OBJECTID:
  *             tmp_objectid = objectid_decode_str(stream_char, length)
  *             objects.append(tmp_objectid)             # <<<<<<<<<<<<<<
- *         elif tag == ASN_U_NULL: # or tag & _CONTEXT_SPECIFIC:
+ *         elif tag == ASN_U_NULL:
  *             objects.append(None)
  */
       __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, __pyx_v_tmp_objectid); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 517, __pyx_L1_error)
@@ -5579,7 +5579,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     /* "fastsnmp/snmp_parser.pyx":518
  *             tmp_objectid = objectid_decode_str(stream_char, length)
  *             objects.append(tmp_objectid)
- *         elif tag == ASN_U_NULL: # or tag & _CONTEXT_SPECIFIC:             # <<<<<<<<<<<<<<
+ *         elif tag == ASN_U_NULL:             # <<<<<<<<<<<<<<
  *             objects.append(None)
  *         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
  */
@@ -5588,7 +5588,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
 
       /* "fastsnmp/snmp_parser.pyx":519
  *             objects.append(tmp_objectid)
- *         elif tag == ASN_U_NULL: # or tag & _CONTEXT_SPECIFIC:
+ *         elif tag == ASN_U_NULL:
  *             objects.append(None)             # <<<<<<<<<<<<<<
  *         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
  *             tmp_list_val = sequence_decode_c(stream_char, length)
@@ -5598,7 +5598,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
       /* "fastsnmp/snmp_parser.pyx":518
  *             tmp_objectid = objectid_decode_str(stream_char, length)
  *             objects.append(tmp_objectid)
- *         elif tag == ASN_U_NULL: # or tag & _CONTEXT_SPECIFIC:             # <<<<<<<<<<<<<<
+ *         elif tag == ASN_U_NULL:             # <<<<<<<<<<<<<<
  *             objects.append(None)
  *         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
  */
@@ -5606,7 +5606,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     }
 
     /* "fastsnmp/snmp_parser.pyx":520
- *         elif tag == ASN_U_NULL: # or tag & _CONTEXT_SPECIFIC:
+ *         elif tag == ASN_U_NULL:
  *             objects.append(None)
  *         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:             # <<<<<<<<<<<<<<
  *             tmp_list_val = sequence_decode_c(stream_char, length)
@@ -5646,7 +5646,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
       __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, __pyx_v_tmp_list_val); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 522, __pyx_L1_error)
 
       /* "fastsnmp/snmp_parser.pyx":520
- *         elif tag == ASN_U_NULL: # or tag & _CONTEXT_SPECIFIC:
+ *         elif tag == ASN_U_NULL:
  *             objects.append(None)
  *         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:             # <<<<<<<<<<<<<<
  *             tmp_list_val = sequence_decode_c(stream_char, length)
@@ -5678,7 +5678,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *             # bytes_val = c_octetstring_decode(stream_char, length)
  *             bytes_val = <bytes> stream_char[:length]             # <<<<<<<<<<<<<<
  *             objects.append(bytes_val)
- *         elif tag == ASN_U_NO_SUCH_OBJECT:
+ *         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
  */
       __pyx_t_1 = __Pyx_PyBytes_FromStringAndSize(((const char*)__pyx_v_stream_char) + 0, __pyx_v_length - 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 525, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5692,8 +5692,8 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  *             # bytes_val = c_octetstring_decode(stream_char, length)
  *             bytes_val = <bytes> stream_char[:length]
  *             objects.append(bytes_val)             # <<<<<<<<<<<<<<
- *         elif tag == ASN_U_NO_SUCH_OBJECT:
- *             objects.append(NoSuchObject)
+ *         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
+ *             objects.append(None)
  */
       __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, __pyx_v_bytes_val); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 526, __pyx_L1_error)
 
@@ -5710,122 +5710,64 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     /* "fastsnmp/snmp_parser.pyx":527
  *             bytes_val = <bytes> stream_char[:length]
  *             objects.append(bytes_val)
- *         elif tag == ASN_U_NO_SUCH_OBJECT:             # <<<<<<<<<<<<<<
- *             objects.append(NoSuchObject)
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:
+ *         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:             # <<<<<<<<<<<<<<
+ *             objects.append(None)
+ *         else:
  */
-    __pyx_t_2 = ((__pyx_v_tag == 0x80) != 0);
-    if (__pyx_t_2) {
+    switch (__pyx_v_tag) {
+      case 0x80:
+      case 0x81:
+      case 0x82:
+      __pyx_t_2 = 1;
+      break;
+      default:
+      __pyx_t_2 = 0;
+      break;
+    }
+    if (likely(__pyx_t_2)) {
 
       /* "fastsnmp/snmp_parser.pyx":528
  *             objects.append(bytes_val)
- *         elif tag == ASN_U_NO_SUCH_OBJECT:
- *             objects.append(NoSuchObject)             # <<<<<<<<<<<<<<
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:
- *             objects.append(NoSuchInstance)
+ *         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
+ *             objects.append(None)             # <<<<<<<<<<<<<<
+ *         else:
+ *             raise NotImplementedError("unknown tag=%s" % tag)
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_NoSuchObject); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 528, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, __pyx_t_6); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 528, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, Py_None); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 528, __pyx_L1_error)
 
       /* "fastsnmp/snmp_parser.pyx":527
  *             bytes_val = <bytes> stream_char[:length]
  *             objects.append(bytes_val)
- *         elif tag == ASN_U_NO_SUCH_OBJECT:             # <<<<<<<<<<<<<<
- *             objects.append(NoSuchObject)
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:
- */
-      goto __pyx_L5;
-    }
-
-    /* "fastsnmp/snmp_parser.pyx":529
- *         elif tag == ASN_U_NO_SUCH_OBJECT:
- *             objects.append(NoSuchObject)
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:             # <<<<<<<<<<<<<<
- *             objects.append(NoSuchInstance)
- *         elif tag == ASN_U_END_OF_MIB_VIEW:
- */
-    __pyx_t_2 = ((__pyx_v_tag == 0x81) != 0);
-    if (__pyx_t_2) {
-
-      /* "fastsnmp/snmp_parser.pyx":530
- *             objects.append(NoSuchObject)
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:
- *             objects.append(NoSuchInstance)             # <<<<<<<<<<<<<<
- *         elif tag == ASN_U_END_OF_MIB_VIEW:
- *             objects.append(EndOfMibView)
- */
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_NoSuchInstance); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 530, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, __pyx_t_6); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 530, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-      /* "fastsnmp/snmp_parser.pyx":529
- *         elif tag == ASN_U_NO_SUCH_OBJECT:
- *             objects.append(NoSuchObject)
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:             # <<<<<<<<<<<<<<
- *             objects.append(NoSuchInstance)
- *         elif tag == ASN_U_END_OF_MIB_VIEW:
- */
-      goto __pyx_L5;
-    }
-
-    /* "fastsnmp/snmp_parser.pyx":531
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:
- *             objects.append(NoSuchInstance)
- *         elif tag == ASN_U_END_OF_MIB_VIEW:             # <<<<<<<<<<<<<<
- *             objects.append(EndOfMibView)
- *         else:
- */
-    __pyx_t_2 = ((__pyx_v_tag == 0x82) != 0);
-    if (likely(__pyx_t_2)) {
-
-      /* "fastsnmp/snmp_parser.pyx":532
- *             objects.append(NoSuchInstance)
- *         elif tag == ASN_U_END_OF_MIB_VIEW:
- *             objects.append(EndOfMibView)             # <<<<<<<<<<<<<<
- *         else:
- *             raise NotImplementedError("unknown tag=%s" % tag)
- */
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_EndOfMibView); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 532, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_objects, __pyx_t_6); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 532, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-      /* "fastsnmp/snmp_parser.pyx":531
- *         elif tag == ASN_U_NO_SUCH_INSTANCE:
- *             objects.append(NoSuchInstance)
- *         elif tag == ASN_U_END_OF_MIB_VIEW:             # <<<<<<<<<<<<<<
- *             objects.append(EndOfMibView)
+ *         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:             # <<<<<<<<<<<<<<
+ *             objects.append(None)
  *         else:
  */
       goto __pyx_L5;
     }
 
-    /* "fastsnmp/snmp_parser.pyx":534
- *             objects.append(EndOfMibView)
+    /* "fastsnmp/snmp_parser.pyx":530
+ *             objects.append(None)
  *         else:
  *             raise NotImplementedError("unknown tag=%s" % tag)             # <<<<<<<<<<<<<<
  * 
  *         offset += length
  */
     /*else*/ {
-      __pyx_t_6 = __Pyx_PyInt_From_uint64_t(__pyx_v_tag); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 534, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyInt_From_uint64_t(__pyx_v_tag); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 530, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_1 = PyUnicode_Format(__pyx_kp_u_unknown_tag_s, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 534, __pyx_L1_error)
+      __pyx_t_1 = PyUnicode_Format(__pyx_kp_u_unknown_tag_s, __pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 530, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 534, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 530, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_Raise(__pyx_t_6, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __PYX_ERR(0, 534, __pyx_L1_error)
+      __PYX_ERR(0, 530, __pyx_L1_error)
     }
     __pyx_L5:;
 
-    /* "fastsnmp/snmp_parser.pyx":536
+    /* "fastsnmp/snmp_parser.pyx":532
  *             raise NotImplementedError("unknown tag=%s" % tag)
  * 
  *         offset += length             # <<<<<<<<<<<<<<
@@ -5834,7 +5776,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
  */
     __pyx_v_offset = (__pyx_v_offset + __pyx_v_length);
 
-    /* "fastsnmp/snmp_parser.pyx":537
+    /* "fastsnmp/snmp_parser.pyx":533
  * 
  *         offset += length
  *         stream_char += length             # <<<<<<<<<<<<<<
@@ -5844,7 +5786,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
     __pyx_v_stream_char = (__pyx_v_stream_char + __pyx_v_length);
   }
 
-  /* "fastsnmp/snmp_parser.pyx":538
+  /* "fastsnmp/snmp_parser.pyx":534
  *         offset += length
  *         stream_char += length
  *     return objects             # <<<<<<<<<<<<<<
@@ -5881,7 +5823,7 @@ static PyObject *__pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(unsigned char
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":541
+/* "fastsnmp/snmp_parser.pyx":537
  * 
  * 
  * cdef int length_decode_c(const unsigned char *stream, size_t *length, size_t *enc_len):             # <<<<<<<<<<<<<<
@@ -5896,9 +5838,9 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
   int __pyx_t_1;
   long __pyx_t_2;
   __Pyx_RefNannySetupContext("length_decode_c", 0);
-  __Pyx_TraceCall("length_decode_c", __pyx_f[0], 541, 0, __PYX_ERR(0, 541, __pyx_L1_error));
+  __Pyx_TraceCall("length_decode_c", __pyx_f[0], 537, 0, __PYX_ERR(0, 537, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":545
+  /* "fastsnmp/snmp_parser.pyx":541
  *     X.690 8,1,3
  *     """
  *     length[0] = <uint8_t>stream[0]             # <<<<<<<<<<<<<<
@@ -5907,7 +5849,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
  */
   (__pyx_v_length[0]) = ((uint8_t)(__pyx_v_stream[0]));
 
-  /* "fastsnmp/snmp_parser.pyx":546
+  /* "fastsnmp/snmp_parser.pyx":542
  *     """
  *     length[0] = <uint8_t>stream[0]
  *     enc_len[0] = 1             # <<<<<<<<<<<<<<
@@ -5916,7 +5858,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
  */
   (__pyx_v_enc_len[0]) = 1;
 
-  /* "fastsnmp/snmp_parser.pyx":548
+  /* "fastsnmp/snmp_parser.pyx":544
  *     enc_len[0] = 1
  * 
  *     if length[0] & 0x80 == 0x80:  # 8.1.3.5             # <<<<<<<<<<<<<<
@@ -5926,7 +5868,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
   __pyx_t_1 = ((((__pyx_v_length[0]) & 0x80) == 0x80) != 0);
   if (__pyx_t_1) {
 
-    /* "fastsnmp/snmp_parser.pyx":549
+    /* "fastsnmp/snmp_parser.pyx":545
  * 
  *     if length[0] & 0x80 == 0x80:  # 8.1.3.5
  *         enc_len[0] = length[0] & 0x7f             # <<<<<<<<<<<<<<
@@ -5935,7 +5877,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
  */
     (__pyx_v_enc_len[0]) = ((__pyx_v_length[0]) & 0x7f);
 
-    /* "fastsnmp/snmp_parser.pyx":550
+    /* "fastsnmp/snmp_parser.pyx":546
  *     if length[0] & 0x80 == 0x80:  # 8.1.3.5
  *         enc_len[0] = length[0] & 0x7f
  *         length[0] = uinteger_decode_c(stream+1, enc_len)             # <<<<<<<<<<<<<<
@@ -5944,7 +5886,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
  */
     (__pyx_v_length[0]) = __pyx_f_8fastsnmp_11snmp_parser_uinteger_decode_c((__pyx_v_stream + 1), __pyx_v_enc_len);
 
-    /* "fastsnmp/snmp_parser.pyx":551
+    /* "fastsnmp/snmp_parser.pyx":547
  *         enc_len[0] = length[0] & 0x7f
  *         length[0] = uinteger_decode_c(stream+1, enc_len)
  *         enc_len[0] += 1             # <<<<<<<<<<<<<<
@@ -5954,7 +5896,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
     __pyx_t_2 = 0;
     (__pyx_v_enc_len[__pyx_t_2]) = ((__pyx_v_enc_len[__pyx_t_2]) + 1);
 
-    /* "fastsnmp/snmp_parser.pyx":548
+    /* "fastsnmp/snmp_parser.pyx":544
  *     enc_len[0] = 1
  * 
  *     if length[0] & 0x80 == 0x80:  # 8.1.3.5             # <<<<<<<<<<<<<<
@@ -5963,7 +5905,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":553
+  /* "fastsnmp/snmp_parser.pyx":549
  *         enc_len[0] += 1
  * 
  *     return 0             # <<<<<<<<<<<<<<
@@ -5973,7 +5915,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":541
+  /* "fastsnmp/snmp_parser.pyx":537
  * 
  * 
  * cdef int length_decode_c(const unsigned char *stream, size_t *length, size_t *enc_len):             # <<<<<<<<<<<<<<
@@ -5991,7 +5933,7 @@ static int __pyx_f_8fastsnmp_11snmp_parser_length_decode_c(unsigned char const *
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":556
+/* "fastsnmp/snmp_parser.pyx":552
  * 
  * 
  * def length_decode(bytes data):             # <<<<<<<<<<<<<<
@@ -6006,7 +5948,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_19length_decode(PyObject *__py
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("length_decode (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), (&PyBytes_Type), 1, "data", 1))) __PYX_ERR(0, 556, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), (&PyBytes_Type), 1, "data", 1))) __PYX_ERR(0, 552, __pyx_L1_error)
   __pyx_r = __pyx_pf_8fastsnmp_11snmp_parser_18length_decode(__pyx_self, ((PyObject*)__pyx_v_data));
 
   /* function exit code */
@@ -6030,9 +5972,9 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_18length_decode(CYTHON_UNUSED 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_TraceFrameInit(__pyx_codeobj__15)
   __Pyx_RefNannySetupContext("length_decode", 0);
-  __Pyx_TraceCall("length_decode", __pyx_f[0], 556, 0, __PYX_ERR(0, 556, __pyx_L1_error));
+  __Pyx_TraceCall("length_decode", __pyx_f[0], 552, 0, __PYX_ERR(0, 552, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":558
+  /* "fastsnmp/snmp_parser.pyx":554
  * def length_decode(bytes data):
  *     cdef size_t encode_length, length
  *     length_decode_c(data, &length, &encode_length)             # <<<<<<<<<<<<<<
@@ -6041,12 +5983,12 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_18length_decode(CYTHON_UNUSED 
  */
   if (unlikely(__pyx_v_data == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "expected bytes, NoneType found");
-    __PYX_ERR(0, 558, __pyx_L1_error)
+    __PYX_ERR(0, 554, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_PyBytes_AsUString(__pyx_v_data); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 558, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBytes_AsUString(__pyx_v_data); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 554, __pyx_L1_error)
   (void)(__pyx_f_8fastsnmp_11snmp_parser_length_decode_c(__pyx_t_1, (&__pyx_v_length), (&__pyx_v_encode_length)));
 
-  /* "fastsnmp/snmp_parser.pyx":559
+  /* "fastsnmp/snmp_parser.pyx":555
  *     cdef size_t encode_length, length
  *     length_decode_c(data, &length, &encode_length)
  *     return length, encode_length             # <<<<<<<<<<<<<<
@@ -6054,11 +5996,11 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_18length_decode(CYTHON_UNUSED 
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyInt_FromSize_t(__pyx_v_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 559, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_FromSize_t(__pyx_v_length); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 555, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_FromSize_t(__pyx_v_encode_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 559, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_FromSize_t(__pyx_v_encode_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 555, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 559, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 555, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
@@ -6070,7 +6012,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_18length_decode(CYTHON_UNUSED 
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":556
+  /* "fastsnmp/snmp_parser.pyx":552
  * 
  * 
  * def length_decode(bytes data):             # <<<<<<<<<<<<<<
@@ -6092,7 +6034,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_18length_decode(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":562
+/* "fastsnmp/snmp_parser.pyx":558
  * 
  * 
  * def length_encode(uint64_t length):             # <<<<<<<<<<<<<<
@@ -6110,7 +6052,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_21length_encode(PyObject *__py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("length_encode (wrapper)", 0);
   assert(__pyx_arg_length); {
-    __pyx_v_length = __Pyx_PyInt_As_uint64_t(__pyx_arg_length); if (unlikely((__pyx_v_length == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 562, __pyx_L3_error)
+    __pyx_v_length = __Pyx_PyInt_As_uint64_t(__pyx_arg_length); if (unlikely((__pyx_v_length == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 558, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -6139,26 +6081,26 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
   int __pyx_t_4;
   __Pyx_TraceFrameInit(__pyx_codeobj__16)
   __Pyx_RefNannySetupContext("length_encode", 0);
-  __Pyx_TraceCall("length_encode", __pyx_f[0], 562, 0, __PYX_ERR(0, 562, __pyx_L1_error));
+  __Pyx_TraceCall("length_encode", __pyx_f[0], 558, 0, __PYX_ERR(0, 558, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":571
+  /* "fastsnmp/snmp_parser.pyx":567
  *     :rtype: bytes
  *     """
  *     if length in length_cache:             # <<<<<<<<<<<<<<
  *         return length_cache[length]
  *     cdef uint64_t tmp_length = length
  */
-  __pyx_t_1 = __Pyx_PyInt_From_uint64_t(__pyx_v_length); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 571, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_uint64_t(__pyx_v_length); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 567, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_length_cache); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 571, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_length_cache); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 567, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_t_1, __pyx_t_2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 571, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_t_1, __pyx_t_2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 567, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_4 = (__pyx_t_3 != 0);
   if (__pyx_t_4) {
 
-    /* "fastsnmp/snmp_parser.pyx":572
+    /* "fastsnmp/snmp_parser.pyx":568
  *     """
  *     if length in length_cache:
  *         return length_cache[length]             # <<<<<<<<<<<<<<
@@ -6166,16 +6108,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
  *     if length <= 127:
  */
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_length_cache); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 572, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_length_cache); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 568, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, __pyx_v_length, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 572, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, __pyx_v_length, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 568, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "fastsnmp/snmp_parser.pyx":571
+    /* "fastsnmp/snmp_parser.pyx":567
  *     :rtype: bytes
  *     """
  *     if length in length_cache:             # <<<<<<<<<<<<<<
@@ -6184,7 +6126,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":573
+  /* "fastsnmp/snmp_parser.pyx":569
  *     if length in length_cache:
  *         return length_cache[length]
  *     cdef uint64_t tmp_length = length             # <<<<<<<<<<<<<<
@@ -6193,7 +6135,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
  */
   __pyx_v_tmp_length = __pyx_v_length;
 
-  /* "fastsnmp/snmp_parser.pyx":574
+  /* "fastsnmp/snmp_parser.pyx":570
  *         return length_cache[length]
  *     cdef uint64_t tmp_length = length
  *     if length <= 127:             # <<<<<<<<<<<<<<
@@ -6203,27 +6145,27 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
   __pyx_t_4 = ((__pyx_v_length <= 0x7F) != 0);
   if (__pyx_t_4) {
 
-    /* "fastsnmp/snmp_parser.pyx":575
+    /* "fastsnmp/snmp_parser.pyx":571
  *     cdef uint64_t tmp_length = length
  *     if length <= 127:
  *         result = bytes([length & 0xff])             # <<<<<<<<<<<<<<
  *     else:
  *         # Long form - Octet one is the number of octets used to
  */
-    __pyx_t_1 = __Pyx_PyInt_From_uint64_t((__pyx_v_length & 0xff)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 575, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_uint64_t((__pyx_v_length & 0xff)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 571, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 575, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 571, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_1);
     PyList_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyBytes_Type)), __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 575, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyBytes_Type)), __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 571, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_result = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":574
+    /* "fastsnmp/snmp_parser.pyx":570
  *         return length_cache[length]
  *     cdef uint64_t tmp_length = length
  *     if length <= 127:             # <<<<<<<<<<<<<<
@@ -6233,7 +6175,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
     goto __pyx_L4;
   }
 
-  /* "fastsnmp/snmp_parser.pyx":583
+  /* "fastsnmp/snmp_parser.pyx":579
  *         # 8 bits to encode the length
  * 
  *         resultlist = bytearray()             # <<<<<<<<<<<<<<
@@ -6241,12 +6183,12 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
  *         while tmp_length > 0:
  */
   /*else*/ {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)(&PyByteArray_Type))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)(&PyByteArray_Type))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 579, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_resultlist = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":584
+    /* "fastsnmp/snmp_parser.pyx":580
  * 
  *         resultlist = bytearray()
  *         numOctets = 0             # <<<<<<<<<<<<<<
@@ -6256,7 +6198,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
     __Pyx_INCREF(__pyx_int_0);
     __pyx_v_numOctets = __pyx_int_0;
 
-    /* "fastsnmp/snmp_parser.pyx":585
+    /* "fastsnmp/snmp_parser.pyx":581
  *         resultlist = bytearray()
  *         numOctets = 0
  *         while tmp_length > 0:             # <<<<<<<<<<<<<<
@@ -6267,21 +6209,21 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
       __pyx_t_4 = ((__pyx_v_tmp_length > 0) != 0);
       if (!__pyx_t_4) break;
 
-      /* "fastsnmp/snmp_parser.pyx":586
+      /* "fastsnmp/snmp_parser.pyx":582
  *         numOctets = 0
  *         while tmp_length > 0:
  *             resultlist.insert(0, tmp_length & 0xff)             # <<<<<<<<<<<<<<
  *             tmp_length >>= 8
  *             numOctets += 1
  */
-      __pyx_t_1 = __Pyx_PyInt_From_uint64_t((__pyx_v_tmp_length & 0xff)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 586, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_uint64_t((__pyx_v_tmp_length & 0xff)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 582, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = __Pyx_CallUnboundCMethod2(&__pyx_umethod_PyByteArray_Type_insert, __pyx_v_resultlist, __pyx_int_0, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 586, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_CallUnboundCMethod2(&__pyx_umethod_PyByteArray_Type_insert, __pyx_v_resultlist, __pyx_int_0, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 582, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":587
+      /* "fastsnmp/snmp_parser.pyx":583
  *         while tmp_length > 0:
  *             resultlist.insert(0, tmp_length & 0xff)
  *             tmp_length >>= 8             # <<<<<<<<<<<<<<
@@ -6290,72 +6232,72 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
  */
       __pyx_v_tmp_length = (__pyx_v_tmp_length >> 8);
 
-      /* "fastsnmp/snmp_parser.pyx":588
+      /* "fastsnmp/snmp_parser.pyx":584
  *             resultlist.insert(0, tmp_length & 0xff)
  *             tmp_length >>= 8
  *             numOctets += 1             # <<<<<<<<<<<<<<
  *         # Add a 1 to the front of the octet
  *         numOctets |= 0x80
  */
-      __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_numOctets, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 588, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_numOctets, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 584, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF_SET(__pyx_v_numOctets, __pyx_t_2);
       __pyx_t_2 = 0;
     }
 
-    /* "fastsnmp/snmp_parser.pyx":590
+    /* "fastsnmp/snmp_parser.pyx":586
  *             numOctets += 1
  *         # Add a 1 to the front of the octet
  *         numOctets |= 0x80             # <<<<<<<<<<<<<<
  *         resultlist.insert(0, numOctets & 0xff)
  *         result = bytes(resultlist)
  */
-    __pyx_t_2 = __Pyx_PyInt_OrObjC(__pyx_v_numOctets, __pyx_int_128, 0x80, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 590, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_OrObjC(__pyx_v_numOctets, __pyx_int_128, 0x80, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 586, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF_SET(__pyx_v_numOctets, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":591
+    /* "fastsnmp/snmp_parser.pyx":587
  *         # Add a 1 to the front of the octet
  *         numOctets |= 0x80
  *         resultlist.insert(0, numOctets & 0xff)             # <<<<<<<<<<<<<<
  *         result = bytes(resultlist)
  *     length_cache[length] = result
  */
-    __pyx_t_2 = __Pyx_PyInt_AndObjC(__pyx_v_numOctets, __pyx_int_255, 0xff, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 591, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_AndObjC(__pyx_v_numOctets, __pyx_int_255, 0xff, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 587, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_CallUnboundCMethod2(&__pyx_umethod_PyByteArray_Type_insert, __pyx_v_resultlist, __pyx_int_0, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 591, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_CallUnboundCMethod2(&__pyx_umethod_PyByteArray_Type_insert, __pyx_v_resultlist, __pyx_int_0, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 587, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":592
+    /* "fastsnmp/snmp_parser.pyx":588
  *         numOctets |= 0x80
  *         resultlist.insert(0, numOctets & 0xff)
  *         result = bytes(resultlist)             # <<<<<<<<<<<<<<
  *     length_cache[length] = result
  *     return result
  */
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyBytes_Type)), __pyx_v_resultlist); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 592, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyBytes_Type)), __pyx_v_resultlist); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 588, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_result = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
   }
   __pyx_L4:;
 
-  /* "fastsnmp/snmp_parser.pyx":593
+  /* "fastsnmp/snmp_parser.pyx":589
  *         resultlist.insert(0, numOctets & 0xff)
  *         result = bytes(resultlist)
  *     length_cache[length] = result             # <<<<<<<<<<<<<<
  *     return result
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_length_cache); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 593, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_length_cache); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 589, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (unlikely(__Pyx_SetItemInt(__pyx_t_1, __pyx_v_length, __pyx_v_result, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 0) < 0)) __PYX_ERR(0, 593, __pyx_L1_error)
+  if (unlikely(__Pyx_SetItemInt(__pyx_t_1, __pyx_v_length, __pyx_v_result, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 0) < 0)) __PYX_ERR(0, 589, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":594
+  /* "fastsnmp/snmp_parser.pyx":590
  *         result = bytes(resultlist)
  *     length_cache[length] = result
  *     return result             # <<<<<<<<<<<<<<
@@ -6367,7 +6309,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
   __pyx_r = __pyx_v_result;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":562
+  /* "fastsnmp/snmp_parser.pyx":558
  * 
  * 
  * def length_encode(uint64_t length):             # <<<<<<<<<<<<<<
@@ -6391,7 +6333,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_20length_encode(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":596
+/* "fastsnmp/snmp_parser.pyx":592
  *     return result
  * 
  * cdef inline int tag_decode_c(const unsigned char *stream, uint64_t *tag, size_t *enc_len) except -1:             # <<<<<<<<<<<<<<
@@ -6405,9 +6347,9 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("tag_decode_c", 0);
-  __Pyx_TraceCall("tag_decode_c", __pyx_f[0], 596, 0, __PYX_ERR(0, 596, __pyx_L1_error));
+  __Pyx_TraceCall("tag_decode_c", __pyx_f[0], 592, 0, __PYX_ERR(0, 592, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":604
+  /* "fastsnmp/snmp_parser.pyx":600
  *     """
  * 
  *     tag[0] = <uint8_t>stream[0]  # low-tag-number form             # <<<<<<<<<<<<<<
@@ -6416,7 +6358,7 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
  */
   (__pyx_v_tag[0]) = ((uint8_t)(__pyx_v_stream[0]));
 
-  /* "fastsnmp/snmp_parser.pyx":605
+  /* "fastsnmp/snmp_parser.pyx":601
  * 
  *     tag[0] = <uint8_t>stream[0]  # low-tag-number form
  *     enc_len[0] = 1             # <<<<<<<<<<<<<<
@@ -6425,7 +6367,7 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
  */
   (__pyx_v_enc_len[0]) = 1;
 
-  /* "fastsnmp/snmp_parser.pyx":606
+  /* "fastsnmp/snmp_parser.pyx":602
  *     tag[0] = <uint8_t>stream[0]  # low-tag-number form
  *     enc_len[0] = 1
  *     if tag[0] & 0x1F == 0x1F:  # high-tag-number form             # <<<<<<<<<<<<<<
@@ -6435,7 +6377,7 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
   __pyx_t_1 = ((((__pyx_v_tag[0]) & 0x1F) == 0x1F) != 0);
   if (__pyx_t_1) {
 
-    /* "fastsnmp/snmp_parser.pyx":607
+    /* "fastsnmp/snmp_parser.pyx":603
  *     enc_len[0] = 1
  *     if tag[0] & 0x1F == 0x1F:  # high-tag-number form
  *         return -1             # <<<<<<<<<<<<<<
@@ -6445,7 +6387,7 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
     __pyx_r = -1;
     goto __pyx_L0;
 
-    /* "fastsnmp/snmp_parser.pyx":606
+    /* "fastsnmp/snmp_parser.pyx":602
  *     tag[0] = <uint8_t>stream[0]  # low-tag-number form
  *     enc_len[0] = 1
  *     if tag[0] & 0x1F == 0x1F:  # high-tag-number form             # <<<<<<<<<<<<<<
@@ -6454,7 +6396,7 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":609
+  /* "fastsnmp/snmp_parser.pyx":605
  *         return -1
  * 
  *     return 0             # <<<<<<<<<<<<<<
@@ -6464,7 +6406,7 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":596
+  /* "fastsnmp/snmp_parser.pyx":592
  *     return result
  * 
  * cdef inline int tag_decode_c(const unsigned char *stream, uint64_t *tag, size_t *enc_len) except -1:             # <<<<<<<<<<<<<<
@@ -6482,7 +6424,7 @@ static CYTHON_INLINE int __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(unsigned c
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":611
+/* "fastsnmp/snmp_parser.pyx":607
  *     return 0
  * 
  * def tag_decode(bytes stream not None):             # <<<<<<<<<<<<<<
@@ -6497,7 +6439,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_23tag_decode(PyObject *__pyx_s
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("tag_decode (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_stream), (&PyBytes_Type), 0, "stream", 1))) __PYX_ERR(0, 611, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_stream), (&PyBytes_Type), 0, "stream", 1))) __PYX_ERR(0, 607, __pyx_L1_error)
   __pyx_r = __pyx_pf_8fastsnmp_11snmp_parser_22tag_decode(__pyx_self, ((PyObject*)__pyx_v_stream));
 
   /* function exit code */
@@ -6522,9 +6464,9 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_22tag_decode(CYTHON_UNUSED PyO
   PyObject *__pyx_t_5 = NULL;
   __Pyx_TraceFrameInit(__pyx_codeobj__17)
   __Pyx_RefNannySetupContext("tag_decode", 0);
-  __Pyx_TraceCall("tag_decode", __pyx_f[0], 611, 0, __PYX_ERR(0, 611, __pyx_L1_error));
+  __Pyx_TraceCall("tag_decode", __pyx_f[0], 607, 0, __PYX_ERR(0, 607, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":612
+  /* "fastsnmp/snmp_parser.pyx":608
  * 
  * def tag_decode(bytes stream not None):
  *     cdef uint64_t tag=0             # <<<<<<<<<<<<<<
@@ -6533,17 +6475,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_22tag_decode(CYTHON_UNUSED PyO
  */
   __pyx_v_tag = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":614
+  /* "fastsnmp/snmp_parser.pyx":610
  *     cdef uint64_t tag=0
  *     cdef size_t encode_length
  *     tag_decode_c(stream, &tag, &encode_length)             # <<<<<<<<<<<<<<
  *     return tag, encode_length
  * 
  */
-  __pyx_t_1 = __Pyx_PyBytes_AsUString(__pyx_v_stream); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 614, __pyx_L1_error)
-  __pyx_t_2 = __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(__pyx_t_1, (&__pyx_v_tag), (&__pyx_v_encode_length)); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 614, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBytes_AsUString(__pyx_v_stream); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 610, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(__pyx_t_1, (&__pyx_v_tag), (&__pyx_v_encode_length)); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 610, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":615
+  /* "fastsnmp/snmp_parser.pyx":611
  *     cdef size_t encode_length
  *     tag_decode_c(stream, &tag, &encode_length)
  *     return tag, encode_length             # <<<<<<<<<<<<<<
@@ -6551,11 +6493,11 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_22tag_decode(CYTHON_UNUSED PyO
  * # TODO: implement more encoders
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __Pyx_PyInt_From_uint64_t(__pyx_v_tag); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 615, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_uint64_t(__pyx_v_tag); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 611, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_FromSize_t(__pyx_v_encode_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 615, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_FromSize_t(__pyx_v_encode_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 611, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 615, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 611, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
@@ -6567,7 +6509,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_22tag_decode(CYTHON_UNUSED PyO
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":611
+  /* "fastsnmp/snmp_parser.pyx":607
  *     return 0
  * 
  * def tag_decode(bytes stream not None):             # <<<<<<<<<<<<<<
@@ -6589,7 +6531,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_22tag_decode(CYTHON_UNUSED PyO
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":618
+/* "fastsnmp/snmp_parser.pyx":614
  * 
  * # TODO: implement more encoders
  * def value_encode(value=None, value_type='Null'):             # <<<<<<<<<<<<<<
@@ -6638,7 +6580,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_25value_encode(PyObject *__pyx
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "value_encode") < 0)) __PYX_ERR(0, 618, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "value_encode") < 0)) __PYX_ERR(0, 614, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -6655,7 +6597,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_25value_encode(PyObject *__pyx
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("value_encode", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 618, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("value_encode", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 614, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("fastsnmp.snmp_parser.value_encode", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -6679,19 +6621,19 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
   PyObject *__pyx_t_5 = NULL;
   __Pyx_TraceFrameInit(__pyx_codeobj__18)
   __Pyx_RefNannySetupContext("value_encode", 0);
-  __Pyx_TraceCall("value_encode", __pyx_f[0], 618, 0, __PYX_ERR(0, 618, __pyx_L1_error));
+  __Pyx_TraceCall("value_encode", __pyx_f[0], 614, 0, __PYX_ERR(0, 614, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":622
+  /* "fastsnmp/snmp_parser.pyx":618
  *     Encoded value by ASN.1
  *     """
  *     if value_type == 'Null':             # <<<<<<<<<<<<<<
  *         if value is not None:
  *             raise Exception('value must be None for Null type!')
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_Null, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 622, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_Null, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 618, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "fastsnmp/snmp_parser.pyx":623
+    /* "fastsnmp/snmp_parser.pyx":619
  *     """
  *     if value_type == 'Null':
  *         if value is not None:             # <<<<<<<<<<<<<<
@@ -6702,20 +6644,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
     __pyx_t_2 = (__pyx_t_1 != 0);
     if (unlikely(__pyx_t_2)) {
 
-      /* "fastsnmp/snmp_parser.pyx":624
+      /* "fastsnmp/snmp_parser.pyx":620
  *     if value_type == 'Null':
  *         if value is not None:
  *             raise Exception('value must be None for Null type!')             # <<<<<<<<<<<<<<
  *         return b''
  *     elif value_type == "Integer":
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 624, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 620, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __PYX_ERR(0, 624, __pyx_L1_error)
+      __PYX_ERR(0, 620, __pyx_L1_error)
 
-      /* "fastsnmp/snmp_parser.pyx":623
+      /* "fastsnmp/snmp_parser.pyx":619
  *     """
  *     if value_type == 'Null':
  *         if value is not None:             # <<<<<<<<<<<<<<
@@ -6724,7 +6666,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  */
     }
 
-    /* "fastsnmp/snmp_parser.pyx":625
+    /* "fastsnmp/snmp_parser.pyx":621
  *         if value is not None:
  *             raise Exception('value must be None for Null type!')
  *         return b''             # <<<<<<<<<<<<<<
@@ -6736,7 +6678,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
     __pyx_r = __pyx_kp_b__20;
     goto __pyx_L0;
 
-    /* "fastsnmp/snmp_parser.pyx":622
+    /* "fastsnmp/snmp_parser.pyx":618
  *     Encoded value by ASN.1
  *     """
  *     if value_type == 'Null':             # <<<<<<<<<<<<<<
@@ -6745,17 +6687,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":626
+  /* "fastsnmp/snmp_parser.pyx":622
  *             raise Exception('value must be None for Null type!')
  *         return b''
  *     elif value_type == "Integer":             # <<<<<<<<<<<<<<
  *         return integer_encode(value)
  *     elif value_type == "Counter64":
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_Integer, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 626, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_Integer, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 622, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "fastsnmp/snmp_parser.pyx":627
+    /* "fastsnmp/snmp_parser.pyx":623
  *         return b''
  *     elif value_type == "Integer":
  *         return integer_encode(value)             # <<<<<<<<<<<<<<
@@ -6763,7 +6705,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  *         return uinteger_encode(value)
  */
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 627, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 623, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -6777,14 +6719,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
     }
     __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_v_value) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_value);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 627, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 623, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "fastsnmp/snmp_parser.pyx":626
+    /* "fastsnmp/snmp_parser.pyx":622
  *             raise Exception('value must be None for Null type!')
  *         return b''
  *     elif value_type == "Integer":             # <<<<<<<<<<<<<<
@@ -6793,17 +6735,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":628
+  /* "fastsnmp/snmp_parser.pyx":624
  *     elif value_type == "Integer":
  *         return integer_encode(value)
  *     elif value_type == "Counter64":             # <<<<<<<<<<<<<<
  *         return uinteger_encode(value)
  *     elif value_type == "OctetString":
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_Counter64, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 628, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_Counter64, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 624, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "fastsnmp/snmp_parser.pyx":629
+    /* "fastsnmp/snmp_parser.pyx":625
  *         return integer_encode(value)
  *     elif value_type == "Counter64":
  *         return uinteger_encode(value)             # <<<<<<<<<<<<<<
@@ -6811,7 +6753,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  *         return value.encode()
  */
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_uinteger_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 629, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_uinteger_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 625, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -6825,14 +6767,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
     }
     __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_v_value) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_value);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 629, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 625, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "fastsnmp/snmp_parser.pyx":628
+    /* "fastsnmp/snmp_parser.pyx":624
  *     elif value_type == "Integer":
  *         return integer_encode(value)
  *     elif value_type == "Counter64":             # <<<<<<<<<<<<<<
@@ -6841,17 +6783,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":630
+  /* "fastsnmp/snmp_parser.pyx":626
  *     elif value_type == "Counter64":
  *         return uinteger_encode(value)
  *     elif value_type == "OctetString":             # <<<<<<<<<<<<<<
  *         return value.encode()
  *     else:
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_OctetString, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 630, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_value_type, __pyx_n_u_OctetString, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 626, __pyx_L1_error)
   if (likely(__pyx_t_2)) {
 
-    /* "fastsnmp/snmp_parser.pyx":631
+    /* "fastsnmp/snmp_parser.pyx":627
  *         return uinteger_encode(value)
  *     elif value_type == "OctetString":
  *         return value.encode()             # <<<<<<<<<<<<<<
@@ -6859,7 +6801,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  *         raise NotImplementedError('not implement coder for %s' % type(value))
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_value, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 631, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_value, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 627, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -6873,14 +6815,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
     }
     __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 631, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 627, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "fastsnmp/snmp_parser.pyx":630
+    /* "fastsnmp/snmp_parser.pyx":626
  *     elif value_type == "Counter64":
  *         return uinteger_encode(value)
  *     elif value_type == "OctetString":             # <<<<<<<<<<<<<<
@@ -6889,7 +6831,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":633
+  /* "fastsnmp/snmp_parser.pyx":629
  *         return value.encode()
  *     else:
  *         raise NotImplementedError('not implement coder for %s' % type(value))             # <<<<<<<<<<<<<<
@@ -6897,17 +6839,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
  * 
  */
   /*else*/ {
-    __pyx_t_3 = __Pyx_PyUnicode_FormatSafe(__pyx_kp_u_not_implement_coder_for_s, ((PyObject *)Py_TYPE(__pyx_v_value))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 633, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyUnicode_FormatSafe(__pyx_kp_u_not_implement_coder_for_s, ((PyObject *)Py_TYPE(__pyx_v_value))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 629, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 633, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 629, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 633, __pyx_L1_error)
+    __PYX_ERR(0, 629, __pyx_L1_error)
   }
 
-  /* "fastsnmp/snmp_parser.pyx":618
+  /* "fastsnmp/snmp_parser.pyx":614
  * 
  * # TODO: implement more encoders
  * def value_encode(value=None, value_type='Null'):             # <<<<<<<<<<<<<<
@@ -6929,7 +6871,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_24value_encode(CYTHON_UNUSED P
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":636
+/* "fastsnmp/snmp_parser.pyx":632
  * 
  * 
  * def encode_varbind(oid, value_type='Null', value=None):             # <<<<<<<<<<<<<<
@@ -6984,7 +6926,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_27encode_varbind(PyObject *__p
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "encode_varbind") < 0)) __PYX_ERR(0, 636, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "encode_varbind") < 0)) __PYX_ERR(0, 632, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -7003,7 +6945,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_27encode_varbind(PyObject *__p
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("encode_varbind", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 636, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("encode_varbind", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 632, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("fastsnmp.snmp_parser.encode_varbind", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7039,10 +6981,10 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   int __pyx_t_8;
   __Pyx_TraceFrameInit(__pyx_codeobj__21)
   __Pyx_RefNannySetupContext("encode_varbind", 0);
-  __Pyx_TraceCall("encode_varbind", __pyx_f[0], 636, 0, __PYX_ERR(0, 636, __pyx_L1_error));
+  __Pyx_TraceCall("encode_varbind", __pyx_f[0], 632, 0, __PYX_ERR(0, 632, __pyx_L1_error));
   __Pyx_INCREF(__pyx_v_value_type);
 
-  /* "fastsnmp/snmp_parser.pyx":637
+  /* "fastsnmp/snmp_parser.pyx":633
  * 
  * def encode_varbind(oid, value_type='Null', value=None):
  *     if value is None:             # <<<<<<<<<<<<<<
@@ -7053,7 +6995,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "fastsnmp/snmp_parser.pyx":638
+    /* "fastsnmp/snmp_parser.pyx":634
  * def encode_varbind(oid, value_type='Null', value=None):
  *     if value is None:
  *         value_type = 'Null'             # <<<<<<<<<<<<<<
@@ -7063,7 +7005,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
     __Pyx_INCREF(__pyx_n_u_Null);
     __Pyx_DECREF_SET(__pyx_v_value_type, __pyx_n_u_Null);
 
-    /* "fastsnmp/snmp_parser.pyx":637
+    /* "fastsnmp/snmp_parser.pyx":633
  * 
  * def encode_varbind(oid, value_type='Null', value=None):
  *     if value is None:             # <<<<<<<<<<<<<<
@@ -7072,14 +7014,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":639
+  /* "fastsnmp/snmp_parser.pyx":635
  *     if value is None:
  *         value_type = 'Null'
  *     obj_id_value = objectid_encode(oid)             # <<<<<<<<<<<<<<
  *     obj_id_type = ASN_U_OBJECTID_BYTE
  *     obj_id_len = length_encode(len(obj_id_value))
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_objectid_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 639, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_objectid_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 635, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -7093,13 +7035,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   }
   __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_v_oid) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_oid);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 639, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 635, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_obj_id_value = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":640
+  /* "fastsnmp/snmp_parser.pyx":636
  *         value_type = 'Null'
  *     obj_id_value = objectid_encode(oid)
  *     obj_id_type = ASN_U_OBJECTID_BYTE             # <<<<<<<<<<<<<<
@@ -7109,17 +7051,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __Pyx_INCREF(__pyx_kp_b__22);
   __pyx_v_obj_id_type = __pyx_kp_b__22;
 
-  /* "fastsnmp/snmp_parser.pyx":641
+  /* "fastsnmp/snmp_parser.pyx":637
  *     obj_id_value = objectid_encode(oid)
  *     obj_id_type = ASN_U_OBJECTID_BYTE
  *     obj_id_len = length_encode(len(obj_id_value))             # <<<<<<<<<<<<<<
  * 
  *     obj_value_value = value_encode(value, value_type)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 641, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 637, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = PyObject_Length(__pyx_v_obj_id_value); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 641, __pyx_L1_error)
-  __pyx_t_5 = PyInt_FromSsize_t(__pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 641, __pyx_L1_error)
+  __pyx_t_6 = PyObject_Length(__pyx_v_obj_id_value); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 637, __pyx_L1_error)
+  __pyx_t_5 = PyInt_FromSsize_t(__pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 637, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -7134,20 +7076,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __pyx_t_3 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_7, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 641, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 637, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_obj_id_len = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":643
+  /* "fastsnmp/snmp_parser.pyx":639
  *     obj_id_len = length_encode(len(obj_id_value))
  * 
  *     obj_value_value = value_encode(value, value_type)             # <<<<<<<<<<<<<<
  *     obj_value_type = TYPE_NAME_TO_TYPE[value_type]
  *     obj_value_len = length_encode(len(obj_value_value))
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_value_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 643, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_value_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 639, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   __pyx_t_8 = 0;
@@ -7164,7 +7106,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_4)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_value, __pyx_v_value_type};
-    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 643, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 639, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else
@@ -7172,13 +7114,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_value, __pyx_v_value_type};
-    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 643, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 639, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else
   #endif
   {
-    __pyx_t_7 = PyTuple_New(2+__pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 643, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(2+__pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 639, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     if (__pyx_t_5) {
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -7189,7 +7131,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
     __Pyx_INCREF(__pyx_v_value_type);
     __Pyx_GIVEREF(__pyx_v_value_type);
     PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_8, __pyx_v_value_type);
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 643, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 639, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
@@ -7197,32 +7139,32 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __pyx_v_obj_value_value = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":644
+  /* "fastsnmp/snmp_parser.pyx":640
  * 
  *     obj_value_value = value_encode(value, value_type)
  *     obj_value_type = TYPE_NAME_TO_TYPE[value_type]             # <<<<<<<<<<<<<<
  *     obj_value_len = length_encode(len(obj_value_value))
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_TYPE_NAME_TO_TYPE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 644, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_TYPE_NAME_TO_TYPE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 640, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_3, __pyx_v_value_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 644, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_3, __pyx_v_value_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 640, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_obj_value_type = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":645
+  /* "fastsnmp/snmp_parser.pyx":641
  *     obj_value_value = value_encode(value, value_type)
  *     obj_value_type = TYPE_NAME_TO_TYPE[value_type]
  *     obj_value_len = length_encode(len(obj_value_value))             # <<<<<<<<<<<<<<
  * 
  *     varbinds_obj = obj_id_type + obj_id_len + obj_id_value + obj_value_type + obj_value_len + obj_value_value
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 645, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 641, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = PyObject_Length(__pyx_v_obj_value_value); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 645, __pyx_L1_error)
-  __pyx_t_7 = PyInt_FromSsize_t(__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 645, __pyx_L1_error)
+  __pyx_t_6 = PyObject_Length(__pyx_v_obj_value_value); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 641, __pyx_L1_error)
+  __pyx_t_7 = PyInt_FromSsize_t(__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 641, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -7237,37 +7179,37 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 645, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 641, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_obj_value_len = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":647
+  /* "fastsnmp/snmp_parser.pyx":643
  *     obj_value_len = length_encode(len(obj_value_value))
  * 
  *     varbinds_obj = obj_id_type + obj_id_len + obj_id_value + obj_value_type + obj_value_len + obj_value_value             # <<<<<<<<<<<<<<
  * 
  *     seq_tag = ASN_U_SEQUENCE_BYTE
  */
-  __pyx_t_4 = PyNumber_Add(__pyx_v_obj_id_type, __pyx_v_obj_id_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 647, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_v_obj_id_type, __pyx_v_obj_id_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 643, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_obj_id_value); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 647, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_obj_id_value); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 643, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_obj_value_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 647, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_obj_value_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 643, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_obj_value_len); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 647, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_v_obj_value_len); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 643, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_obj_value_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 647, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_obj_value_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 643, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_varbinds_obj = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":649
+  /* "fastsnmp/snmp_parser.pyx":645
  *     varbinds_obj = obj_id_type + obj_id_len + obj_id_value + obj_value_type + obj_value_len + obj_value_value
  * 
  *     seq_tag = ASN_U_SEQUENCE_BYTE             # <<<<<<<<<<<<<<
@@ -7277,17 +7219,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __Pyx_INCREF(__pyx_kp_b_0);
   __pyx_v_seq_tag = __pyx_kp_b_0;
 
-  /* "fastsnmp/snmp_parser.pyx":650
+  /* "fastsnmp/snmp_parser.pyx":646
  * 
  *     seq_tag = ASN_U_SEQUENCE_BYTE
  *     varbind_enc = seq_tag + length_encode(len(varbinds_obj)) + varbinds_obj             # <<<<<<<<<<<<<<
  *     return varbind_enc
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 650, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 646, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = PyObject_Length(__pyx_v_varbinds_obj); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 650, __pyx_L1_error)
-  __pyx_t_7 = PyInt_FromSsize_t(__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 650, __pyx_L1_error)
+  __pyx_t_6 = PyObject_Length(__pyx_v_varbinds_obj); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 646, __pyx_L1_error)
+  __pyx_t_7 = PyInt_FromSsize_t(__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 646, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -7302,19 +7244,19 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 650, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 646, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_v_seq_tag, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 650, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_v_seq_tag, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 646, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_varbinds_obj); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 650, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_3, __pyx_v_varbinds_obj); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 646, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_varbind_enc = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":651
+  /* "fastsnmp/snmp_parser.pyx":647
  *     seq_tag = ASN_U_SEQUENCE_BYTE
  *     varbind_enc = seq_tag + length_encode(len(varbinds_obj)) + varbinds_obj
  *     return varbind_enc             # <<<<<<<<<<<<<<
@@ -7326,7 +7268,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   __pyx_r = __pyx_v_varbind_enc;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":636
+  /* "fastsnmp/snmp_parser.pyx":632
  * 
  * 
  * def encode_varbind(oid, value_type='Null', value=None):             # <<<<<<<<<<<<<<
@@ -7359,7 +7301,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_26encode_varbind(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":654
+/* "fastsnmp/snmp_parser.pyx":650
  * 
  * 
  * def varbinds_encode(varbinds):             # <<<<<<<<<<<<<<
@@ -7404,21 +7346,21 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
   int __pyx_t_12;
   __Pyx_TraceFrameInit(__pyx_codeobj__23)
   __Pyx_RefNannySetupContext("varbinds_encode", 0);
-  __Pyx_TraceCall("varbinds_encode", __pyx_f[0], 654, 0, __PYX_ERR(0, 654, __pyx_L1_error));
+  __Pyx_TraceCall("varbinds_encode", __pyx_f[0], 650, 0, __PYX_ERR(0, 650, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":655
+  /* "fastsnmp/snmp_parser.pyx":651
  * 
  * def varbinds_encode(varbinds):
  *     res = bytearray()             # <<<<<<<<<<<<<<
  *     for varbind in varbinds:
  *         if isinstance(varbind, str):
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)(&PyByteArray_Type))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 655, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)(&PyByteArray_Type))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 651, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_res = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":656
+  /* "fastsnmp/snmp_parser.pyx":652
  * def varbinds_encode(varbinds):
  *     res = bytearray()
  *     for varbind in varbinds:             # <<<<<<<<<<<<<<
@@ -7429,26 +7371,26 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
     __pyx_t_1 = __pyx_v_varbinds; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_varbinds); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 656, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_varbinds); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 652, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 656, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 652, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 656, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 652, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 656, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 652, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 656, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 652, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 656, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 652, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -7458,7 +7400,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 656, __pyx_L1_error)
+          else __PYX_ERR(0, 652, __pyx_L1_error)
         }
         break;
       }
@@ -7467,7 +7409,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
     __Pyx_XDECREF_SET(__pyx_v_varbind, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":657
+    /* "fastsnmp/snmp_parser.pyx":653
  *     res = bytearray()
  *     for varbind in varbinds:
  *         if isinstance(varbind, str):             # <<<<<<<<<<<<<<
@@ -7478,7 +7420,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
     __pyx_t_6 = (__pyx_t_5 != 0);
     if (__pyx_t_6) {
 
-      /* "fastsnmp/snmp_parser.pyx":658
+      /* "fastsnmp/snmp_parser.pyx":654
  *     for varbind in varbinds:
  *         if isinstance(varbind, str):
  *             oid = varbind             # <<<<<<<<<<<<<<
@@ -7488,7 +7430,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       __Pyx_INCREF(__pyx_v_varbind);
       __Pyx_XDECREF_SET(__pyx_v_oid, __pyx_v_varbind);
 
-      /* "fastsnmp/snmp_parser.pyx":659
+      /* "fastsnmp/snmp_parser.pyx":655
  *         if isinstance(varbind, str):
  *             oid = varbind
  *             value = None             # <<<<<<<<<<<<<<
@@ -7498,7 +7440,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       __Pyx_INCREF(Py_None);
       __Pyx_XDECREF_SET(__pyx_v_value, Py_None);
 
-      /* "fastsnmp/snmp_parser.pyx":660
+      /* "fastsnmp/snmp_parser.pyx":656
  *             oid = varbind
  *             value = None
  *             value_type = "Null"             # <<<<<<<<<<<<<<
@@ -7508,7 +7450,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       __Pyx_INCREF(__pyx_n_u_Null);
       __Pyx_XDECREF_SET(__pyx_v_value_type, __pyx_n_u_Null);
 
-      /* "fastsnmp/snmp_parser.pyx":657
+      /* "fastsnmp/snmp_parser.pyx":653
  *     res = bytearray()
  *     for varbind in varbinds:
  *         if isinstance(varbind, str):             # <<<<<<<<<<<<<<
@@ -7518,18 +7460,18 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       goto __pyx_L5;
     }
 
-    /* "fastsnmp/snmp_parser.pyx":661
+    /* "fastsnmp/snmp_parser.pyx":657
  *             value = None
  *             value_type = "Null"
  *         elif len(varbind) == 3:             # <<<<<<<<<<<<<<
  *             oid, value_type, value = varbind
  *         elif len(varbind) == 2:
  */
-    __pyx_t_7 = PyObject_Length(__pyx_v_varbind); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 661, __pyx_L1_error)
+    __pyx_t_7 = PyObject_Length(__pyx_v_varbind); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 657, __pyx_L1_error)
     __pyx_t_6 = ((__pyx_t_7 == 3) != 0);
     if (__pyx_t_6) {
 
-      /* "fastsnmp/snmp_parser.pyx":662
+      /* "fastsnmp/snmp_parser.pyx":658
  *             value_type = "Null"
  *         elif len(varbind) == 3:
  *             oid, value_type, value = varbind             # <<<<<<<<<<<<<<
@@ -7542,7 +7484,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         if (unlikely(size != 3)) {
           if (size > 3) __Pyx_RaiseTooManyValuesError(3);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 662, __pyx_L1_error)
+          __PYX_ERR(0, 658, __pyx_L1_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -7558,16 +7500,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         __Pyx_INCREF(__pyx_t_8);
         __Pyx_INCREF(__pyx_t_9);
         #else
-        __pyx_t_4 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 662, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 658, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_8 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 662, __pyx_L1_error)
+        __pyx_t_8 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 658, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_9 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 662, __pyx_L1_error)
+        __pyx_t_9 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 658, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
         #endif
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_10 = PyObject_GetIter(__pyx_v_varbind); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 662, __pyx_L1_error)
+        __pyx_t_10 = PyObject_GetIter(__pyx_v_varbind); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 658, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __pyx_t_11 = Py_TYPE(__pyx_t_10)->tp_iternext;
         index = 0; __pyx_t_4 = __pyx_t_11(__pyx_t_10); if (unlikely(!__pyx_t_4)) goto __pyx_L6_unpacking_failed;
@@ -7576,7 +7518,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         __Pyx_GOTREF(__pyx_t_8);
         index = 2; __pyx_t_9 = __pyx_t_11(__pyx_t_10); if (unlikely(!__pyx_t_9)) goto __pyx_L6_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_9);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_10), 3) < 0) __PYX_ERR(0, 662, __pyx_L1_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_10), 3) < 0) __PYX_ERR(0, 658, __pyx_L1_error)
         __pyx_t_11 = NULL;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         goto __pyx_L7_unpacking_done;
@@ -7584,7 +7526,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __pyx_t_11 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 662, __pyx_L1_error)
+        __PYX_ERR(0, 658, __pyx_L1_error)
         __pyx_L7_unpacking_done:;
       }
       __Pyx_XDECREF_SET(__pyx_v_oid, __pyx_t_4);
@@ -7594,7 +7536,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       __Pyx_XDECREF_SET(__pyx_v_value, __pyx_t_9);
       __pyx_t_9 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":661
+      /* "fastsnmp/snmp_parser.pyx":657
  *             value = None
  *             value_type = "Null"
  *         elif len(varbind) == 3:             # <<<<<<<<<<<<<<
@@ -7604,18 +7546,18 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       goto __pyx_L5;
     }
 
-    /* "fastsnmp/snmp_parser.pyx":663
+    /* "fastsnmp/snmp_parser.pyx":659
  *         elif len(varbind) == 3:
  *             oid, value_type, value = varbind
  *         elif len(varbind) == 2:             # <<<<<<<<<<<<<<
  *             oid, value_type = varbind
  *             value = None
  */
-    __pyx_t_7 = PyObject_Length(__pyx_v_varbind); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 663, __pyx_L1_error)
+    __pyx_t_7 = PyObject_Length(__pyx_v_varbind); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 659, __pyx_L1_error)
     __pyx_t_6 = ((__pyx_t_7 == 2) != 0);
     if (__pyx_t_6) {
 
-      /* "fastsnmp/snmp_parser.pyx":664
+      /* "fastsnmp/snmp_parser.pyx":660
  *             oid, value_type, value = varbind
  *         elif len(varbind) == 2:
  *             oid, value_type = varbind             # <<<<<<<<<<<<<<
@@ -7628,7 +7570,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          __PYX_ERR(0, 664, __pyx_L1_error)
+          __PYX_ERR(0, 660, __pyx_L1_error)
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -7641,21 +7583,21 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         __Pyx_INCREF(__pyx_t_9);
         __Pyx_INCREF(__pyx_t_8);
         #else
-        __pyx_t_9 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 664, __pyx_L1_error)
+        __pyx_t_9 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 660, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_8 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 664, __pyx_L1_error)
+        __pyx_t_8 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 660, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         #endif
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_4 = PyObject_GetIter(__pyx_v_varbind); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 664, __pyx_L1_error)
+        __pyx_t_4 = PyObject_GetIter(__pyx_v_varbind); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 660, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_t_11 = Py_TYPE(__pyx_t_4)->tp_iternext;
         index = 0; __pyx_t_9 = __pyx_t_11(__pyx_t_4); if (unlikely(!__pyx_t_9)) goto __pyx_L8_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_9);
         index = 1; __pyx_t_8 = __pyx_t_11(__pyx_t_4); if (unlikely(!__pyx_t_8)) goto __pyx_L8_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_8);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_4), 2) < 0) __PYX_ERR(0, 664, __pyx_L1_error)
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_4), 2) < 0) __PYX_ERR(0, 660, __pyx_L1_error)
         __pyx_t_11 = NULL;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         goto __pyx_L9_unpacking_done;
@@ -7663,7 +7605,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __pyx_t_11 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        __PYX_ERR(0, 664, __pyx_L1_error)
+        __PYX_ERR(0, 660, __pyx_L1_error)
         __pyx_L9_unpacking_done:;
       }
       __Pyx_XDECREF_SET(__pyx_v_oid, __pyx_t_9);
@@ -7671,7 +7613,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       __Pyx_XDECREF_SET(__pyx_v_value_type, __pyx_t_8);
       __pyx_t_8 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":665
+      /* "fastsnmp/snmp_parser.pyx":661
  *         elif len(varbind) == 2:
  *             oid, value_type = varbind
  *             value = None             # <<<<<<<<<<<<<<
@@ -7681,7 +7623,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       __Pyx_INCREF(Py_None);
       __Pyx_XDECREF_SET(__pyx_v_value, Py_None);
 
-      /* "fastsnmp/snmp_parser.pyx":663
+      /* "fastsnmp/snmp_parser.pyx":659
  *         elif len(varbind) == 3:
  *             oid, value_type, value = varbind
  *         elif len(varbind) == 2:             # <<<<<<<<<<<<<<
@@ -7691,18 +7633,18 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
     }
     __pyx_L5:;
 
-    /* "fastsnmp/snmp_parser.pyx":666
+    /* "fastsnmp/snmp_parser.pyx":662
  *             oid, value_type = varbind
  *             value = None
  *         res += encode_varbind(oid, value_type, value)             # <<<<<<<<<<<<<<
  *     return res
  * 
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_encode_varbind); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 666, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_encode_varbind); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 662, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    if (unlikely(!__pyx_v_oid)) { __Pyx_RaiseUnboundLocalError("oid"); __PYX_ERR(0, 666, __pyx_L1_error) }
-    if (unlikely(!__pyx_v_value_type)) { __Pyx_RaiseUnboundLocalError("value_type"); __PYX_ERR(0, 666, __pyx_L1_error) }
-    if (unlikely(!__pyx_v_value)) { __Pyx_RaiseUnboundLocalError("value"); __PYX_ERR(0, 666, __pyx_L1_error) }
+    if (unlikely(!__pyx_v_oid)) { __Pyx_RaiseUnboundLocalError("oid"); __PYX_ERR(0, 662, __pyx_L1_error) }
+    if (unlikely(!__pyx_v_value_type)) { __Pyx_RaiseUnboundLocalError("value_type"); __PYX_ERR(0, 662, __pyx_L1_error) }
+    if (unlikely(!__pyx_v_value)) { __Pyx_RaiseUnboundLocalError("value"); __PYX_ERR(0, 662, __pyx_L1_error) }
     __pyx_t_4 = NULL;
     __pyx_t_12 = 0;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_9))) {
@@ -7718,7 +7660,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_9)) {
       PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_oid, __pyx_v_value_type, __pyx_v_value};
-      __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 3+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 666, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 3+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 662, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_8);
     } else
@@ -7726,13 +7668,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
       PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_oid, __pyx_v_value_type, __pyx_v_value};
-      __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 3+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 666, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 3+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 662, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_8);
     } else
     #endif
     {
-      __pyx_t_10 = PyTuple_New(3+__pyx_t_12); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 666, __pyx_L1_error)
+      __pyx_t_10 = PyTuple_New(3+__pyx_t_12); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 662, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       if (__pyx_t_4) {
         __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -7746,18 +7688,18 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
       __Pyx_INCREF(__pyx_v_value);
       __Pyx_GIVEREF(__pyx_v_value);
       PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_12, __pyx_v_value);
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 666, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 662, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
     }
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-    __pyx_t_9 = PyNumber_InPlaceAdd(__pyx_v_res, __pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 666, __pyx_L1_error)
+    __pyx_t_9 = PyNumber_InPlaceAdd(__pyx_v_res, __pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 662, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF_SET(__pyx_v_res, __pyx_t_9);
     __pyx_t_9 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":656
+    /* "fastsnmp/snmp_parser.pyx":652
  * def varbinds_encode(varbinds):
  *     res = bytearray()
  *     for varbind in varbinds:             # <<<<<<<<<<<<<<
@@ -7767,7 +7709,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":667
+  /* "fastsnmp/snmp_parser.pyx":663
  *             value = None
  *         res += encode_varbind(oid, value_type, value)
  *     return res             # <<<<<<<<<<<<<<
@@ -7779,7 +7721,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
   __pyx_r = __pyx_v_res;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":654
+  /* "fastsnmp/snmp_parser.pyx":650
  * 
  * 
  * def varbinds_encode(varbinds):             # <<<<<<<<<<<<<<
@@ -7808,7 +7750,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_28varbinds_encode(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":670
+/* "fastsnmp/snmp_parser.pyx":666
  * 
  * 
  * def varbinds_encode_tlv(varbinds):             # <<<<<<<<<<<<<<
@@ -7844,16 +7786,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_30varbinds_encode_tlv(CYTHON_U
   PyObject *__pyx_t_5 = NULL;
   __Pyx_TraceFrameInit(__pyx_codeobj__24)
   __Pyx_RefNannySetupContext("varbinds_encode_tlv", 0);
-  __Pyx_TraceCall("varbinds_encode_tlv", __pyx_f[0], 670, 0, __PYX_ERR(0, 670, __pyx_L1_error));
+  __Pyx_TraceCall("varbinds_encode_tlv", __pyx_f[0], 666, 0, __PYX_ERR(0, 666, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":671
+  /* "fastsnmp/snmp_parser.pyx":667
  * 
  * def varbinds_encode_tlv(varbinds):
  *     varbinds_data = varbinds_encode(varbinds)             # <<<<<<<<<<<<<<
  *     varbinds_type = ASN_U_SEQUENCE_BYTE
  *     varbinds_len = length_encode(len(varbinds_data))
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_varbinds_encode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 671, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_varbinds_encode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 667, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -7867,13 +7809,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_30varbinds_encode_tlv(CYTHON_U
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_varbinds) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_varbinds);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 671, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 667, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_varbinds_data = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":672
+  /* "fastsnmp/snmp_parser.pyx":668
  * def varbinds_encode_tlv(varbinds):
  *     varbinds_data = varbinds_encode(varbinds)
  *     varbinds_type = ASN_U_SEQUENCE_BYTE             # <<<<<<<<<<<<<<
@@ -7883,17 +7825,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_30varbinds_encode_tlv(CYTHON_U
   __Pyx_INCREF(__pyx_kp_b_0);
   __pyx_v_varbinds_type = __pyx_kp_b_0;
 
-  /* "fastsnmp/snmp_parser.pyx":673
+  /* "fastsnmp/snmp_parser.pyx":669
  *     varbinds_data = varbinds_encode(varbinds)
  *     varbinds_type = ASN_U_SEQUENCE_BYTE
  *     varbinds_len = length_encode(len(varbinds_data))             # <<<<<<<<<<<<<<
  *     return varbinds_type + varbinds_len + varbinds_data
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 673, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 669, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyObject_Length(__pyx_v_varbinds_data); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 673, __pyx_L1_error)
-  __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 673, __pyx_L1_error)
+  __pyx_t_4 = PyObject_Length(__pyx_v_varbinds_data); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 669, __pyx_L1_error)
+  __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 669, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -7908,13 +7850,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_30varbinds_encode_tlv(CYTHON_U
   __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 673, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 669, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_varbinds_len = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":674
+  /* "fastsnmp/snmp_parser.pyx":670
  *     varbinds_type = ASN_U_SEQUENCE_BYTE
  *     varbinds_len = length_encode(len(varbinds_data))
  *     return varbinds_type + varbinds_len + varbinds_data             # <<<<<<<<<<<<<<
@@ -7922,16 +7864,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_30varbinds_encode_tlv(CYTHON_U
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyNumber_Add(__pyx_v_varbinds_type, __pyx_v_varbinds_len); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 674, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Add(__pyx_v_varbinds_type, __pyx_v_varbinds_len); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 670, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_varbinds_data); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 674, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_varbinds_data); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 670, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":670
+  /* "fastsnmp/snmp_parser.pyx":666
  * 
  * 
  * def varbinds_encode_tlv(varbinds):             # <<<<<<<<<<<<<<
@@ -7957,7 +7899,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_30varbinds_encode_tlv(CYTHON_U
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":677
+/* "fastsnmp/snmp_parser.pyx":673
  * 
  * 
  * def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=10, non_repeaters=0):             # <<<<<<<<<<<<<<
@@ -8013,13 +7955,13 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_33msg_encode(PyObject *__pyx_s
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_community)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("msg_encode", 0, 3, 6, 1); __PYX_ERR(0, 677, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("msg_encode", 0, 3, 6, 1); __PYX_ERR(0, 673, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_varbinds)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("msg_encode", 0, 3, 6, 2); __PYX_ERR(0, 677, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("msg_encode", 0, 3, 6, 2); __PYX_ERR(0, 673, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -8041,7 +7983,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_33msg_encode(PyObject *__pyx_s
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "msg_encode") < 0)) __PYX_ERR(0, 677, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "msg_encode") < 0)) __PYX_ERR(0, 673, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -8067,7 +8009,7 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_33msg_encode(PyObject *__pyx_s
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("msg_encode", 0, 3, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 677, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("msg_encode", 0, 3, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 673, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("fastsnmp.snmp_parser.msg_encode", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -8122,9 +8064,9 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   PyObject *__pyx_t_8 = NULL;
   __Pyx_TraceFrameInit(__pyx_codeobj__25)
   __Pyx_RefNannySetupContext("msg_encode", 0);
-  __Pyx_TraceCall("msg_encode", __pyx_f[0], 677, 0, __PYX_ERR(0, 677, __pyx_L1_error));
+  __Pyx_TraceCall("msg_encode", __pyx_f[0], 673, 0, __PYX_ERR(0, 673, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":696
+  /* "fastsnmp/snmp_parser.pyx":692
  *     :rtype: bytes
  *     """
  *     if isinstance(varbinds, (list, tuple)):             # <<<<<<<<<<<<<<
@@ -8145,14 +8087,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "fastsnmp/snmp_parser.pyx":697
+    /* "fastsnmp/snmp_parser.pyx":693
  *     """
  *     if isinstance(varbinds, (list, tuple)):
  *         varbinds_tlv = varbinds_encode_tlv(varbinds)             # <<<<<<<<<<<<<<
  *     else:
  *         varbinds_tlv = varbinds
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_varbinds_encode_tlv); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 697, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_varbinds_encode_tlv); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 693, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -8166,13 +8108,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     }
     __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_v_varbinds) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_varbinds);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 697, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 693, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_v_varbinds_tlv = __pyx_t_4;
     __pyx_t_4 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":696
+    /* "fastsnmp/snmp_parser.pyx":692
  *     :rtype: bytes
  *     """
  *     if isinstance(varbinds, (list, tuple)):             # <<<<<<<<<<<<<<
@@ -8182,7 +8124,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     goto __pyx_L3;
   }
 
-  /* "fastsnmp/snmp_parser.pyx":699
+  /* "fastsnmp/snmp_parser.pyx":695
  *         varbinds_tlv = varbinds_encode_tlv(varbinds)
  *     else:
  *         varbinds_tlv = varbinds             # <<<<<<<<<<<<<<
@@ -8195,7 +8137,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   }
   __pyx_L3:;
 
-  /* "fastsnmp/snmp_parser.pyx":700
+  /* "fastsnmp/snmp_parser.pyx":696
  *     else:
  *         varbinds_tlv = varbinds
  *     request_id_type = ASN_U_INTEGER_BYTE             # <<<<<<<<<<<<<<
@@ -8205,14 +8147,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __Pyx_INCREF(__pyx_kp_b__26);
   __pyx_v_request_id_type = __pyx_kp_b__26;
 
-  /* "fastsnmp/snmp_parser.pyx":701
+  /* "fastsnmp/snmp_parser.pyx":697
  *         varbinds_tlv = varbinds
  *     request_id_type = ASN_U_INTEGER_BYTE
  *     request_id_value = integer_encode(req_id)             # <<<<<<<<<<<<<<
  *     request_id_len = length_encode(len(request_id_value))
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 701, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 697, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -8226,23 +8168,23 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   }
   __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_v_req_id) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_req_id);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 701, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 697, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_request_id_value = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":702
+  /* "fastsnmp/snmp_parser.pyx":698
  *     request_id_type = ASN_U_INTEGER_BYTE
  *     request_id_value = integer_encode(req_id)
  *     request_id_len = length_encode(len(request_id_value))             # <<<<<<<<<<<<<<
  * 
  *     if msg_type == "GetBulk":
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 702, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 698, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = PyObject_Length(__pyx_v_request_id_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 702, __pyx_L1_error)
-  __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 702, __pyx_L1_error)
+  __pyx_t_7 = PyObject_Length(__pyx_v_request_id_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 698, __pyx_L1_error)
+  __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 698, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_8 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -8257,51 +8199,51 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 702, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 698, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_request_id_len = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":704
+  /* "fastsnmp/snmp_parser.pyx":700
  *     request_id_len = length_encode(len(request_id_value))
  * 
  *     if msg_type == "GetBulk":             # <<<<<<<<<<<<<<
  *         if max_repetitions < 1:
  *             raise Exception("max_repetitions must be higher than %s" % max_repetitions)
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_msg_type, __pyx_n_u_GetBulk, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 704, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_msg_type, __pyx_n_u_GetBulk, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 700, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "fastsnmp/snmp_parser.pyx":705
+    /* "fastsnmp/snmp_parser.pyx":701
  * 
  *     if msg_type == "GetBulk":
  *         if max_repetitions < 1:             # <<<<<<<<<<<<<<
  *             raise Exception("max_repetitions must be higher than %s" % max_repetitions)
  *         non_repeaters_value = integer_encode(non_repeaters)
  */
-    __pyx_t_4 = PyObject_RichCompare(__pyx_v_max_repetitions, __pyx_int_1, Py_LT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 705, __pyx_L1_error)
-    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 705, __pyx_L1_error)
+    __pyx_t_4 = PyObject_RichCompare(__pyx_v_max_repetitions, __pyx_int_1, Py_LT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 701, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 701, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     if (unlikely(__pyx_t_2)) {
 
-      /* "fastsnmp/snmp_parser.pyx":706
+      /* "fastsnmp/snmp_parser.pyx":702
  *     if msg_type == "GetBulk":
  *         if max_repetitions < 1:
  *             raise Exception("max_repetitions must be higher than %s" % max_repetitions)             # <<<<<<<<<<<<<<
  *         non_repeaters_value = integer_encode(non_repeaters)
  *         non_repeaters_type = ASN_U_INTEGER_BYTE
  */
-      __pyx_t_4 = __Pyx_PyUnicode_FormatSafe(__pyx_kp_u_max_repetitions_must_be_higher_t, __pyx_v_max_repetitions); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 706, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyUnicode_FormatSafe(__pyx_kp_u_max_repetitions_must_be_higher_t, __pyx_v_max_repetitions); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 702, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 706, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 702, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_Raise(__pyx_t_5, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __PYX_ERR(0, 706, __pyx_L1_error)
+      __PYX_ERR(0, 702, __pyx_L1_error)
 
-      /* "fastsnmp/snmp_parser.pyx":705
+      /* "fastsnmp/snmp_parser.pyx":701
  * 
  *     if msg_type == "GetBulk":
  *         if max_repetitions < 1:             # <<<<<<<<<<<<<<
@@ -8310,14 +8252,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
  */
     }
 
-    /* "fastsnmp/snmp_parser.pyx":707
+    /* "fastsnmp/snmp_parser.pyx":703
  *         if max_repetitions < 1:
  *             raise Exception("max_repetitions must be higher than %s" % max_repetitions)
  *         non_repeaters_value = integer_encode(non_repeaters)             # <<<<<<<<<<<<<<
  *         non_repeaters_type = ASN_U_INTEGER_BYTE
  *         non_repeaters_len = length_encode(len(non_repeaters_value))
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 707, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 703, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8331,13 +8273,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     }
     __pyx_t_5 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_v_non_repeaters) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_non_repeaters);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 707, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 703, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_non_repeaters_value = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":708
+    /* "fastsnmp/snmp_parser.pyx":704
  *             raise Exception("max_repetitions must be higher than %s" % max_repetitions)
  *         non_repeaters_value = integer_encode(non_repeaters)
  *         non_repeaters_type = ASN_U_INTEGER_BYTE             # <<<<<<<<<<<<<<
@@ -8347,17 +8289,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_kp_b__26);
     __pyx_v_non_repeaters_type = __pyx_kp_b__26;
 
-    /* "fastsnmp/snmp_parser.pyx":709
+    /* "fastsnmp/snmp_parser.pyx":705
  *         non_repeaters_value = integer_encode(non_repeaters)
  *         non_repeaters_type = ASN_U_INTEGER_BYTE
  *         non_repeaters_len = length_encode(len(non_repeaters_value))             # <<<<<<<<<<<<<<
  *         max_repetitions_value = integer_encode(max_repetitions)
  *         max_repetitions_type = ASN_U_INTEGER_BYTE
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 709, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 705, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = PyObject_Length(__pyx_v_non_repeaters_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 709, __pyx_L1_error)
-    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 709, __pyx_L1_error)
+    __pyx_t_7 = PyObject_Length(__pyx_v_non_repeaters_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 705, __pyx_L1_error)
+    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 705, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8372,20 +8314,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 709, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 705, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_non_repeaters_len = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":710
+    /* "fastsnmp/snmp_parser.pyx":706
  *         non_repeaters_type = ASN_U_INTEGER_BYTE
  *         non_repeaters_len = length_encode(len(non_repeaters_value))
  *         max_repetitions_value = integer_encode(max_repetitions)             # <<<<<<<<<<<<<<
  *         max_repetitions_type = ASN_U_INTEGER_BYTE
  *         max_repetitions_len = length_encode(len(max_repetitions_value))
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 710, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_integer_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 706, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8399,13 +8341,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     }
     __pyx_t_5 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_v_max_repetitions) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_max_repetitions);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 710, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 706, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_max_repetitions_value = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":711
+    /* "fastsnmp/snmp_parser.pyx":707
  *         non_repeaters_len = length_encode(len(non_repeaters_value))
  *         max_repetitions_value = integer_encode(max_repetitions)
  *         max_repetitions_type = ASN_U_INTEGER_BYTE             # <<<<<<<<<<<<<<
@@ -8415,17 +8357,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_kp_b__26);
     __pyx_v_max_repetitions_type = __pyx_kp_b__26;
 
-    /* "fastsnmp/snmp_parser.pyx":712
+    /* "fastsnmp/snmp_parser.pyx":708
  *         max_repetitions_value = integer_encode(max_repetitions)
  *         max_repetitions_type = ASN_U_INTEGER_BYTE
  *         max_repetitions_len = length_encode(len(max_repetitions_value))             # <<<<<<<<<<<<<<
  *         pdu = request_id_type + request_id_len + request_id_value + \
  *               non_repeaters_type + non_repeaters_len + non_repeaters_value + \
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 712, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 708, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = PyObject_Length(__pyx_v_max_repetitions_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 712, __pyx_L1_error)
-    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 712, __pyx_L1_error)
+    __pyx_t_7 = PyObject_Length(__pyx_v_max_repetitions_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 708, __pyx_L1_error)
+    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 708, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8440,73 +8382,73 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 712, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 708, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_max_repetitions_len = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":713
+    /* "fastsnmp/snmp_parser.pyx":709
  *         max_repetitions_type = ASN_U_INTEGER_BYTE
  *         max_repetitions_len = length_encode(len(max_repetitions_value))
  *         pdu = request_id_type + request_id_len + request_id_value + \             # <<<<<<<<<<<<<<
  *               non_repeaters_type + non_repeaters_len + non_repeaters_value + \
  *               max_repetitions_type + max_repetitions_len + max_repetitions_value + \
  */
-    __pyx_t_5 = PyNumber_Add(__pyx_v_request_id_type, __pyx_v_request_id_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 713, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_v_request_id_type, __pyx_v_request_id_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_request_id_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 713, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_request_id_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":714
+    /* "fastsnmp/snmp_parser.pyx":710
  *         max_repetitions_len = length_encode(len(max_repetitions_value))
  *         pdu = request_id_type + request_id_len + request_id_value + \
  *               non_repeaters_type + non_repeaters_len + non_repeaters_value + \             # <<<<<<<<<<<<<<
  *               max_repetitions_type + max_repetitions_len + max_repetitions_value + \
  *               varbinds_tlv
  */
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_non_repeaters_type); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 713, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_non_repeaters_type); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 709, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_non_repeaters_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 714, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_non_repeaters_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 710, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_non_repeaters_value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 714, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_non_repeaters_value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 710, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":715
+    /* "fastsnmp/snmp_parser.pyx":711
  *         pdu = request_id_type + request_id_len + request_id_value + \
  *               non_repeaters_type + non_repeaters_len + non_repeaters_value + \
  *               max_repetitions_type + max_repetitions_len + max_repetitions_value + \             # <<<<<<<<<<<<<<
  *               varbinds_tlv
  *         pdu_type = ASN_SNMP_GETBULK_BYTE
  */
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_max_repetitions_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 714, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_max_repetitions_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 710, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_max_repetitions_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 715, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_max_repetitions_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 711, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_max_repetitions_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 715, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_max_repetitions_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 711, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":716
+    /* "fastsnmp/snmp_parser.pyx":712
  *               non_repeaters_type + non_repeaters_len + non_repeaters_value + \
  *               max_repetitions_type + max_repetitions_len + max_repetitions_value + \
  *               varbinds_tlv             # <<<<<<<<<<<<<<
  *         pdu_type = ASN_SNMP_GETBULK_BYTE
  *     else:
  */
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_varbinds_tlv); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 715, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_varbinds_tlv); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 711, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_pdu = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":717
+    /* "fastsnmp/snmp_parser.pyx":713
  *               max_repetitions_type + max_repetitions_len + max_repetitions_value + \
  *               varbinds_tlv
  *         pdu_type = ASN_SNMP_GETBULK_BYTE             # <<<<<<<<<<<<<<
@@ -8516,7 +8458,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_kp_b__27);
     __pyx_v_pdu_type = __pyx_kp_b__27;
 
-    /* "fastsnmp/snmp_parser.pyx":704
+    /* "fastsnmp/snmp_parser.pyx":700
  *     request_id_len = length_encode(len(request_id_value))
  * 
  *     if msg_type == "GetBulk":             # <<<<<<<<<<<<<<
@@ -8526,7 +8468,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     goto __pyx_L6;
   }
 
-  /* "fastsnmp/snmp_parser.pyx":719
+  /* "fastsnmp/snmp_parser.pyx":715
  *         pdu_type = ASN_SNMP_GETBULK_BYTE
  *     else:
  *         error_status_value = INT_0  # integer_encode(0)             # <<<<<<<<<<<<<<
@@ -8537,7 +8479,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_kp_b__28);
     __pyx_v_error_status_value = __pyx_kp_b__28;
 
-    /* "fastsnmp/snmp_parser.pyx":720
+    /* "fastsnmp/snmp_parser.pyx":716
  *     else:
  *         error_status_value = INT_0  # integer_encode(0)
  *         error_status_type = ASN_U_INTEGER_BYTE             # <<<<<<<<<<<<<<
@@ -8547,17 +8489,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_kp_b__26);
     __pyx_v_error_status_type = __pyx_kp_b__26;
 
-    /* "fastsnmp/snmp_parser.pyx":721
+    /* "fastsnmp/snmp_parser.pyx":717
  *         error_status_value = INT_0  # integer_encode(0)
  *         error_status_type = ASN_U_INTEGER_BYTE
  *         error_status_len = length_encode(len(error_status_value))             # <<<<<<<<<<<<<<
  *         error_index_value = INT_0  # integer_encode(0)
  *         error_index_type = ASN_U_INTEGER_BYTE
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 721, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 717, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = PyBytes_GET_SIZE(__pyx_v_error_status_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 721, __pyx_L1_error)
-    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 721, __pyx_L1_error)
+    __pyx_t_7 = PyBytes_GET_SIZE(__pyx_v_error_status_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 717, __pyx_L1_error)
+    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 717, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8572,13 +8514,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 721, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 717, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_error_status_len = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":722
+    /* "fastsnmp/snmp_parser.pyx":718
  *         error_status_type = ASN_U_INTEGER_BYTE
  *         error_status_len = length_encode(len(error_status_value))
  *         error_index_value = INT_0  # integer_encode(0)             # <<<<<<<<<<<<<<
@@ -8588,7 +8530,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_kp_b__28);
     __pyx_v_error_index_value = __pyx_kp_b__28;
 
-    /* "fastsnmp/snmp_parser.pyx":723
+    /* "fastsnmp/snmp_parser.pyx":719
  *         error_status_len = length_encode(len(error_status_value))
  *         error_index_value = INT_0  # integer_encode(0)
  *         error_index_type = ASN_U_INTEGER_BYTE             # <<<<<<<<<<<<<<
@@ -8598,17 +8540,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_kp_b__26);
     __pyx_v_error_index_type = __pyx_kp_b__26;
 
-    /* "fastsnmp/snmp_parser.pyx":724
+    /* "fastsnmp/snmp_parser.pyx":720
  *         error_index_value = INT_0  # integer_encode(0)
  *         error_index_type = ASN_U_INTEGER_BYTE
  *         error_index_len = length_encode(len(error_index_value))             # <<<<<<<<<<<<<<
  *         pdu = request_id_type + request_id_len + request_id_value + \
  *               error_status_type + error_status_len + error_status_value + \
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 724, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 720, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = PyBytes_GET_SIZE(__pyx_v_error_index_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 724, __pyx_L1_error)
-    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 724, __pyx_L1_error)
+    __pyx_t_7 = PyBytes_GET_SIZE(__pyx_v_error_index_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 720, __pyx_L1_error)
+    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 720, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8623,82 +8565,82 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
     __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 724, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 720, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_error_index_len = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":725
+    /* "fastsnmp/snmp_parser.pyx":721
  *         error_index_type = ASN_U_INTEGER_BYTE
  *         error_index_len = length_encode(len(error_index_value))
  *         pdu = request_id_type + request_id_len + request_id_value + \             # <<<<<<<<<<<<<<
  *               error_status_type + error_status_len + error_status_value + \
  *               error_index_type + error_index_len + error_index_value + \
  */
-    __pyx_t_5 = PyNumber_Add(__pyx_v_request_id_type, __pyx_v_request_id_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 725, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_v_request_id_type, __pyx_v_request_id_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 721, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_request_id_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 725, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_request_id_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 721, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":726
+    /* "fastsnmp/snmp_parser.pyx":722
  *         error_index_len = length_encode(len(error_index_value))
  *         pdu = request_id_type + request_id_len + request_id_value + \
  *               error_status_type + error_status_len + error_status_value + \             # <<<<<<<<<<<<<<
  *               error_index_type + error_index_len + error_index_value + \
  *               varbinds_tlv
  */
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_error_status_type); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 725, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_error_status_type); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 721, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_error_status_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 726, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_error_status_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 722, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_error_status_value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 726, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_error_status_value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 722, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":727
+    /* "fastsnmp/snmp_parser.pyx":723
  *         pdu = request_id_type + request_id_len + request_id_value + \
  *               error_status_type + error_status_len + error_status_value + \
  *               error_index_type + error_index_len + error_index_value + \             # <<<<<<<<<<<<<<
  *               varbinds_tlv
  *         pdu_type = ASN_SNMP_MSG_TYPES[msg_type]
  */
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_error_index_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 726, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_error_index_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 722, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_error_index_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 727, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_error_index_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 723, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_error_index_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 727, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_error_index_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 723, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":728
+    /* "fastsnmp/snmp_parser.pyx":724
  *               error_status_type + error_status_len + error_status_value + \
  *               error_index_type + error_index_len + error_index_value + \
  *               varbinds_tlv             # <<<<<<<<<<<<<<
  *         pdu_type = ASN_SNMP_MSG_TYPES[msg_type]
  * 
  */
-    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_varbinds_tlv); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 727, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_varbinds_tlv); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 723, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_pdu = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":729
+    /* "fastsnmp/snmp_parser.pyx":725
  *               error_index_type + error_index_len + error_index_value + \
  *               varbinds_tlv
  *         pdu_type = ASN_SNMP_MSG_TYPES[msg_type]             # <<<<<<<<<<<<<<
  * 
  *     pdu_len = length_encode(len(pdu))
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_ASN_SNMP_MSG_TYPES); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 729, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_ASN_SNMP_MSG_TYPES); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 725, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_msg_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 729, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_msg_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 725, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_v_pdu_type = __pyx_t_4;
@@ -8706,16 +8648,84 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   }
   __pyx_L6:;
 
-  /* "fastsnmp/snmp_parser.pyx":731
+  /* "fastsnmp/snmp_parser.pyx":727
  *         pdu_type = ASN_SNMP_MSG_TYPES[msg_type]
  * 
  *     pdu_len = length_encode(len(pdu))             # <<<<<<<<<<<<<<
  * 
  *     community_value = octetstring_encode(community)
  */
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 727, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_7 = PyObject_Length(__pyx_v_pdu); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 727, __pyx_L1_error)
+  __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 727, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_8 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
+    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_5);
+    if (likely(__pyx_t_8)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_8);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_5, function);
+    }
+  }
+  __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 727, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_v_pdu_len = __pyx_t_4;
+  __pyx_t_4 = 0;
+
+  /* "fastsnmp/snmp_parser.pyx":729
+ *     pdu_len = length_encode(len(pdu))
+ * 
+ *     community_value = octetstring_encode(community)             # <<<<<<<<<<<<<<
+ *     community_type = ASN_U_OCTETSTRING_BYTE
+ *     community_len = length_encode(len(community_value))
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_octetstring_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 729, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = NULL;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_5, function);
+    }
+  }
+  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_v_community) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_community);
+  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 729, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_v_community_value = __pyx_t_4;
+  __pyx_t_4 = 0;
+
+  /* "fastsnmp/snmp_parser.pyx":730
+ * 
+ *     community_value = octetstring_encode(community)
+ *     community_type = ASN_U_OCTETSTRING_BYTE             # <<<<<<<<<<<<<<
+ *     community_len = length_encode(len(community_value))
+ * 
+ */
+  __Pyx_INCREF(__pyx_kp_b__29);
+  __pyx_v_community_type = __pyx_kp_b__29;
+
+  /* "fastsnmp/snmp_parser.pyx":731
+ *     community_value = octetstring_encode(community)
+ *     community_type = ASN_U_OCTETSTRING_BYTE
+ *     community_len = length_encode(len(community_value))             # <<<<<<<<<<<<<<
+ * 
+ *     version_value = INT_1  # v2c
+ */
   __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 731, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = PyObject_Length(__pyx_v_pdu); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 731, __pyx_L1_error)
+  __pyx_t_7 = PyObject_Length(__pyx_v_community_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 731, __pyx_L1_error)
   __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 731, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_8 = NULL;
@@ -8734,78 +8744,10 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 731, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_v_pdu_len = __pyx_t_4;
-  __pyx_t_4 = 0;
-
-  /* "fastsnmp/snmp_parser.pyx":733
- *     pdu_len = length_encode(len(pdu))
- * 
- *     community_value = octetstring_encode(community)             # <<<<<<<<<<<<<<
- *     community_type = ASN_U_OCTETSTRING_BYTE
- *     community_len = length_encode(len(community_value))
- */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_octetstring_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 733, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_v_community) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_community);
-  __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 733, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_v_community_value = __pyx_t_4;
-  __pyx_t_4 = 0;
-
-  /* "fastsnmp/snmp_parser.pyx":734
- * 
- *     community_value = octetstring_encode(community)
- *     community_type = ASN_U_OCTETSTRING_BYTE             # <<<<<<<<<<<<<<
- *     community_len = length_encode(len(community_value))
- * 
- */
-  __Pyx_INCREF(__pyx_kp_b__29);
-  __pyx_v_community_type = __pyx_kp_b__29;
-
-  /* "fastsnmp/snmp_parser.pyx":735
- *     community_value = octetstring_encode(community)
- *     community_type = ASN_U_OCTETSTRING_BYTE
- *     community_len = length_encode(len(community_value))             # <<<<<<<<<<<<<<
- * 
- *     version_value = INT_1  # v2c
- */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 735, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = PyObject_Length(__pyx_v_community_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 735, __pyx_L1_error)
-  __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 735, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_8 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
-    }
-  }
-  __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 735, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_community_len = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":737
+  /* "fastsnmp/snmp_parser.pyx":733
  *     community_len = length_encode(len(community_value))
  * 
  *     version_value = INT_1  # v2c             # <<<<<<<<<<<<<<
@@ -8815,7 +8757,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __Pyx_INCREF(__pyx_kp_b__30);
   __pyx_v_version_value = __pyx_kp_b__30;
 
-  /* "fastsnmp/snmp_parser.pyx":738
+  /* "fastsnmp/snmp_parser.pyx":734
  * 
  *     version_value = INT_1  # v2c
  *     version_type = ASN_U_INTEGER_BYTE             # <<<<<<<<<<<<<<
@@ -8825,7 +8767,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __Pyx_INCREF(__pyx_kp_b__26);
   __pyx_v_version_type = __pyx_kp_b__26;
 
-  /* "fastsnmp/snmp_parser.pyx":739
+  /* "fastsnmp/snmp_parser.pyx":735
  *     version_value = INT_1  # v2c
  *     version_type = ASN_U_INTEGER_BYTE
  *     version_len = INT_1  # length_encode(len(version_value))             # <<<<<<<<<<<<<<
@@ -8835,7 +8777,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __Pyx_INCREF(__pyx_kp_b__30);
   __pyx_v_version_len = __pyx_kp_b__30;
 
-  /* "fastsnmp/snmp_parser.pyx":741
+  /* "fastsnmp/snmp_parser.pyx":737
  *     version_len = INT_1  # length_encode(len(version_value))
  * 
  *     snmp_message_type = ASN_U_SEQUENCE_BYTE             # <<<<<<<<<<<<<<
@@ -8845,66 +8787,66 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __Pyx_INCREF(__pyx_kp_b_0);
   __pyx_v_snmp_message_type = __pyx_kp_b_0;
 
-  /* "fastsnmp/snmp_parser.pyx":742
+  /* "fastsnmp/snmp_parser.pyx":738
  * 
  *     snmp_message_type = ASN_U_SEQUENCE_BYTE
  *     snmp_message_value = version_type + version_len + version_value + \             # <<<<<<<<<<<<<<
  *                          community_type + community_len + community_value + \
  *                          pdu_type + pdu_len + pdu
  */
-  __pyx_t_4 = PyNumber_Add(__pyx_v_version_type, __pyx_v_version_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 742, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_v_version_type, __pyx_v_version_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 738, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_version_value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 742, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_version_value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 738, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":743
+  /* "fastsnmp/snmp_parser.pyx":739
  *     snmp_message_type = ASN_U_SEQUENCE_BYTE
  *     snmp_message_value = version_type + version_len + version_value + \
  *                          community_type + community_len + community_value + \             # <<<<<<<<<<<<<<
  *                          pdu_type + pdu_len + pdu
  *     snmp_message_len = length_encode(len(snmp_message_value))
  */
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_community_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 742, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_community_type); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 738, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_community_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 743, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_community_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 739, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_community_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 743, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_community_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 739, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":744
+  /* "fastsnmp/snmp_parser.pyx":740
  *     snmp_message_value = version_type + version_len + version_value + \
  *                          community_type + community_len + community_value + \
  *                          pdu_type + pdu_len + pdu             # <<<<<<<<<<<<<<
  *     snmp_message_len = length_encode(len(snmp_message_value))
  *     return snmp_message_type + snmp_message_len + snmp_message_value
  */
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_pdu_type); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 743, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_pdu_type); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 739, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_pdu_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 744, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_pdu_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 740, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_pdu); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 744, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_pdu); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 740, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_snmp_message_value = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":745
+  /* "fastsnmp/snmp_parser.pyx":741
  *                          community_type + community_len + community_value + \
  *                          pdu_type + pdu_len + pdu
  *     snmp_message_len = length_encode(len(snmp_message_value))             # <<<<<<<<<<<<<<
  *     return snmp_message_type + snmp_message_len + snmp_message_value
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 745, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_length_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 741, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_7 = PyObject_Length(__pyx_v_snmp_message_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 745, __pyx_L1_error)
-  __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 745, __pyx_L1_error)
+  __pyx_t_7 = PyObject_Length(__pyx_v_snmp_message_value); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 741, __pyx_L1_error)
+  __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 741, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_8 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8919,13 +8861,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 745, __pyx_L1_error)
+  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 741, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_snmp_message_len = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":746
+  /* "fastsnmp/snmp_parser.pyx":742
  *                          pdu_type + pdu_len + pdu
  *     snmp_message_len = length_encode(len(snmp_message_value))
  *     return snmp_message_type + snmp_message_len + snmp_message_value             # <<<<<<<<<<<<<<
@@ -8933,16 +8875,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_5 = PyNumber_Add(__pyx_v_snmp_message_type, __pyx_v_snmp_message_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 746, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Add(__pyx_v_snmp_message_type, __pyx_v_snmp_message_len); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 742, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_snmp_message_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 746, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_v_snmp_message_value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 742, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":677
+  /* "fastsnmp/snmp_parser.pyx":673
  * 
  * 
  * def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=10, non_repeaters=0):             # <<<<<<<<<<<<<<
@@ -8993,7 +8935,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_32msg_encode(CYTHON_UNUSED PyO
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":749
+/* "fastsnmp/snmp_parser.pyx":745
  * 
  * 
  * def msg_decode(stream):             # <<<<<<<<<<<<<<
@@ -9041,9 +8983,9 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
   PyObject *__pyx_t_7 = NULL;
   __Pyx_TraceFrameInit(__pyx_codeobj__31)
   __Pyx_RefNannySetupContext("msg_decode", 0);
-  __Pyx_TraceCall("msg_decode", __pyx_f[0], 749, 0, __PYX_ERR(0, 749, __pyx_L1_error));
+  __Pyx_TraceCall("msg_decode", __pyx_f[0], 745, 0, __PYX_ERR(0, 745, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":750
+  /* "fastsnmp/snmp_parser.pyx":746
  * 
  * def msg_decode(stream):
  *     cdef uint64_t tag=0             # <<<<<<<<<<<<<<
@@ -9052,17 +8994,17 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
  */
   __pyx_v_tag = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":752
+  /* "fastsnmp/snmp_parser.pyx":748
  *     cdef uint64_t tag=0
  *     cdef size_t encode_length, length
  *     cdef const unsigned char *stream_char = stream             # <<<<<<<<<<<<<<
  *     cdef const unsigned char *stream_ptr = stream_char
  *     cdef size_t stream_len = len(stream)
  */
-  __pyx_t_1 = __Pyx_PyObject_AsUString(__pyx_v_stream); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 752, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_AsUString(__pyx_v_stream); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 748, __pyx_L1_error)
   __pyx_v_stream_char = __pyx_t_1;
 
-  /* "fastsnmp/snmp_parser.pyx":753
+  /* "fastsnmp/snmp_parser.pyx":749
  *     cdef size_t encode_length, length
  *     cdef const unsigned char *stream_char = stream
  *     cdef const unsigned char *stream_ptr = stream_char             # <<<<<<<<<<<<<<
@@ -9071,26 +9013,26 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
  */
   __pyx_v_stream_ptr = __pyx_v_stream_char;
 
-  /* "fastsnmp/snmp_parser.pyx":754
+  /* "fastsnmp/snmp_parser.pyx":750
  *     cdef const unsigned char *stream_char = stream
  *     cdef const unsigned char *stream_ptr = stream_char
  *     cdef size_t stream_len = len(stream)             # <<<<<<<<<<<<<<
  *     cdef list data
  * 
  */
-  __pyx_t_2 = PyObject_Length(__pyx_v_stream); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 754, __pyx_L1_error)
+  __pyx_t_2 = PyObject_Length(__pyx_v_stream); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 750, __pyx_L1_error)
   __pyx_v_stream_len = __pyx_t_2;
 
-  /* "fastsnmp/snmp_parser.pyx":757
+  /* "fastsnmp/snmp_parser.pyx":753
  *     cdef list data
  * 
  *     tag_decode_c(stream_ptr, &tag, &encode_length)             # <<<<<<<<<<<<<<
  *     stream_ptr += encode_length
  *     length_decode_c(stream_ptr, &length, &encode_length)
  */
-  __pyx_t_3 = __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(__pyx_v_stream_ptr, (&__pyx_v_tag), (&__pyx_v_encode_length)); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(0, 757, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_8fastsnmp_11snmp_parser_tag_decode_c(__pyx_v_stream_ptr, (&__pyx_v_tag), (&__pyx_v_encode_length)); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(0, 753, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":758
+  /* "fastsnmp/snmp_parser.pyx":754
  * 
  *     tag_decode_c(stream_ptr, &tag, &encode_length)
  *     stream_ptr += encode_length             # <<<<<<<<<<<<<<
@@ -9099,7 +9041,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
  */
   __pyx_v_stream_ptr = (__pyx_v_stream_ptr + __pyx_v_encode_length);
 
-  /* "fastsnmp/snmp_parser.pyx":759
+  /* "fastsnmp/snmp_parser.pyx":755
  *     tag_decode_c(stream_ptr, &tag, &encode_length)
  *     stream_ptr += encode_length
  *     length_decode_c(stream_ptr, &length, &encode_length)             # <<<<<<<<<<<<<<
@@ -9108,7 +9050,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
  */
   (void)(__pyx_f_8fastsnmp_11snmp_parser_length_decode_c(__pyx_v_stream_ptr, (&__pyx_v_length), (&__pyx_v_encode_length)));
 
-  /* "fastsnmp/snmp_parser.pyx":760
+  /* "fastsnmp/snmp_parser.pyx":756
  *     stream_ptr += encode_length
  *     length_decode_c(stream_ptr, &length, &encode_length)
  *     stream_ptr += encode_length             # <<<<<<<<<<<<<<
@@ -9117,14 +9059,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
  */
   __pyx_v_stream_ptr = (__pyx_v_stream_ptr + __pyx_v_encode_length);
 
-  /* "fastsnmp/snmp_parser.pyx":761
+  /* "fastsnmp/snmp_parser.pyx":757
  *     length_decode_c(stream_ptr, &length, &encode_length)
  *     stream_ptr += encode_length
  *     snmp_ver, community, data = sequence_decode_c(stream_ptr, length)             # <<<<<<<<<<<<<<
  *     req_id, error_status, error_index, varbinds = data
  *     return req_id, error_status, error_index, varbinds
  */
-  __pyx_t_4 = __pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(__pyx_v_stream_ptr, __pyx_v_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 761, __pyx_L1_error)
+  __pyx_t_4 = __pyx_f_8fastsnmp_11snmp_parser_sequence_decode_c(__pyx_v_stream_ptr, __pyx_v_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 757, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   if (likely(__pyx_t_4 != Py_None)) {
     PyObject* sequence = __pyx_t_4;
@@ -9132,7 +9074,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
     if (unlikely(size != 3)) {
       if (size > 3) __Pyx_RaiseTooManyValuesError(3);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 761, __pyx_L1_error)
+      __PYX_ERR(0, 757, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     __pyx_t_5 = PyList_GET_ITEM(sequence, 0); 
@@ -9142,18 +9084,18 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
     __Pyx_INCREF(__pyx_t_6);
     __Pyx_INCREF(__pyx_t_7);
     #else
-    __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 761, __pyx_L1_error)
+    __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 757, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 761, __pyx_L1_error)
+    __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 757, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 761, __pyx_L1_error)
+    __pyx_t_7 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 757, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     #endif
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else {
-    __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 761, __pyx_L1_error)
+    __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 757, __pyx_L1_error)
   }
-  if (!(likely(PyList_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_t_7)->tp_name), 0))) __PYX_ERR(0, 761, __pyx_L1_error)
+  if (!(likely(PyList_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_t_7)->tp_name), 0))) __PYX_ERR(0, 757, __pyx_L1_error)
   __pyx_v_snmp_ver = __pyx_t_5;
   __pyx_t_5 = 0;
   __pyx_v_community = __pyx_t_6;
@@ -9161,7 +9103,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
   __pyx_v_data = ((PyObject*)__pyx_t_7);
   __pyx_t_7 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":762
+  /* "fastsnmp/snmp_parser.pyx":758
  *     stream_ptr += encode_length
  *     snmp_ver, community, data = sequence_decode_c(stream_ptr, length)
  *     req_id, error_status, error_index, varbinds = data             # <<<<<<<<<<<<<<
@@ -9174,7 +9116,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
     if (unlikely(size != 4)) {
       if (size > 4) __Pyx_RaiseTooManyValuesError(4);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 762, __pyx_L1_error)
+      __PYX_ERR(0, 758, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     __pyx_t_4 = PyList_GET_ITEM(sequence, 0); 
@@ -9190,14 +9132,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
       Py_ssize_t i;
       PyObject** temps[4] = {&__pyx_t_4,&__pyx_t_7,&__pyx_t_6,&__pyx_t_5};
       for (i=0; i < 4; i++) {
-        PyObject* item = PySequence_ITEM(sequence, i); if (unlikely(!item)) __PYX_ERR(0, 762, __pyx_L1_error)
+        PyObject* item = PySequence_ITEM(sequence, i); if (unlikely(!item)) __PYX_ERR(0, 758, __pyx_L1_error)
         __Pyx_GOTREF(item);
         *(temps[i]) = item;
       }
     }
     #endif
   } else {
-    __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 762, __pyx_L1_error)
+    __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 758, __pyx_L1_error)
   }
   __pyx_v_req_id = __pyx_t_4;
   __pyx_t_4 = 0;
@@ -9208,7 +9150,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
   __pyx_v_varbinds = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":763
+  /* "fastsnmp/snmp_parser.pyx":759
  *     snmp_ver, community, data = sequence_decode_c(stream_ptr, length)
  *     req_id, error_status, error_index, varbinds = data
  *     return req_id, error_status, error_index, varbinds             # <<<<<<<<<<<<<<
@@ -9216,7 +9158,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_5 = PyTuple_New(4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 763, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 759, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_INCREF(__pyx_v_req_id);
   __Pyx_GIVEREF(__pyx_v_req_id);
@@ -9234,7 +9176,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":749
+  /* "fastsnmp/snmp_parser.pyx":745
  * 
  * 
  * def msg_decode(stream):             # <<<<<<<<<<<<<<
@@ -9264,7 +9206,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_34msg_decode(CYTHON_UNUSED PyO
   return __pyx_r;
 }
 
-/* "fastsnmp/snmp_parser.pyx":766
+/* "fastsnmp/snmp_parser.pyx":762
  * 
  * 
  * def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tuple oids_to_poll not None):             # <<<<<<<<<<<<<<
@@ -9307,17 +9249,17 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_37parse_varbind(PyObject *__py
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_orig_main_oids)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("parse_varbind", 1, 3, 3, 1); __PYX_ERR(0, 766, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("parse_varbind", 1, 3, 3, 1); __PYX_ERR(0, 762, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_oids_to_poll)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("parse_varbind", 1, 3, 3, 2); __PYX_ERR(0, 766, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("parse_varbind", 1, 3, 3, 2); __PYX_ERR(0, 762, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "parse_varbind") < 0)) __PYX_ERR(0, 766, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "parse_varbind") < 0)) __PYX_ERR(0, 762, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -9332,15 +9274,15 @@ static PyObject *__pyx_pw_8fastsnmp_11snmp_parser_37parse_varbind(PyObject *__py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("parse_varbind", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 766, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("parse_varbind", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 762, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("fastsnmp.snmp_parser.parse_varbind", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_var_bind_list), (&PyList_Type), 0, "var_bind_list", 1))) __PYX_ERR(0, 766, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_orig_main_oids), (&PyTuple_Type), 0, "orig_main_oids", 1))) __PYX_ERR(0, 766, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_oids_to_poll), (&PyTuple_Type), 0, "oids_to_poll", 1))) __PYX_ERR(0, 766, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_var_bind_list), (&PyList_Type), 0, "var_bind_list", 1))) __PYX_ERR(0, 762, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_orig_main_oids), (&PyTuple_Type), 0, "orig_main_oids", 1))) __PYX_ERR(0, 762, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_oids_to_poll), (&PyTuple_Type), 0, "oids_to_poll", 1))) __PYX_ERR(0, 762, __pyx_L1_error)
   __pyx_r = __pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(__pyx_self, __pyx_v_var_bind_list, __pyx_v_orig_main_oids, __pyx_v_oids_to_poll);
 
   /* function exit code */
@@ -9362,8 +9304,8 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   PyObject *__pyx_v_orig_main_oids_doted = 0;
   PyObject *__pyx_v_orig_main_oids_len = 0;
   PyObject *__pyx_v_value = 0;
+  uint64_t __pyx_v_main_oids_len;
   PyObject *__pyx_v_rest_oids_positions = NULL;
-  Py_ssize_t __pyx_v_main_oids_len;
   PyObject *__pyx_v_main_oids_positions = NULL;
   Py_ssize_t __pyx_v_var_bind_list_len;
   PyObject *__pyx_v_i = NULL;
@@ -9408,75 +9350,75 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   Py_ssize_t __pyx_t_28;
   __Pyx_TraceFrameInit(__pyx_codeobj__32)
   __Pyx_RefNannySetupContext("parse_varbind", 0);
-  __Pyx_TraceCall("parse_varbind", __pyx_f[0], 766, 0, __PYX_ERR(0, 766, __pyx_L1_error));
+  __Pyx_TraceCall("parse_varbind", __pyx_f[0], 762, 0, __PYX_ERR(0, 762, __pyx_L1_error));
 
-  /* "fastsnmp/snmp_parser.pyx":768
+  /* "fastsnmp/snmp_parser.pyx":764
  * def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tuple oids_to_poll not None):
  *     cdef str oid, main_oid, index_part
  *     cdef list result = [], item             # <<<<<<<<<<<<<<
  *     cdef list next_oids = list()
  *     cdef list orig_main_oids_doted = list()
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 768, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 764, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_result = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":769
+  /* "fastsnmp/snmp_parser.pyx":765
  *     cdef str oid, main_oid, index_part
  *     cdef list result = [], item
  *     cdef list next_oids = list()             # <<<<<<<<<<<<<<
  *     cdef list orig_main_oids_doted = list()
  *     cdef list orig_main_oids_len = list()
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 769, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 765, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_next_oids = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":770
+  /* "fastsnmp/snmp_parser.pyx":766
  *     cdef list result = [], item
  *     cdef list next_oids = list()
  *     cdef list orig_main_oids_doted = list()             # <<<<<<<<<<<<<<
  *     cdef list orig_main_oids_len = list()
  *     cdef object value
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 770, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 766, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_orig_main_oids_doted = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":771
+  /* "fastsnmp/snmp_parser.pyx":767
  *     cdef list next_oids = list()
  *     cdef list orig_main_oids_doted = list()
  *     cdef list orig_main_oids_len = list()             # <<<<<<<<<<<<<<
  *     cdef object value
- *     rest_oids_positions = [x for x in range(len(oids_to_poll)) if oids_to_poll[x]]
+ *     cdef uint64_t main_oids_len
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 771, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 767, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_orig_main_oids_len = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":773
- *     cdef list orig_main_oids_len = list()
+  /* "fastsnmp/snmp_parser.pyx":770
  *     cdef object value
+ *     cdef uint64_t main_oids_len
  *     rest_oids_positions = [x for x in range(len(oids_to_poll)) if oids_to_poll[x]]             # <<<<<<<<<<<<<<
  *     main_oids_len = len(rest_oids_positions)
  *     main_oids_positions = cycle(rest_oids_positions)
  */
   { /* enter inner scope */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 773, __pyx_L1_error)
+    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 770, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PyTuple_GET_SIZE(__pyx_v_oids_to_poll); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 773, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_GET_SIZE(__pyx_v_oids_to_poll); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 770, __pyx_L1_error)
     __pyx_t_3 = __pyx_t_2;
     for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
       __pyx_7genexpr__pyx_v_x = __pyx_t_4;
-      __pyx_t_5 = __Pyx_PyObject_IsTrue(PyTuple_GET_ITEM(__pyx_v_oids_to_poll, __pyx_7genexpr__pyx_v_x)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 773, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_IsTrue(PyTuple_GET_ITEM(__pyx_v_oids_to_poll, __pyx_7genexpr__pyx_v_x)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 770, __pyx_L1_error)
       if (__pyx_t_5) {
-        __pyx_t_6 = PyInt_FromSsize_t(__pyx_7genexpr__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 773, __pyx_L1_error)
+        __pyx_t_6 = PyInt_FromSsize_t(__pyx_7genexpr__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 770, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 773, __pyx_L1_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 770, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
     }
@@ -9484,24 +9426,24 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   __pyx_v_rest_oids_positions = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":774
- *     cdef object value
+  /* "fastsnmp/snmp_parser.pyx":771
+ *     cdef uint64_t main_oids_len
  *     rest_oids_positions = [x for x in range(len(oids_to_poll)) if oids_to_poll[x]]
  *     main_oids_len = len(rest_oids_positions)             # <<<<<<<<<<<<<<
  *     main_oids_positions = cycle(rest_oids_positions)
  *     var_bind_list_len = len(var_bind_list)
  */
-  __pyx_t_2 = PyList_GET_SIZE(__pyx_v_rest_oids_positions); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 774, __pyx_L1_error)
+  __pyx_t_2 = PyList_GET_SIZE(__pyx_v_rest_oids_positions); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 771, __pyx_L1_error)
   __pyx_v_main_oids_len = __pyx_t_2;
 
-  /* "fastsnmp/snmp_parser.pyx":775
+  /* "fastsnmp/snmp_parser.pyx":772
  *     rest_oids_positions = [x for x in range(len(oids_to_poll)) if oids_to_poll[x]]
  *     main_oids_len = len(rest_oids_positions)
  *     main_oids_positions = cycle(rest_oids_positions)             # <<<<<<<<<<<<<<
  *     var_bind_list_len = len(var_bind_list)
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_cycle); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 775, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_cycle); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 772, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
@@ -9515,23 +9457,23 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   }
   __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_7, __pyx_v_rest_oids_positions) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_rest_oids_positions);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 775, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 772, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_v_main_oids_positions = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":776
+  /* "fastsnmp/snmp_parser.pyx":773
  *     main_oids_len = len(rest_oids_positions)
  *     main_oids_positions = cycle(rest_oids_positions)
  *     var_bind_list_len = len(var_bind_list)             # <<<<<<<<<<<<<<
  * 
  *     for i in orig_main_oids:
  */
-  __pyx_t_2 = PyList_GET_SIZE(__pyx_v_var_bind_list); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 776, __pyx_L1_error)
+  __pyx_t_2 = PyList_GET_SIZE(__pyx_v_var_bind_list); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 773, __pyx_L1_error)
   __pyx_v_var_bind_list_len = __pyx_t_2;
 
-  /* "fastsnmp/snmp_parser.pyx":778
+  /* "fastsnmp/snmp_parser.pyx":775
  *     var_bind_list_len = len(var_bind_list)
  * 
  *     for i in orig_main_oids:             # <<<<<<<<<<<<<<
@@ -9542,40 +9484,40 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   for (;;) {
     if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_6); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 778, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_6); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 775, __pyx_L1_error)
     #else
-    __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 778, __pyx_L1_error)
+    __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 775, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":779
+    /* "fastsnmp/snmp_parser.pyx":776
  * 
  *     for i in orig_main_oids:
  *         orig_main_oids_doted.append(i + ".")             # <<<<<<<<<<<<<<
  *         orig_main_oids_len.append(len(i))
  * 
  */
-    __pyx_t_6 = PyNumber_Add(__pyx_v_i, __pyx_kp_u__4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 779, __pyx_L1_error)
+    __pyx_t_6 = PyNumber_Add(__pyx_v_i, __pyx_kp_u__4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 776, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_orig_main_oids_doted, __pyx_t_6); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 779, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_orig_main_oids_doted, __pyx_t_6); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 776, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":780
+    /* "fastsnmp/snmp_parser.pyx":777
  *     for i in orig_main_oids:
  *         orig_main_oids_doted.append(i + ".")
  *         orig_main_oids_len.append(len(i))             # <<<<<<<<<<<<<<
  * 
  *     skip_column = {}
  */
-    __pyx_t_3 = PyObject_Length(__pyx_v_i); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 780, __pyx_L1_error)
-    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 780, __pyx_L1_error)
+    __pyx_t_3 = PyObject_Length(__pyx_v_i); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 777, __pyx_L1_error)
+    __pyx_t_6 = PyInt_FromSsize_t(__pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 777, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_orig_main_oids_len, __pyx_t_6); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 780, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_orig_main_oids_len, __pyx_t_6); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 777, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":778
+    /* "fastsnmp/snmp_parser.pyx":775
  *     var_bind_list_len = len(var_bind_list)
  * 
  *     for i in orig_main_oids:             # <<<<<<<<<<<<<<
@@ -9585,31 +9527,31 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":782
+  /* "fastsnmp/snmp_parser.pyx":779
  *         orig_main_oids_len.append(len(i))
  * 
  *     skip_column = {}             # <<<<<<<<<<<<<<
  *     # if some oid in requested oids is not supported, column with it is index will
  *     # be filled with another oid. need to skip
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 782, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 779, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_skip_column = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":785
+  /* "fastsnmp/snmp_parser.pyx":782
  *     # if some oid in requested oids is not supported, column with it is index will
  *     # be filled with another oid. need to skip
  *     last_seen_index = {}             # <<<<<<<<<<<<<<
  * 
  *     for var_bind_pos in range(var_bind_list_len):
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 785, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 782, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_last_seen_index = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":787
+  /* "fastsnmp/snmp_parser.pyx":784
  *     last_seen_index = {}
  * 
  *     for var_bind_pos in range(var_bind_list_len):             # <<<<<<<<<<<<<<
@@ -9621,20 +9563,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_var_bind_pos = __pyx_t_4;
 
-    /* "fastsnmp/snmp_parser.pyx":788
+    /* "fastsnmp/snmp_parser.pyx":785
  * 
  *     for var_bind_pos in range(var_bind_list_len):
  *         item = var_bind_list[var_bind_pos]             # <<<<<<<<<<<<<<
  *         # if item is None:
  *         #     raise VarBindUnpackException("bad value in %s at %s" % (var_bind_list, var_bind_pos))
  */
-    if (!(likely(PyList_CheckExact(PyList_GET_ITEM(__pyx_v_var_bind_list, __pyx_v_var_bind_pos)))||((PyList_GET_ITEM(__pyx_v_var_bind_list, __pyx_v_var_bind_pos)) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(PyList_GET_ITEM(__pyx_v_var_bind_list, __pyx_v_var_bind_pos))->tp_name), 0))) __PYX_ERR(0, 788, __pyx_L1_error)
+    if (!(likely(PyList_CheckExact(PyList_GET_ITEM(__pyx_v_var_bind_list, __pyx_v_var_bind_pos)))||((PyList_GET_ITEM(__pyx_v_var_bind_list, __pyx_v_var_bind_pos)) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(PyList_GET_ITEM(__pyx_v_var_bind_list, __pyx_v_var_bind_pos))->tp_name), 0))) __PYX_ERR(0, 785, __pyx_L1_error)
     __pyx_t_1 = PyList_GET_ITEM(__pyx_v_var_bind_list, __pyx_v_var_bind_pos);
     __Pyx_INCREF(__pyx_t_1);
     __Pyx_XDECREF_SET(__pyx_v_item, ((PyObject*)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":791
+    /* "fastsnmp/snmp_parser.pyx":788
  *         # if item is None:
  *         #     raise VarBindUnpackException("bad value in %s at %s" % (var_bind_list, var_bind_pos))
  *         try:             # <<<<<<<<<<<<<<
@@ -9650,7 +9592,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       __Pyx_XGOTREF(__pyx_t_11);
       /*try:*/ {
 
-        /* "fastsnmp/snmp_parser.pyx":792
+        /* "fastsnmp/snmp_parser.pyx":789
  *         #     raise VarBindUnpackException("bad value in %s at %s" % (var_bind_list, var_bind_pos))
  *         try:
  *             oid, value = item             # <<<<<<<<<<<<<<
@@ -9663,7 +9605,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
           if (unlikely(size != 2)) {
             if (size > 2) __Pyx_RaiseTooManyValuesError(2);
             else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-            __PYX_ERR(0, 792, __pyx_L10_error)
+            __PYX_ERR(0, 789, __pyx_L10_error)
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
           __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
@@ -9671,21 +9613,21 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
           __Pyx_INCREF(__pyx_t_1);
           __Pyx_INCREF(__pyx_t_6);
           #else
-          __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 792, __pyx_L10_error)
+          __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 789, __pyx_L10_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 792, __pyx_L10_error)
+          __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 789, __pyx_L10_error)
           __Pyx_GOTREF(__pyx_t_6);
           #endif
         } else {
-          __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 792, __pyx_L10_error)
+          __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 789, __pyx_L10_error)
         }
-        if (!(likely(PyUnicode_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "unicode", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 792, __pyx_L10_error)
+        if (!(likely(PyUnicode_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "unicode", Py_TYPE(__pyx_t_1)->tp_name), 0))) __PYX_ERR(0, 789, __pyx_L10_error)
         __Pyx_XDECREF_SET(__pyx_v_oid, ((PyObject*)__pyx_t_1));
         __pyx_t_1 = 0;
         __Pyx_XDECREF_SET(__pyx_v_value, __pyx_t_6);
         __pyx_t_6 = 0;
 
-        /* "fastsnmp/snmp_parser.pyx":791
+        /* "fastsnmp/snmp_parser.pyx":788
  *         # if item is None:
  *         #     raise VarBindUnpackException("bad value in %s at %s" % (var_bind_list, var_bind_pos))
  *         try:             # <<<<<<<<<<<<<<
@@ -9702,7 +9644,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":793
+      /* "fastsnmp/snmp_parser.pyx":790
  *         try:
  *             oid, value = item
  *         except (ValueError, TypeError) as e:             # <<<<<<<<<<<<<<
@@ -9712,7 +9654,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       __pyx_t_12 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_ValueError) || __Pyx_PyErr_ExceptionMatches(__pyx_builtin_TypeError);
       if (__pyx_t_12) {
         __Pyx_AddTraceback("fastsnmp.snmp_parser.parse_varbind", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_6, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 793, __pyx_L12_except_error)
+        if (__Pyx_GetException(&__pyx_t_6, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 790, __pyx_L12_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_GOTREF(__pyx_t_7);
@@ -9720,16 +9662,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
         __pyx_v_e = __pyx_t_1;
         /*try:*/ {
 
-          /* "fastsnmp/snmp_parser.pyx":794
+          /* "fastsnmp/snmp_parser.pyx":791
  *             oid, value = item
  *         except (ValueError, TypeError) as e:
  *             raise VarBindUnpackException("Exception='%s' item=%s" % (e, item))             # <<<<<<<<<<<<<<
  *         if not isinstance(oid, str):
  *             raise VarBindContentException("expected oid in str. got %r" % oid)
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_VarBindUnpackException); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 794, __pyx_L23_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_VarBindUnpackException); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 791, __pyx_L23_error)
           __Pyx_GOTREF(__pyx_t_14);
-          __pyx_t_15 = PyTuple_New(4); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 794, __pyx_L23_error)
+          __pyx_t_15 = PyTuple_New(4); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 791, __pyx_L23_error)
           __Pyx_GOTREF(__pyx_t_15);
           __pyx_t_16 = 0;
           __pyx_t_17 = 127;
@@ -9737,7 +9679,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
           __pyx_t_16 += 11;
           __Pyx_GIVEREF(__pyx_kp_u_Exception);
           PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_kp_u_Exception);
-          __pyx_t_18 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_v_e), __pyx_empty_unicode); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 794, __pyx_L23_error)
+          __pyx_t_18 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_v_e), __pyx_empty_unicode); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 791, __pyx_L23_error)
           __Pyx_GOTREF(__pyx_t_18);
           __pyx_t_17 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_18) > __pyx_t_17) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_18) : __pyx_t_17;
           __pyx_t_16 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_18);
@@ -9748,14 +9690,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
           __pyx_t_16 += 7;
           __Pyx_GIVEREF(__pyx_kp_u_item);
           PyTuple_SET_ITEM(__pyx_t_15, 2, __pyx_kp_u_item);
-          __pyx_t_18 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_v_item), __pyx_empty_unicode); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 794, __pyx_L23_error)
+          __pyx_t_18 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_v_item), __pyx_empty_unicode); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 791, __pyx_L23_error)
           __Pyx_GOTREF(__pyx_t_18);
           __pyx_t_17 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_18) > __pyx_t_17) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_18) : __pyx_t_17;
           __pyx_t_16 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_18);
           __Pyx_GIVEREF(__pyx_t_18);
           PyTuple_SET_ITEM(__pyx_t_15, 3, __pyx_t_18);
           __pyx_t_18 = 0;
-          __pyx_t_18 = __Pyx_PyUnicode_Join(__pyx_t_15, 4, __pyx_t_16, __pyx_t_17); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 794, __pyx_L23_error)
+          __pyx_t_18 = __Pyx_PyUnicode_Join(__pyx_t_15, 4, __pyx_t_16, __pyx_t_17); if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 791, __pyx_L23_error)
           __Pyx_GOTREF(__pyx_t_18);
           __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
           __pyx_t_15 = NULL;
@@ -9771,15 +9713,15 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
           __pyx_t_13 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_15, __pyx_t_18) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_t_18);
           __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
           __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 794, __pyx_L23_error)
+          if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 791, __pyx_L23_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __Pyx_Raise(__pyx_t_13, 0, 0, 0);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          __PYX_ERR(0, 794, __pyx_L23_error)
+          __PYX_ERR(0, 791, __pyx_L23_error)
         }
 
-        /* "fastsnmp/snmp_parser.pyx":793
+        /* "fastsnmp/snmp_parser.pyx":790
  *         try:
  *             oid, value = item
  *         except (ValueError, TypeError) as e:             # <<<<<<<<<<<<<<
@@ -9828,7 +9770,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       goto __pyx_L12_except_error;
       __pyx_L12_except_error:;
 
-      /* "fastsnmp/snmp_parser.pyx":791
+      /* "fastsnmp/snmp_parser.pyx":788
  *         # if item is None:
  *         #     raise VarBindUnpackException("bad value in %s at %s" % (var_bind_list, var_bind_pos))
  *         try:             # <<<<<<<<<<<<<<
@@ -9843,7 +9785,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       __pyx_L17_try_end:;
     }
 
-    /* "fastsnmp/snmp_parser.pyx":795
+    /* "fastsnmp/snmp_parser.pyx":792
  *         except (ValueError, TypeError) as e:
  *             raise VarBindUnpackException("Exception='%s' item=%s" % (e, item))
  *         if not isinstance(oid, str):             # <<<<<<<<<<<<<<
@@ -9854,16 +9796,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
     __pyx_t_27 = ((!(__pyx_t_5 != 0)) != 0);
     if (unlikely(__pyx_t_27)) {
 
-      /* "fastsnmp/snmp_parser.pyx":796
+      /* "fastsnmp/snmp_parser.pyx":793
  *             raise VarBindUnpackException("Exception='%s' item=%s" % (e, item))
  *         if not isinstance(oid, str):
  *             raise VarBindContentException("expected oid in str. got %r" % oid)             # <<<<<<<<<<<<<<
  *         main_oids_pos = next(main_oids_positions)
  *         if value is None:
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VarBindContentException); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 796, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_VarBindContentException); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 793, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_6 = PyUnicode_Format(__pyx_kp_u_expected_oid_in_str_got_r, __pyx_v_oid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 796, __pyx_L1_error)
+      __pyx_t_6 = PyUnicode_Format(__pyx_kp_u_expected_oid_in_str_got_r, __pyx_v_oid); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 793, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __pyx_t_13 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -9878,14 +9820,14 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       __pyx_t_7 = (__pyx_t_13) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_13, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_6);
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 796, __pyx_L1_error)
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 793, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_Raise(__pyx_t_7, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __PYX_ERR(0, 796, __pyx_L1_error)
+      __PYX_ERR(0, 793, __pyx_L1_error)
 
-      /* "fastsnmp/snmp_parser.pyx":795
+      /* "fastsnmp/snmp_parser.pyx":792
  *         except (ValueError, TypeError) as e:
  *             raise VarBindUnpackException("Exception='%s' item=%s" % (e, item))
  *         if not isinstance(oid, str):             # <<<<<<<<<<<<<<
@@ -9894,19 +9836,19 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
     }
 
-    /* "fastsnmp/snmp_parser.pyx":797
+    /* "fastsnmp/snmp_parser.pyx":794
  *         if not isinstance(oid, str):
  *             raise VarBindContentException("expected oid in str. got %r" % oid)
  *         main_oids_pos = next(main_oids_positions)             # <<<<<<<<<<<<<<
  *         if value is None:
  *             skip_column[main_oids_pos] = True
  */
-    __pyx_t_7 = __Pyx_PyIter_Next(__pyx_v_main_oids_positions); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 797, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyIter_Next(__pyx_v_main_oids_positions); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 794, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_XDECREF_SET(__pyx_v_main_oids_pos, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":798
+    /* "fastsnmp/snmp_parser.pyx":795
  *             raise VarBindContentException("expected oid in str. got %r" % oid)
  *         main_oids_pos = next(main_oids_positions)
  *         if value is None:             # <<<<<<<<<<<<<<
@@ -9917,16 +9859,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
     __pyx_t_5 = (__pyx_t_27 != 0);
     if (__pyx_t_5) {
 
-      /* "fastsnmp/snmp_parser.pyx":799
+      /* "fastsnmp/snmp_parser.pyx":796
  *         main_oids_pos = next(main_oids_positions)
  *         if value is None:
  *             skip_column[main_oids_pos] = True             # <<<<<<<<<<<<<<
  *         if main_oids_pos in skip_column:
  *             continue
  */
-      if (unlikely(PyDict_SetItem(__pyx_v_skip_column, __pyx_v_main_oids_pos, Py_True) < 0)) __PYX_ERR(0, 799, __pyx_L1_error)
+      if (unlikely(PyDict_SetItem(__pyx_v_skip_column, __pyx_v_main_oids_pos, Py_True) < 0)) __PYX_ERR(0, 796, __pyx_L1_error)
 
-      /* "fastsnmp/snmp_parser.pyx":798
+      /* "fastsnmp/snmp_parser.pyx":795
  *             raise VarBindContentException("expected oid in str. got %r" % oid)
  *         main_oids_pos = next(main_oids_positions)
  *         if value is None:             # <<<<<<<<<<<<<<
@@ -9935,18 +9877,18 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
     }
 
-    /* "fastsnmp/snmp_parser.pyx":800
+    /* "fastsnmp/snmp_parser.pyx":797
  *         if value is None:
  *             skip_column[main_oids_pos] = True
  *         if main_oids_pos in skip_column:             # <<<<<<<<<<<<<<
  *             continue
  *         main_oid = orig_main_oids_doted[main_oids_pos]
  */
-    __pyx_t_5 = (__Pyx_PyDict_ContainsTF(__pyx_v_main_oids_pos, __pyx_v_skip_column, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 800, __pyx_L1_error)
+    __pyx_t_5 = (__Pyx_PyDict_ContainsTF(__pyx_v_main_oids_pos, __pyx_v_skip_column, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 797, __pyx_L1_error)
     __pyx_t_27 = (__pyx_t_5 != 0);
     if (__pyx_t_27) {
 
-      /* "fastsnmp/snmp_parser.pyx":801
+      /* "fastsnmp/snmp_parser.pyx":798
  *             skip_column[main_oids_pos] = True
  *         if main_oids_pos in skip_column:
  *             continue             # <<<<<<<<<<<<<<
@@ -9955,7 +9897,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
       goto __pyx_L8_continue;
 
-      /* "fastsnmp/snmp_parser.pyx":800
+      /* "fastsnmp/snmp_parser.pyx":797
  *         if value is None:
  *             skip_column[main_oids_pos] = True
  *         if main_oids_pos in skip_column:             # <<<<<<<<<<<<<<
@@ -9964,20 +9906,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
     }
 
-    /* "fastsnmp/snmp_parser.pyx":802
+    /* "fastsnmp/snmp_parser.pyx":799
  *         if main_oids_pos in skip_column:
  *             continue
  *         main_oid = orig_main_oids_doted[main_oids_pos]             # <<<<<<<<<<<<<<
  *         if oid.startswith(main_oid):
  *             index_part = oid[orig_main_oids_len[main_oids_pos]+1:]
  */
-    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids_doted, __pyx_v_main_oids_pos); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 802, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids_doted, __pyx_v_main_oids_pos); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 799, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (!(likely(PyUnicode_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "unicode", Py_TYPE(__pyx_t_7)->tp_name), 0))) __PYX_ERR(0, 802, __pyx_L1_error)
+    if (!(likely(PyUnicode_CheckExact(__pyx_t_7))||((__pyx_t_7) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "unicode", Py_TYPE(__pyx_t_7)->tp_name), 0))) __PYX_ERR(0, 799, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_main_oid, ((PyObject*)__pyx_t_7));
     __pyx_t_7 = 0;
 
-    /* "fastsnmp/snmp_parser.pyx":803
+    /* "fastsnmp/snmp_parser.pyx":800
  *             continue
  *         main_oid = orig_main_oids_doted[main_oids_pos]
  *         if oid.startswith(main_oid):             # <<<<<<<<<<<<<<
@@ -9986,12 +9928,12 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
     if (unlikely(__pyx_v_oid == Py_None)) {
       PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "startswith");
-      __PYX_ERR(0, 803, __pyx_L1_error)
+      __PYX_ERR(0, 800, __pyx_L1_error)
     }
-    __pyx_t_27 = __Pyx_PyUnicode_Tailmatch(__pyx_v_oid, __pyx_v_main_oid, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_27 == ((int)-1))) __PYX_ERR(0, 803, __pyx_L1_error)
+    __pyx_t_27 = __Pyx_PyUnicode_Tailmatch(__pyx_v_oid, __pyx_v_main_oid, 0, PY_SSIZE_T_MAX, -1); if (unlikely(__pyx_t_27 == ((int)-1))) __PYX_ERR(0, 800, __pyx_L1_error)
     if ((__pyx_t_27 != 0)) {
 
-      /* "fastsnmp/snmp_parser.pyx":804
+      /* "fastsnmp/snmp_parser.pyx":801
  *         main_oid = orig_main_oids_doted[main_oids_pos]
  *         if oid.startswith(main_oid):
  *             index_part = oid[orig_main_oids_len[main_oids_pos]+1:]             # <<<<<<<<<<<<<<
@@ -10000,45 +9942,45 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
       if (unlikely(__pyx_v_oid == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 804, __pyx_L1_error)
+        __PYX_ERR(0, 801, __pyx_L1_error)
       }
-      __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids_len, __pyx_v_main_oids_pos); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 804, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids_len, __pyx_v_main_oids_pos); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 801, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_t_7, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 804, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_t_7, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 801, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_27 = (__pyx_t_1 == Py_None);
       if (__pyx_t_27) {
         __pyx_t_16 = 0;
       } else {
-        __pyx_t_28 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_28 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 804, __pyx_L1_error)
+        __pyx_t_28 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_28 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 801, __pyx_L1_error)
         __pyx_t_16 = __pyx_t_28;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_oid, __pyx_t_16, PY_SSIZE_T_MAX); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 804, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_oid, __pyx_t_16, PY_SSIZE_T_MAX); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 801, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_XDECREF_SET(__pyx_v_index_part, ((PyObject*)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":805
+      /* "fastsnmp/snmp_parser.pyx":802
  *         if oid.startswith(main_oid):
  *             index_part = oid[orig_main_oids_len[main_oids_pos]+1:]
  *             last_seen_index[main_oids_pos] = index_part             # <<<<<<<<<<<<<<
  *             result.append([orig_main_oids[main_oids_pos], index_part, value])
  *         else:
  */
-      if (unlikely(PyDict_SetItem(__pyx_v_last_seen_index, __pyx_v_main_oids_pos, __pyx_v_index_part) < 0)) __PYX_ERR(0, 805, __pyx_L1_error)
+      if (unlikely(PyDict_SetItem(__pyx_v_last_seen_index, __pyx_v_main_oids_pos, __pyx_v_index_part) < 0)) __PYX_ERR(0, 802, __pyx_L1_error)
 
-      /* "fastsnmp/snmp_parser.pyx":806
+      /* "fastsnmp/snmp_parser.pyx":803
  *             index_part = oid[orig_main_oids_len[main_oids_pos]+1:]
  *             last_seen_index[main_oids_pos] = index_part
  *             result.append([orig_main_oids[main_oids_pos], index_part, value])             # <<<<<<<<<<<<<<
  *         else:
  *             skip_column[main_oids_pos] = True
  */
-      __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids, __pyx_v_main_oids_pos); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 806, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids, __pyx_v_main_oids_pos); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 803, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_7 = PyList_New(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 806, __pyx_L1_error)
+      __pyx_t_7 = PyList_New(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 803, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_GIVEREF(__pyx_t_1);
       PyList_SET_ITEM(__pyx_t_7, 0, __pyx_t_1);
@@ -10049,10 +9991,10 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       __Pyx_GIVEREF(__pyx_v_value);
       PyList_SET_ITEM(__pyx_t_7, 2, __pyx_v_value);
       __pyx_t_1 = 0;
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_result, __pyx_t_7); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 806, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_result, __pyx_t_7); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 803, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":803
+      /* "fastsnmp/snmp_parser.pyx":800
  *             continue
  *         main_oid = orig_main_oids_doted[main_oids_pos]
  *         if oid.startswith(main_oid):             # <<<<<<<<<<<<<<
@@ -10062,7 +10004,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       goto __pyx_L32;
     }
 
-    /* "fastsnmp/snmp_parser.pyx":808
+    /* "fastsnmp/snmp_parser.pyx":805
  *             result.append([orig_main_oids[main_oids_pos], index_part, value])
  *         else:
  *             skip_column[main_oids_pos] = True             # <<<<<<<<<<<<<<
@@ -10070,20 +10012,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  *                 break
  */
     /*else*/ {
-      if (unlikely(PyDict_SetItem(__pyx_v_skip_column, __pyx_v_main_oids_pos, Py_True) < 0)) __PYX_ERR(0, 808, __pyx_L1_error)
+      if (unlikely(PyDict_SetItem(__pyx_v_skip_column, __pyx_v_main_oids_pos, Py_True) < 0)) __PYX_ERR(0, 805, __pyx_L1_error)
 
-      /* "fastsnmp/snmp_parser.pyx":809
+      /* "fastsnmp/snmp_parser.pyx":806
  *         else:
  *             skip_column[main_oids_pos] = True
  *             if len(skip_column) == var_bind_list_len:             # <<<<<<<<<<<<<<
  *                 break
  *     if len(skip_column) < main_oids_len:
  */
-      __pyx_t_16 = PyDict_Size(__pyx_v_skip_column); if (unlikely(__pyx_t_16 == ((Py_ssize_t)-1))) __PYX_ERR(0, 809, __pyx_L1_error)
+      __pyx_t_16 = PyDict_Size(__pyx_v_skip_column); if (unlikely(__pyx_t_16 == ((Py_ssize_t)-1))) __PYX_ERR(0, 806, __pyx_L1_error)
       __pyx_t_27 = ((__pyx_t_16 == __pyx_v_var_bind_list_len) != 0);
       if (__pyx_t_27) {
 
-        /* "fastsnmp/snmp_parser.pyx":810
+        /* "fastsnmp/snmp_parser.pyx":807
  *             skip_column[main_oids_pos] = True
  *             if len(skip_column) == var_bind_list_len:
  *                 break             # <<<<<<<<<<<<<<
@@ -10092,7 +10034,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
         goto __pyx_L9_break;
 
-        /* "fastsnmp/snmp_parser.pyx":809
+        /* "fastsnmp/snmp_parser.pyx":806
  *         else:
  *             skip_column[main_oids_pos] = True
  *             if len(skip_column) == var_bind_list_len:             # <<<<<<<<<<<<<<
@@ -10106,37 +10048,37 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   }
   __pyx_L9_break:;
 
-  /* "fastsnmp/snmp_parser.pyx":811
+  /* "fastsnmp/snmp_parser.pyx":808
  *             if len(skip_column) == var_bind_list_len:
  *                 break
  *     if len(skip_column) < main_oids_len:             # <<<<<<<<<<<<<<
  *         if len(skip_column):
  *             next_oids = [None,] * len(orig_main_oids)
  */
-  __pyx_t_2 = PyDict_Size(__pyx_v_skip_column); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 811, __pyx_L1_error)
+  __pyx_t_2 = PyDict_Size(__pyx_v_skip_column); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 808, __pyx_L1_error)
   __pyx_t_27 = ((__pyx_t_2 < __pyx_v_main_oids_len) != 0);
   if (__pyx_t_27) {
 
-    /* "fastsnmp/snmp_parser.pyx":812
+    /* "fastsnmp/snmp_parser.pyx":809
  *                 break
  *     if len(skip_column) < main_oids_len:
  *         if len(skip_column):             # <<<<<<<<<<<<<<
  *             next_oids = [None,] * len(orig_main_oids)
  *             for pos in rest_oids_positions:
  */
-    __pyx_t_2 = PyDict_Size(__pyx_v_skip_column); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 812, __pyx_L1_error)
+    __pyx_t_2 = PyDict_Size(__pyx_v_skip_column); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 809, __pyx_L1_error)
     __pyx_t_27 = (__pyx_t_2 != 0);
     if (__pyx_t_27) {
 
-      /* "fastsnmp/snmp_parser.pyx":813
+      /* "fastsnmp/snmp_parser.pyx":810
  *     if len(skip_column) < main_oids_len:
  *         if len(skip_column):
  *             next_oids = [None,] * len(orig_main_oids)             # <<<<<<<<<<<<<<
  *             for pos in rest_oids_positions:
  *                 if pos in skip_column:
  */
-      __pyx_t_2 = PyTuple_GET_SIZE(__pyx_v_orig_main_oids); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 813, __pyx_L1_error)
-      __pyx_t_7 = PyList_New(1 * ((__pyx_t_2<0) ? 0:__pyx_t_2)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 813, __pyx_L1_error)
+      __pyx_t_2 = PyTuple_GET_SIZE(__pyx_v_orig_main_oids); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 810, __pyx_L1_error)
+      __pyx_t_7 = PyList_New(1 * ((__pyx_t_2<0) ? 0:__pyx_t_2)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 810, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       { Py_ssize_t __pyx_temp;
         for (__pyx_temp=0; __pyx_temp < __pyx_t_2; __pyx_temp++) {
@@ -10148,7 +10090,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       __Pyx_DECREF_SET(__pyx_v_next_oids, ((PyObject*)__pyx_t_7));
       __pyx_t_7 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":814
+      /* "fastsnmp/snmp_parser.pyx":811
  *         if len(skip_column):
  *             next_oids = [None,] * len(orig_main_oids)
  *             for pos in rest_oids_positions:             # <<<<<<<<<<<<<<
@@ -10159,26 +10101,26 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       for (;;) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_7)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_2); __Pyx_INCREF(__pyx_t_1); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 814, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_2); __Pyx_INCREF(__pyx_t_1); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 811, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 814, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 811, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
         __Pyx_XDECREF_SET(__pyx_v_pos, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "fastsnmp/snmp_parser.pyx":815
+        /* "fastsnmp/snmp_parser.pyx":812
  *             next_oids = [None,] * len(orig_main_oids)
  *             for pos in rest_oids_positions:
  *                 if pos in skip_column:             # <<<<<<<<<<<<<<
  *                     continue
  *                 next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
  */
-        __pyx_t_27 = (__Pyx_PyDict_ContainsTF(__pyx_v_pos, __pyx_v_skip_column, Py_EQ)); if (unlikely(__pyx_t_27 < 0)) __PYX_ERR(0, 815, __pyx_L1_error)
+        __pyx_t_27 = (__Pyx_PyDict_ContainsTF(__pyx_v_pos, __pyx_v_skip_column, Py_EQ)); if (unlikely(__pyx_t_27 < 0)) __PYX_ERR(0, 812, __pyx_L1_error)
         __pyx_t_5 = (__pyx_t_27 != 0);
         if (__pyx_t_5) {
 
-          /* "fastsnmp/snmp_parser.pyx":816
+          /* "fastsnmp/snmp_parser.pyx":813
  *             for pos in rest_oids_positions:
  *                 if pos in skip_column:
  *                     continue             # <<<<<<<<<<<<<<
@@ -10187,7 +10129,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
           goto __pyx_L36_continue;
 
-          /* "fastsnmp/snmp_parser.pyx":815
+          /* "fastsnmp/snmp_parser.pyx":812
  *             next_oids = [None,] * len(orig_main_oids)
  *             for pos in rest_oids_positions:
  *                 if pos in skip_column:             # <<<<<<<<<<<<<<
@@ -10196,20 +10138,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
         }
 
-        /* "fastsnmp/snmp_parser.pyx":817
+        /* "fastsnmp/snmp_parser.pyx":814
  *                 if pos in skip_column:
  *                     continue
  *                 next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])             # <<<<<<<<<<<<<<
  *         else:
  *             next_oids = [
  */
-        __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 817, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 814, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __pyx_t_3 = 0;
         __pyx_t_17 = 127;
-        __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids, __pyx_v_pos); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 817, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids, __pyx_v_pos); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 814, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_13 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_6), __pyx_empty_unicode); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 817, __pyx_L1_error)
+        __pyx_t_13 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_6), __pyx_empty_unicode); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 814, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __pyx_t_17 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_13) > __pyx_t_17) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_13) : __pyx_t_17;
@@ -10221,9 +10163,9 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
         __pyx_t_3 += 1;
         __Pyx_GIVEREF(__pyx_kp_u__4);
         PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_kp_u__4);
-        __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_last_seen_index, __pyx_v_pos); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 817, __pyx_L1_error)
+        __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_last_seen_index, __pyx_v_pos); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 814, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_6 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_13), __pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 817, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_13), __pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 814, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_t_17 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_6) > __pyx_t_17) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_6) : __pyx_t_17;
@@ -10231,13 +10173,13 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
         __Pyx_GIVEREF(__pyx_t_6);
         PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_6);
         __pyx_t_6 = 0;
-        __pyx_t_6 = __Pyx_PyUnicode_Join(__pyx_t_1, 3, __pyx_t_3, __pyx_t_17); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 817, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyUnicode_Join(__pyx_t_1, 3, __pyx_t_3, __pyx_t_17); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 814, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (unlikely(PyObject_SetItem(__pyx_v_next_oids, __pyx_v_pos, __pyx_t_6) < 0)) __PYX_ERR(0, 817, __pyx_L1_error)
+        if (unlikely(PyObject_SetItem(__pyx_v_next_oids, __pyx_v_pos, __pyx_t_6) < 0)) __PYX_ERR(0, 814, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-        /* "fastsnmp/snmp_parser.pyx":814
+        /* "fastsnmp/snmp_parser.pyx":811
  *         if len(skip_column):
  *             next_oids = [None,] * len(orig_main_oids)
  *             for pos in rest_oids_positions:             # <<<<<<<<<<<<<<
@@ -10248,7 +10190,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "fastsnmp/snmp_parser.pyx":812
+      /* "fastsnmp/snmp_parser.pyx":809
  *                 break
  *     if len(skip_column) < main_oids_len:
  *         if len(skip_column):             # <<<<<<<<<<<<<<
@@ -10258,7 +10200,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
       goto __pyx_L35;
     }
 
-    /* "fastsnmp/snmp_parser.pyx":819
+    /* "fastsnmp/snmp_parser.pyx":816
  *                 next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
  *         else:
  *             next_oids = [             # <<<<<<<<<<<<<<
@@ -10267,10 +10209,10 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
     /*else*/ {
       { /* enter inner scope */
-        __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 819, __pyx_L41_error)
+        __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 816, __pyx_L41_error)
         __Pyx_GOTREF(__pyx_t_7);
 
-        /* "fastsnmp/snmp_parser.pyx":820
+        /* "fastsnmp/snmp_parser.pyx":817
  *         else:
  *             next_oids = [
  *                 "%s.%s" % (orig_main_oids[p], last_seen_index[p]) for p in rest_oids_positions]             # <<<<<<<<<<<<<<
@@ -10281,20 +10223,20 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
         for (;;) {
           if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_6)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_2); __Pyx_INCREF(__pyx_t_1); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_2); __Pyx_INCREF(__pyx_t_1); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 817, __pyx_L41_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 817, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
           __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_p, __pyx_t_1);
           __pyx_t_1 = 0;
-          __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 817, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_3 = 0;
           __pyx_t_17 = 127;
-          __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids, __pyx_8genexpr1__pyx_v_p); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_13 = __Pyx_PyObject_GetItem(__pyx_v_orig_main_oids, __pyx_8genexpr1__pyx_v_p); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 817, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_13);
-          __pyx_t_14 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_13), __pyx_empty_unicode); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_14 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_13), __pyx_empty_unicode); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 817, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           __pyx_t_17 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_14) > __pyx_t_17) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_14) : __pyx_t_17;
@@ -10306,9 +10248,9 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
           __pyx_t_3 += 1;
           __Pyx_GIVEREF(__pyx_kp_u__4);
           PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_kp_u__4);
-          __pyx_t_14 = __Pyx_PyDict_GetItem(__pyx_v_last_seen_index, __pyx_8genexpr1__pyx_v_p); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_14 = __Pyx_PyDict_GetItem(__pyx_v_last_seen_index, __pyx_8genexpr1__pyx_v_p); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 817, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_14);
-          __pyx_t_13 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_14), __pyx_empty_unicode); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_13 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_14), __pyx_empty_unicode); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 817, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __pyx_t_17 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_13) > __pyx_t_17) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_13) : __pyx_t_17;
@@ -10316,10 +10258,10 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
           __Pyx_GIVEREF(__pyx_t_13);
           PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_13);
           __pyx_t_13 = 0;
-          __pyx_t_13 = __Pyx_PyUnicode_Join(__pyx_t_1, 3, __pyx_t_3, __pyx_t_17); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 820, __pyx_L41_error)
+          __pyx_t_13 = __Pyx_PyUnicode_Join(__pyx_t_1, 3, __pyx_t_3, __pyx_t_17); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 817, __pyx_L41_error)
           __Pyx_GOTREF(__pyx_t_13);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (unlikely(__Pyx_ListComp_Append(__pyx_t_7, (PyObject*)__pyx_t_13))) __PYX_ERR(0, 819, __pyx_L41_error)
+          if (unlikely(__Pyx_ListComp_Append(__pyx_t_7, (PyObject*)__pyx_t_13))) __PYX_ERR(0, 816, __pyx_L41_error)
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         }
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -10335,7 +10277,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
     }
     __pyx_L35:;
 
-    /* "fastsnmp/snmp_parser.pyx":811
+    /* "fastsnmp/snmp_parser.pyx":808
  *             if len(skip_column) == var_bind_list_len:
  *                 break
  *     if len(skip_column) < main_oids_len:             # <<<<<<<<<<<<<<
@@ -10344,16 +10286,16 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
  */
   }
 
-  /* "fastsnmp/snmp_parser.pyx":822
+  /* "fastsnmp/snmp_parser.pyx":819
  *                 "%s.%s" % (orig_main_oids[p], last_seen_index[p]) for p in rest_oids_positions]
  * 
  *     return result, tuple(next_oids)             # <<<<<<<<<<<<<<
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_7 = PyList_AsTuple(__pyx_v_next_oids); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 822, __pyx_L1_error)
+  __pyx_t_7 = PyList_AsTuple(__pyx_v_next_oids); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 819, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 822, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 819, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_result);
   __Pyx_GIVEREF(__pyx_v_result);
@@ -10365,7 +10307,7 @@ static PyObject *__pyx_pf_8fastsnmp_11snmp_parser_36parse_varbind(CYTHON_UNUSED 
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "fastsnmp/snmp_parser.pyx":766
+  /* "fastsnmp/snmp_parser.pyx":762
  * 
  * 
  * def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tuple oids_to_poll not None):             # <<<<<<<<<<<<<<
@@ -10652,9 +10594,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 160, __pyx_L1_error)
-  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 534, __pyx_L1_error)
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 793, __pyx_L1_error)
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 793, __pyx_L1_error)
+  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 530, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 790, __pyx_L1_error)
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 790, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -10708,14 +10650,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "fastsnmp/snmp_parser.pyx":624
+  /* "fastsnmp/snmp_parser.pyx":620
  *     if value_type == 'Null':
  *         if value is not None:
  *             raise Exception('value must be None for Null type!')             # <<<<<<<<<<<<<<
  *         return b''
  *     elif value_type == "Integer":
  */
-  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_u_value_must_be_None_for_Null_type); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 624, __pyx_L1_error)
+  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_u_value_must_be_None_for_Null_type); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 620, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__19);
   __Pyx_GIVEREF(__pyx_tuple__19);
 
@@ -10827,125 +10769,125 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__47);
   __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_sequence_decode, 475, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 475, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":556
+  /* "fastsnmp/snmp_parser.pyx":552
  * 
  * 
  * def length_decode(bytes data):             # <<<<<<<<<<<<<<
  *     cdef size_t encode_length, length
  *     length_decode_c(data, &length, &encode_length)
  */
-  __pyx_tuple__48 = PyTuple_Pack(3, __pyx_n_s_data, __pyx_n_s_encode_length, __pyx_n_s_length); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(0, 556, __pyx_L1_error)
+  __pyx_tuple__48 = PyTuple_Pack(3, __pyx_n_s_data, __pyx_n_s_encode_length, __pyx_n_s_length); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(0, 552, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__48);
   __Pyx_GIVEREF(__pyx_tuple__48);
-  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__48, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_length_decode, 556, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) __PYX_ERR(0, 556, __pyx_L1_error)
+  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__48, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_length_decode, 552, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) __PYX_ERR(0, 552, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":562
+  /* "fastsnmp/snmp_parser.pyx":558
  * 
  * 
  * def length_encode(uint64_t length):             # <<<<<<<<<<<<<<
  *     """
  *     Function takes the length of the contents and produces the encoding for that length.  Section 6.3 of ITU-T-X.209
  */
-  __pyx_tuple__49 = PyTuple_Pack(6, __pyx_n_s_length, __pyx_n_s_length, __pyx_n_s_tmp_length, __pyx_n_s_result, __pyx_n_s_resultlist, __pyx_n_s_numOctets); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 562, __pyx_L1_error)
+  __pyx_tuple__49 = PyTuple_Pack(6, __pyx_n_s_length, __pyx_n_s_length, __pyx_n_s_tmp_length, __pyx_n_s_result, __pyx_n_s_resultlist, __pyx_n_s_numOctets); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 558, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__49);
   __Pyx_GIVEREF(__pyx_tuple__49);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(1, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_length_encode, 562, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 562, __pyx_L1_error)
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(1, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_length_encode, 558, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 558, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":611
+  /* "fastsnmp/snmp_parser.pyx":607
  *     return 0
  * 
  * def tag_decode(bytes stream not None):             # <<<<<<<<<<<<<<
  *     cdef uint64_t tag=0
  *     cdef size_t encode_length
  */
-  __pyx_tuple__50 = PyTuple_Pack(3, __pyx_n_s_stream, __pyx_n_s_tag, __pyx_n_s_encode_length); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(0, 611, __pyx_L1_error)
+  __pyx_tuple__50 = PyTuple_Pack(3, __pyx_n_s_stream, __pyx_n_s_tag, __pyx_n_s_encode_length); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(0, 607, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__50);
   __Pyx_GIVEREF(__pyx_tuple__50);
-  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__50, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_tag_decode, 611, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 611, __pyx_L1_error)
+  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__50, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_tag_decode, 607, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 607, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":618
+  /* "fastsnmp/snmp_parser.pyx":614
  * 
  * # TODO: implement more encoders
  * def value_encode(value=None, value_type='Null'):             # <<<<<<<<<<<<<<
  *     """
  *     Encoded value by ASN.1
  */
-  __pyx_tuple__51 = PyTuple_Pack(2, __pyx_n_s_value, __pyx_n_s_value_type); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 618, __pyx_L1_error)
+  __pyx_tuple__51 = PyTuple_Pack(2, __pyx_n_s_value, __pyx_n_s_value_type); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 614, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__51);
   __Pyx_GIVEREF(__pyx_tuple__51);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__51, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_value_encode, 618, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 618, __pyx_L1_error)
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__51, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_value_encode, 614, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 614, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":636
+  /* "fastsnmp/snmp_parser.pyx":632
  * 
  * 
  * def encode_varbind(oid, value_type='Null', value=None):             # <<<<<<<<<<<<<<
  *     if value is None:
  *         value_type = 'Null'
  */
-  __pyx_tuple__52 = PyTuple_Pack(12, __pyx_n_s_oid, __pyx_n_s_value_type, __pyx_n_s_value, __pyx_n_s_obj_id_value, __pyx_n_s_obj_id_type, __pyx_n_s_obj_id_len, __pyx_n_s_obj_value_value, __pyx_n_s_obj_value_type, __pyx_n_s_obj_value_len, __pyx_n_s_varbinds_obj, __pyx_n_s_seq_tag, __pyx_n_s_varbind_enc); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(0, 636, __pyx_L1_error)
+  __pyx_tuple__52 = PyTuple_Pack(12, __pyx_n_s_oid, __pyx_n_s_value_type, __pyx_n_s_value, __pyx_n_s_obj_id_value, __pyx_n_s_obj_id_type, __pyx_n_s_obj_id_len, __pyx_n_s_obj_value_value, __pyx_n_s_obj_value_type, __pyx_n_s_obj_value_len, __pyx_n_s_varbinds_obj, __pyx_n_s_seq_tag, __pyx_n_s_varbind_enc); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(0, 632, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__52);
   __Pyx_GIVEREF(__pyx_tuple__52);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(3, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__52, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_encode_varbind, 636, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 636, __pyx_L1_error)
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(3, 0, 12, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__52, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_encode_varbind, 632, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 632, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":654
+  /* "fastsnmp/snmp_parser.pyx":650
  * 
  * 
  * def varbinds_encode(varbinds):             # <<<<<<<<<<<<<<
  *     res = bytearray()
  *     for varbind in varbinds:
  */
-  __pyx_tuple__53 = PyTuple_Pack(6, __pyx_n_s_varbinds, __pyx_n_s_res, __pyx_n_s_varbind, __pyx_n_s_oid, __pyx_n_s_value, __pyx_n_s_value_type); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(0, 654, __pyx_L1_error)
+  __pyx_tuple__53 = PyTuple_Pack(6, __pyx_n_s_varbinds, __pyx_n_s_res, __pyx_n_s_varbind, __pyx_n_s_oid, __pyx_n_s_value, __pyx_n_s_value_type); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(0, 650, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__53);
   __Pyx_GIVEREF(__pyx_tuple__53);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(1, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__53, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_varbinds_encode, 654, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 654, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(1, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__53, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_varbinds_encode, 650, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 650, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":670
+  /* "fastsnmp/snmp_parser.pyx":666
  * 
  * 
  * def varbinds_encode_tlv(varbinds):             # <<<<<<<<<<<<<<
  *     varbinds_data = varbinds_encode(varbinds)
  *     varbinds_type = ASN_U_SEQUENCE_BYTE
  */
-  __pyx_tuple__54 = PyTuple_Pack(4, __pyx_n_s_varbinds, __pyx_n_s_varbinds_data, __pyx_n_s_varbinds_type, __pyx_n_s_varbinds_len); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(0, 670, __pyx_L1_error)
+  __pyx_tuple__54 = PyTuple_Pack(4, __pyx_n_s_varbinds, __pyx_n_s_varbinds_data, __pyx_n_s_varbinds_type, __pyx_n_s_varbinds_len); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(0, 666, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__54);
   __Pyx_GIVEREF(__pyx_tuple__54);
-  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__54, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_varbinds_encode_tlv, 670, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 670, __pyx_L1_error)
+  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__54, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_varbinds_encode_tlv, 666, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 666, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":677
+  /* "fastsnmp/snmp_parser.pyx":673
  * 
  * 
  * def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=10, non_repeaters=0):             # <<<<<<<<<<<<<<
  *     """
  *     Build SNMP-message
  */
-  __pyx_tuple__55 = PyTuple_Pack(34, __pyx_n_s_req_id, __pyx_n_s_community, __pyx_n_s_varbinds, __pyx_n_s_msg_type, __pyx_n_s_max_repetitions, __pyx_n_s_non_repeaters, __pyx_n_s_varbinds_tlv, __pyx_n_s_request_id_type, __pyx_n_s_request_id_value, __pyx_n_s_request_id_len, __pyx_n_s_non_repeaters_value, __pyx_n_s_non_repeaters_type, __pyx_n_s_non_repeaters_len, __pyx_n_s_max_repetitions_value, __pyx_n_s_max_repetitions_type, __pyx_n_s_max_repetitions_len, __pyx_n_s_pdu, __pyx_n_s_pdu_type, __pyx_n_s_error_status_value, __pyx_n_s_error_status_type, __pyx_n_s_error_status_len, __pyx_n_s_error_index_value, __pyx_n_s_error_index_type, __pyx_n_s_error_index_len, __pyx_n_s_pdu_len, __pyx_n_s_community_value, __pyx_n_s_community_type, __pyx_n_s_community_len, __pyx_n_s_version_value, __pyx_n_s_version_type, __pyx_n_s_version_len, __pyx_n_s_snmp_message_type, __pyx_n_s_snmp_message_value, __pyx_n_s_snmp_message_len); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(0, 677, __pyx_L1_error)
+  __pyx_tuple__55 = PyTuple_Pack(34, __pyx_n_s_req_id, __pyx_n_s_community, __pyx_n_s_varbinds, __pyx_n_s_msg_type, __pyx_n_s_max_repetitions, __pyx_n_s_non_repeaters, __pyx_n_s_varbinds_tlv, __pyx_n_s_request_id_type, __pyx_n_s_request_id_value, __pyx_n_s_request_id_len, __pyx_n_s_non_repeaters_value, __pyx_n_s_non_repeaters_type, __pyx_n_s_non_repeaters_len, __pyx_n_s_max_repetitions_value, __pyx_n_s_max_repetitions_type, __pyx_n_s_max_repetitions_len, __pyx_n_s_pdu, __pyx_n_s_pdu_type, __pyx_n_s_error_status_value, __pyx_n_s_error_status_type, __pyx_n_s_error_status_len, __pyx_n_s_error_index_value, __pyx_n_s_error_index_type, __pyx_n_s_error_index_len, __pyx_n_s_pdu_len, __pyx_n_s_community_value, __pyx_n_s_community_type, __pyx_n_s_community_len, __pyx_n_s_version_value, __pyx_n_s_version_type, __pyx_n_s_version_len, __pyx_n_s_snmp_message_type, __pyx_n_s_snmp_message_value, __pyx_n_s_snmp_message_len); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(0, 673, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__55);
   __Pyx_GIVEREF(__pyx_tuple__55);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(6, 0, 34, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__55, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_msg_encode, 677, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 677, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(6, 0, 34, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__55, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_msg_encode, 673, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 673, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":749
+  /* "fastsnmp/snmp_parser.pyx":745
  * 
  * 
  * def msg_decode(stream):             # <<<<<<<<<<<<<<
  *     cdef uint64_t tag=0
  *     cdef size_t encode_length, length
  */
-  __pyx_tuple__56 = PyTuple_Pack(14, __pyx_n_s_stream, __pyx_n_s_tag, __pyx_n_s_encode_length, __pyx_n_s_length, __pyx_n_s_stream_char, __pyx_n_s_stream_ptr, __pyx_n_s_stream_len, __pyx_n_s_data, __pyx_n_s_snmp_ver, __pyx_n_s_community, __pyx_n_s_req_id, __pyx_n_s_error_status, __pyx_n_s_error_index, __pyx_n_s_varbinds); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(0, 749, __pyx_L1_error)
+  __pyx_tuple__56 = PyTuple_Pack(14, __pyx_n_s_stream, __pyx_n_s_tag, __pyx_n_s_encode_length, __pyx_n_s_length, __pyx_n_s_stream_char, __pyx_n_s_stream_ptr, __pyx_n_s_stream_len, __pyx_n_s_data, __pyx_n_s_snmp_ver, __pyx_n_s_community, __pyx_n_s_req_id, __pyx_n_s_error_status, __pyx_n_s_error_index, __pyx_n_s_varbinds); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(0, 745, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__56);
   __Pyx_GIVEREF(__pyx_tuple__56);
-  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(1, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__56, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_msg_decode, 749, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) __PYX_ERR(0, 749, __pyx_L1_error)
+  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(1, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__56, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_msg_decode, 745, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) __PYX_ERR(0, 745, __pyx_L1_error)
 
-  /* "fastsnmp/snmp_parser.pyx":766
+  /* "fastsnmp/snmp_parser.pyx":762
  * 
  * 
  * def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tuple oids_to_poll not None):             # <<<<<<<<<<<<<<
  *     cdef str oid, main_oid, index_part
  *     cdef list result = [], item
  */
-  __pyx_tuple__57 = PyTuple_Pack(25, __pyx_n_s_var_bind_list, __pyx_n_s_orig_main_oids, __pyx_n_s_oids_to_poll, __pyx_n_s_oid, __pyx_n_s_main_oid, __pyx_n_s_index_part, __pyx_n_s_result, __pyx_n_s_item_2, __pyx_n_s_next_oids, __pyx_n_s_orig_main_oids_doted, __pyx_n_s_orig_main_oids_len, __pyx_n_s_value, __pyx_n_s_rest_oids_positions, __pyx_n_s_main_oids_len, __pyx_n_s_main_oids_positions, __pyx_n_s_var_bind_list_len, __pyx_n_s_i, __pyx_n_s_skip_column, __pyx_n_s_last_seen_index, __pyx_n_s_var_bind_pos, __pyx_n_s_e, __pyx_n_s_main_oids_pos, __pyx_n_s_pos, __pyx_n_s_x, __pyx_n_s_p); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(0, 766, __pyx_L1_error)
+  __pyx_tuple__57 = PyTuple_Pack(25, __pyx_n_s_var_bind_list, __pyx_n_s_orig_main_oids, __pyx_n_s_oids_to_poll, __pyx_n_s_oid, __pyx_n_s_main_oid, __pyx_n_s_index_part, __pyx_n_s_result, __pyx_n_s_item_2, __pyx_n_s_next_oids, __pyx_n_s_orig_main_oids_doted, __pyx_n_s_orig_main_oids_len, __pyx_n_s_value, __pyx_n_s_main_oids_len, __pyx_n_s_rest_oids_positions, __pyx_n_s_main_oids_positions, __pyx_n_s_var_bind_list_len, __pyx_n_s_i, __pyx_n_s_skip_column, __pyx_n_s_last_seen_index, __pyx_n_s_var_bind_pos, __pyx_n_s_e, __pyx_n_s_main_oids_pos, __pyx_n_s_pos, __pyx_n_s_x, __pyx_n_s_p); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(0, 762, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__57);
   __Pyx_GIVEREF(__pyx_tuple__57);
-  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(3, 0, 25, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__57, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_parse_varbind, 766, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 766, __pyx_L1_error)
+  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(3, 0, 25, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__57, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fastsnmp_snmp_parser_pyx, __pyx_n_s_parse_varbind, 762, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 762, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -12551,124 +12493,124 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_sequence_decode, __pyx_t_2) < 0) __PYX_ERR(0, 475, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":556
+  /* "fastsnmp/snmp_parser.pyx":552
  * 
  * 
  * def length_decode(bytes data):             # <<<<<<<<<<<<<<
  *     cdef size_t encode_length, length
  *     length_decode_c(data, &length, &encode_length)
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_19length_decode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 556, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_19length_decode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 552, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_length_decode, __pyx_t_2) < 0) __PYX_ERR(0, 556, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_length_decode, __pyx_t_2) < 0) __PYX_ERR(0, 552, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":562
+  /* "fastsnmp/snmp_parser.pyx":558
  * 
  * 
  * def length_encode(uint64_t length):             # <<<<<<<<<<<<<<
  *     """
  *     Function takes the length of the contents and produces the encoding for that length.  Section 6.3 of ITU-T-X.209
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_21length_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 562, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_21length_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 558, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_length_encode, __pyx_t_2) < 0) __PYX_ERR(0, 562, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_length_encode, __pyx_t_2) < 0) __PYX_ERR(0, 558, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":611
+  /* "fastsnmp/snmp_parser.pyx":607
  *     return 0
  * 
  * def tag_decode(bytes stream not None):             # <<<<<<<<<<<<<<
  *     cdef uint64_t tag=0
  *     cdef size_t encode_length
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_23tag_decode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 611, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_23tag_decode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 607, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_tag_decode, __pyx_t_2) < 0) __PYX_ERR(0, 611, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_tag_decode, __pyx_t_2) < 0) __PYX_ERR(0, 607, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":618
+  /* "fastsnmp/snmp_parser.pyx":614
  * 
  * # TODO: implement more encoders
  * def value_encode(value=None, value_type='Null'):             # <<<<<<<<<<<<<<
  *     """
  *     Encoded value by ASN.1
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_25value_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 618, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_25value_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 614, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_value_encode, __pyx_t_2) < 0) __PYX_ERR(0, 618, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_value_encode, __pyx_t_2) < 0) __PYX_ERR(0, 614, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":636
+  /* "fastsnmp/snmp_parser.pyx":632
  * 
  * 
  * def encode_varbind(oid, value_type='Null', value=None):             # <<<<<<<<<<<<<<
  *     if value is None:
  *         value_type = 'Null'
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_27encode_varbind, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 636, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_27encode_varbind, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 632, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_encode_varbind, __pyx_t_2) < 0) __PYX_ERR(0, 636, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_encode_varbind, __pyx_t_2) < 0) __PYX_ERR(0, 632, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":654
+  /* "fastsnmp/snmp_parser.pyx":650
  * 
  * 
  * def varbinds_encode(varbinds):             # <<<<<<<<<<<<<<
  *     res = bytearray()
  *     for varbind in varbinds:
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_29varbinds_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 654, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_29varbinds_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 650, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_varbinds_encode, __pyx_t_2) < 0) __PYX_ERR(0, 654, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_varbinds_encode, __pyx_t_2) < 0) __PYX_ERR(0, 650, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":670
+  /* "fastsnmp/snmp_parser.pyx":666
  * 
  * 
  * def varbinds_encode_tlv(varbinds):             # <<<<<<<<<<<<<<
  *     varbinds_data = varbinds_encode(varbinds)
  *     varbinds_type = ASN_U_SEQUENCE_BYTE
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_31varbinds_encode_tlv, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 670, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_31varbinds_encode_tlv, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 666, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_varbinds_encode_tlv, __pyx_t_2) < 0) __PYX_ERR(0, 670, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_varbinds_encode_tlv, __pyx_t_2) < 0) __PYX_ERR(0, 666, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":677
+  /* "fastsnmp/snmp_parser.pyx":673
  * 
  * 
  * def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=10, non_repeaters=0):             # <<<<<<<<<<<<<<
  *     """
  *     Build SNMP-message
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_33msg_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 677, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_33msg_encode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 673, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_msg_encode, __pyx_t_2) < 0) __PYX_ERR(0, 677, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_msg_encode, __pyx_t_2) < 0) __PYX_ERR(0, 673, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":749
+  /* "fastsnmp/snmp_parser.pyx":745
  * 
  * 
  * def msg_decode(stream):             # <<<<<<<<<<<<<<
  *     cdef uint64_t tag=0
  *     cdef size_t encode_length, length
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_35msg_decode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 749, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_35msg_decode, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 745, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_msg_decode, __pyx_t_2) < 0) __PYX_ERR(0, 749, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_msg_decode, __pyx_t_2) < 0) __PYX_ERR(0, 745, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fastsnmp/snmp_parser.pyx":766
+  /* "fastsnmp/snmp_parser.pyx":762
  * 
  * 
  * def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tuple oids_to_poll not None):             # <<<<<<<<<<<<<<
  *     cdef str oid, main_oid, index_part
  *     cdef list result = [], item
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_37parse_varbind, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 766, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_8fastsnmp_11snmp_parser_37parse_varbind, NULL, __pyx_n_s_fastsnmp_snmp_parser); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 762, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_parse_varbind, __pyx_t_2) < 0) __PYX_ERR(0, 766, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_parse_varbind, __pyx_t_2) < 0) __PYX_ERR(0, 762, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "fastsnmp/snmp_parser.pyx":1

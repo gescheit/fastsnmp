@@ -30,12 +30,12 @@ Type conversion:
 | SNMP | Python |
 | --- | --- |
 | octetstring, ipaddress | bytes |
-| null, unknown specific | None |
+| null | None |
 | objectid | str |
 | counter32, unsigned32, gauge32, counter64, integer | int |
-| noSuchInstance | fastsnmp.snmp_parser.NoSuchInstance |
-| noSuchObject | fastsnmp.snmp_parser.NoSuchObject |
-| endOfMibView | fastsnmp.snmp_parser.EndOfMibView |
+| noSuchInstance | None |
+| noSuchObject | None |
+| endOfMibView | None |
 
 Notices:
 

@@ -524,12 +524,8 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
             # bytes_val = c_octetstring_decode(stream_char, length)
             bytes_val = <bytes> stream_char[:length]
             objects.append(bytes_val)
-        elif tag == ASN_U_NO_SUCH_OBJECT:
-            objects.append(NoSuchObject)
-        elif tag == ASN_U_NO_SUCH_INSTANCE:
-            objects.append(NoSuchInstance)
-        elif tag == ASN_U_END_OF_MIB_VIEW:
-            objects.append(EndOfMibView)
+        elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
+            objects.append(None)
         else:
             raise NotImplementedError("unknown tag=%s" % tag)
 
