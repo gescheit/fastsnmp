@@ -33,6 +33,9 @@ Type conversion:
 | null, unknown specific | None |
 | objectid | str |
 | counter32, unsigned32, gauge32, counter64, integer | int |
+| noSuchInstance | fastsnmp.snmp_parser.NoSuchInstance |
+| noSuchObject | fastsnmp.snmp_parser.NoSuchObject |
+| endOfMibView | fastsnmp.snmp_parser.EndOfMibView |
 
 Notices:
 
