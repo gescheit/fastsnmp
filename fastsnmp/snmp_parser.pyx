@@ -766,6 +766,7 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
     cdef list orig_main_oids_doted = list()
     cdef list orig_main_oids_len = list()
     cdef object value
+    cdef uint64_t main_oids_len
     rest_oids_positions = [x for x in range(len(oids_to_poll)) if oids_to_poll[x]]
     main_oids_len = len(rest_oids_positions)
     main_oids_positions = cycle(rest_oids_positions)
