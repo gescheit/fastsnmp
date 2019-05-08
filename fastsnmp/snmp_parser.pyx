@@ -168,38 +168,38 @@ cdef inline int primitive_decode(char *stream, size_t stream_len, uint64_t *resu
     return retval
 
 
-cdef inline char* objectid_decode_str(const unsigned char *stream, size_t stream_len):
+cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, char *out, size_t *out_length) except -1:
     cdef uint64_t result[122]
-    cdef char result_str[MAX_OID_LEN_STR]
-    cdef char *result_str_ptr = result_str
-    cdef size_t n, ret_len, sid12_enc_len, result_len=0, out_len
+    cdef size_t n, ret_len, sid12_enc_len, result_len=0
     cdef SID12_t tmp_sid
 
     if <size_t>stream[0] > 127:
-        raise Exception("bad objectid")
+        return -1
 
     tmp_sid = sid12s[<size_t>stream[0]]
 
     sid12_enc_len = tmp_sid.strlen
 
-    memcpy(result_str_ptr, tmp_sid.str, sid12_enc_len)
-    result_str_ptr += sid12_enc_len
-    out_len = sid12_enc_len
+    memcpy(out, tmp_sid.str, sid12_enc_len)
+    out += sid12_enc_len
+    out_length[0] = sid12_enc_len
 
     primitive_decode((<char *>stream)+1, stream_len-1, result, &result_len)
 
     for i in range(result_len):
-        n = sprintf(result_str_ptr, ".%ld", result[i])
-        result_str_ptr += n
-        out_len+=n
-
-    return result_str[:out_len]
+        n = sprintf(out, ".%ld", result[i])
+        out += n
+        out_length[0] += n
+    return 0
 
 
 def objectid_decode(stream):
     cdef const unsigned char *stream_char = stream
     cdef size_t stream_len = len(stream)
-    return objectid_decode_str(stream_char, stream_len)
+    cdef char ret_str[MAX_OID_LEN_STR]
+    cdef size_t ret_length
+    objectid_decode_str(stream_char, stream_len, ret_str, &ret_length)
+    return <str>ret_str[:ret_length]
 
 
 cdef inline tuple objectid_decode_tuple(char *stream, size_t stream_len):
@@ -479,7 +479,7 @@ def sequence_decode(bytes stream not None) -> list:
     ret = sequence_decode_c(stream_char, stream_len)
     return ret
 
-cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
+cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len):
     """
     Decode input stream into as sequence
 
@@ -490,21 +490,25 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
     """
     cdef uint64_t tag = 0, tmp_uint_val
     cdef int64_t tmp_int_val
-    cdef size_t encode_length, length, offset=0
+    cdef size_t encode_length, length, current_stream_pos=0
     cdef bytes bytes_val
     cdef const unsigned char *stream_char = stream
     cdef list objects=[], tmp_list_val
     cdef tuple tmp_tuple_val
     cdef str tmp_objectid
 
-    while offset<stream_len:
+    cdef char ret_str[MAX_OID_LEN_STR]
+    cdef size_t ret_length
+    # cdef char *result_str_ptr = result_str
+
+    while current_stream_pos < stream_len:
         tag_decode_c(stream_char, &tag, &encode_length)
         stream_char += encode_length
-        offset += encode_length
-
+        current_stream_pos += encode_length
         length_decode_c(stream_char, &length, &encode_length)
         stream_char += encode_length
-        offset += encode_length
+        current_stream_pos += encode_length
+        assert (current_stream_pos + length) <= stream_len
         if tag == ASN_U_INTEGER:
             tmp_int_val = integer_decode_c(stream_char, &length)
             objects.append(tmp_int_val)
@@ -513,8 +517,8 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
             tmp_uint_val = uinteger_decode_c(stream_char, &length)
             objects.append(tmp_uint_val)
         elif tag == ASN_U_OBJECTID:
-            tmp_objectid = objectid_decode_str(stream_char, length)
-            objects.append(tmp_objectid)
+            objectid_decode_str(stream_char, length, ret_str, &ret_length)
+            objects.append(<str>ret_str[:ret_length])
         elif tag == ASN_U_NULL:
             objects.append(None)
         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
@@ -529,7 +533,7 @@ cdef list sequence_decode_c(const unsigned char *stream, size_t stream_len):
         else:
             raise NotImplementedError("unknown tag=%s" % tag)
 
-        offset += length
+        current_stream_pos += length
         stream_char += length
     return objects
 
