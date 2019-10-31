@@ -92,6 +92,7 @@ DEF ASN_A_OPAQUE_BYTE = bytes([ASN_A_OPAQUE])
 DEF ASN_A_COUNTER64_BYTE = bytes([ASN_A_COUNTER64])
 
 # rfc2741
+DEF ASN_U_EOC = _UNIVERSAL | 0x00  # 0 End of Content
 DEF ASN_U_INTEGER = _UNIVERSAL | 0x02  # 2
 DEF ASN_U_OCTETSTRING = _UNIVERSAL | 0x04  # 4
 DEF ASN_U_NULL = _UNIVERSAL | 0x05  # 5
@@ -523,13 +524,16 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             objects.append(None)
         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
             tmp_list_val = sequence_decode_c(stream_char, length)
-            objects.append(tmp_list_val)
+            if tmp_list_val is not None:
+                objects.append(tmp_list_val)
         elif tag == ASN_U_OCTETSTRING or tag == ASN_A_IPADDRESS:
             # bytes_val = c_octetstring_decode(stream_char, length)
             bytes_val = <bytes> stream_char[:length]
             objects.append(bytes_val)
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
+        elif tag == ASN_U_EOC:
+            return
         else:
             raise NotImplementedError("unknown tag=%s" % tag)
 
