@@ -49,11 +49,11 @@ def resolve(hosts):
         for host in hosts:
             host_ips = res.setdefault(host, list())
             try:
-                host_ip = socket.gethostbyname(host)
+                ips = [x[4][0] for x in socket.getaddrinfo(host, 0, proto=socket.IPPROTO_TCP)]
             except socket.gaierror:
                 logger.error("unable to resolve %s. skipping this host" % host)
                 continue
-            host_ips.append(host_ip)
+            host_ips.extend(ips)
     return res
 
 
@@ -115,8 +115,9 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
     epoll = poll()
     socket_count = min((MAX_SOCKETS_COUNT, len(target_info_r)))
     for _ in range(socket_count):
-        new_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        new_sock.bind(('0.0.0.0', 0))
+        new_sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+        new_sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, False)
+        new_sock.bind(("::", 0))
         socket_map[new_sock.fileno()] = new_sock
         epoll.register(new_sock, POLLOUT)
 
