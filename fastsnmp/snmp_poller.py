@@ -87,9 +87,12 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
 
     for fqdn, ips in list(target_info_r.items()):
         if ips:
-            target_info[ips[0]] = fqdn
-            varbinds_cache[ips[0]] = collections.UserDict()
-            varbinds_cache[ips[0]].by_oids = {}
+            ip = ips[0]
+            if ":" not in ip:
+                ip = "::ffff:" + ip
+            target_info[ip] = fqdn
+            varbinds_cache[ip] = collections.UserDict()
+            varbinds_cache[ip].by_oids = {}
         else:
             logger.error("unable to resolve %s. skipping this host", fqdn)
             del target_info_r[fqdn]
@@ -101,13 +104,18 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
             oids_group = tuple(oids_group)
         target_oid_group = (oids_group, oids_group)
         for fqdn, ips in target_info_r.items():
-            varbinds_cache[ips[0]][start_reqid] = target_oid_group
-            varbinds_cache[ips[0]].by_oids[target_oid_group] = start_reqid
+            ip = ips[0]
+            if ":" not in ip:
+                ip = "::ffff:" + ip
+            varbinds_cache[ip][start_reqid] = target_oid_group
+            varbinds_cache[ip].by_oids[target_oid_group] = start_reqid
         start_reqid += 10000
 
     # add initial jobs
     for ip, poll_data in varbinds_cache.items():
         for reqid in poll_data:
+            if ":" not in ip:
+                ip = "::ffff:" + ip
             job_queue.put((ip, reqid))
 
     # preparation of sockets
