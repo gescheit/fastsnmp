@@ -788,6 +788,7 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
     # if some oid in requested oids is not supported, column with it is index will
     # be filled with another oid. need to skip
     last_seen_index = {}
+    first_seen_index = {}
 
     for var_bind_pos in range(var_bind_list_len):
         item = var_bind_list[var_bind_pos]
@@ -808,6 +809,9 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
         if oid.startswith(main_oid):
             index_part = oid[orig_main_oids_len[main_oids_pos]+1:]
             last_seen_index[main_oids_pos] = index_part
+            if main_oids_pos not in first_seen_index:
+                first_seen_index[main_oids_pos] = index_part
+
             result.append([orig_main_oids[main_oids_pos], index_part, value])
         else:
             skip_column[main_oids_pos] = True
@@ -820,9 +824,17 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
                 if pos in skip_column:
                     continue
                 next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
+                if int(last_seen_index[pos]) < int(first_seen_index[pos]):
+                    raise Exception("not increasing %s vs %s for %s" % (last_seen_index[pos],
+                                                                        first_seen_index[pos],
+                                                                        orig_main_oids[pos]))
         else:
+            for pos in rest_oids_positions:
+                if int(last_seen_index[pos]) < int(first_seen_index[pos]):
+                    raise Exception("not increasing %s vs %s for %s" % (last_seen_index[pos],
+                                                                        first_seen_index[pos],
+                                                                        orig_main_oids[pos]))
             next_oids = [
                 "%s.%s" % (orig_main_oids[p], last_seen_index[p]) for p in rest_oids_positions]
-
     return result, tuple(next_oids)
 
