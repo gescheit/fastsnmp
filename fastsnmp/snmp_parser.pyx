@@ -769,7 +769,7 @@ def msg_decode(stream):
 def check_is_growing(str oid_start not None, str oid_finish not None):
     cdef bint is_growing = True
     if "." in oid_start:
-        if oid_finish.split(".") < oid_start.split("."):
+        if [int(x) for x in oid_finish.split(".")] < [int(x) for x in oid_start.split(".")]:
             is_growing = False
     elif int(oid_finish) < int(oid_start):
         is_growing = False

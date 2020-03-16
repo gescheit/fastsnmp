@@ -255,7 +255,7 @@ class TestSnmpParser(unittest.TestCase):
             ['123456', '53453', False],
             ['1.2.1.1', '1.2.2.2', True],
             ['1.3.1.1', '1.2.2.2', False],
-
+            ['8.2.1.0', '23.7.0.0', True]
         ]
         for start_oid, finish_oid, exp_res in test_data:
             res = snmp_parser.check_is_growing(start_oid, finish_oid)
