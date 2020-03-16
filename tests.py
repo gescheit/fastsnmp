@@ -249,6 +249,18 @@ class TestSnmpParser(unittest.TestCase):
         self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
         self.assertEqual(result, expected_res)
 
+    def test_check_is_growing(self):
+        test_data = [
+            ['1', '2', True],
+            ['123456', '53453', False],
+            ['1.2.1.1', '1.2.2.2', True],
+            ['1.3.1.1', '1.2.2.2', False],
+
+        ]
+        for start_oid, finish_oid, exp_res in test_data:
+            res = snmp_parser.check_is_growing(start_oid, finish_oid)
+            self.assertEqual(res, exp_res)
+
     def _test_parse_varbind_perf(self):
         result = []
         for i in range(100):

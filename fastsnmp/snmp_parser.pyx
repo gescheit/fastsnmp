@@ -766,6 +766,14 @@ def msg_decode(stream):
     req_id, error_status, error_index, varbinds = data
     return req_id, error_status, error_index, varbinds
 
+def check_is_growing(str oid_start not None, str oid_finish not None):
+    cdef bint is_growing = True
+    if "." in oid_start:
+        if oid_finish.split(".") < oid_start.split("."):
+            is_growing = False
+    elif int(oid_finish) < int(oid_start):
+        is_growing = False
+    return is_growing
 
 def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tuple oids_to_poll not None):
     cdef str oid, main_oid, index_part
@@ -824,13 +832,13 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
                 if pos in skip_column:
                     continue
                 next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
-                if int(last_seen_index[pos]) < int(first_seen_index[pos]):
+                if not check_is_growing(first_seen_index[pos], last_seen_index[pos]):
                     raise Exception("not increasing %s vs %s for %s" % (last_seen_index[pos],
                                                                         first_seen_index[pos],
                                                                         orig_main_oids[pos]))
         else:
             for pos in rest_oids_positions:
-                if int(last_seen_index[pos]) < int(first_seen_index[pos]):
+                if not check_is_growing(first_seen_index[pos], last_seen_index[pos]):
                     raise Exception("not increasing %s vs %s for %s" % (last_seen_index[pos],
                                                                         first_seen_index[pos],
                                                                         orig_main_oids[pos]))
