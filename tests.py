@@ -15,7 +15,7 @@ class TestSnmpParser(unittest.TestCase):
         [-1, b'\xff'],
         [-136, b'\xff\x78'],
         [-1390, b'\xfa\x92'],
-        [4294970001,  b'\x01\x00\x00\n\x91'],
+        [4294970001, b'\x01\x00\x00\n\x91'],
     ]
     uints = [
         [0, b'\x00'],
@@ -43,12 +43,12 @@ class TestSnmpParser(unittest.TestCase):
     ]
     length = [
         [(15, 1), b'\x0f'],
-        #[(127, 2), b'\x81\x7f'],  # long form
+        # [(127, 2), b'\x81\x7f'],  # long form
         [(127, 1), b'\x7f'],
         [(129, 2), b'\x81\x81'],
         [(1256, 3), b'\x82\x04\xe8'],
     ]
-    
+
     def test_integer_encode(self):
         for i, enc in self.ints:
             int_encoded = snmp_parser.integer_encode(i)
@@ -225,7 +225,9 @@ class TestSnmpParser(unittest.TestCase):
                   ]
         main_oids = ('1.2.1', '1.2.2', '1.2.3')
         prev_oids_to_poll = ('1.2.1', '1.2.2', '1.2.3')
-        expected_res = [['1.2.1', '1', 1], ['1.2.2', '1', 1], ['1.2.3', '1', 1], ['1.2.1', '2', 1], ['1.2.2', '2', 1], ['1.2.3', '2', 1], ['1.2.1', '3', 1], ['1.2.2', '3', 1], ['1.2.3', '3', 1], ['1.2.1', '4', 1], ['1.2.2', '4', 1], ['1.2.3', '4', 1]]
+        expected_res = [['1.2.1', '1', 1], ['1.2.2', '1', 1], ['1.2.3', '1', 1], ['1.2.1', '2', 1], ['1.2.2', '2', 1],
+                        ['1.2.3', '2', 1], ['1.2.1', '3', 1], ['1.2.2', '3', 1], ['1.2.3', '3', 1], ['1.2.1', '4', 1],
+                        ['1.2.2', '4', 1], ['1.2.3', '4', 1]]
         expected_oids_to_poll = ('1.2.1.4', '1.2.2.4', '1.2.3.4')
         result, next_oids_to_poll = snmp_parser.parse_varbind(result, main_oids, prev_oids_to_poll)
         self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
@@ -240,7 +242,8 @@ class TestSnmpParser(unittest.TestCase):
                   ]
         main_oids = ('1.2.1', '1.2.2', '1.2.3')
         prev_oids_to_poll = ('1.2.1', '1.2.2', '1.2.3')
-        expected_res = [['1.2.1', '1', 1], ['1.2.2', '1', 1], ['1.2.3', '1', 1], ['1.2.1', '2', 1], ['1.2.2', '2', 1], ['1.2.3', '2', 1], ['1.2.2', '3', 1], ['1.2.3', '3', 1], ['1.2.2', '4', 1], ['1.2.3', '4', 1]]
+        expected_res = [['1.2.1', '1', 1], ['1.2.2', '1', 1], ['1.2.3', '1', 1], ['1.2.1', '2', 1], ['1.2.2', '2', 1],
+                        ['1.2.3', '2', 1], ['1.2.2', '3', 1], ['1.2.3', '3', 1], ['1.2.2', '4', 1], ['1.2.3', '4', 1]]
         expected_oids_to_poll = (None, '1.2.2.4', '1.2.3.4')
         result, next_oids_to_poll = snmp_parser.parse_varbind(result, main_oids, prev_oids_to_poll)
         self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
@@ -250,7 +253,7 @@ class TestSnmpParser(unittest.TestCase):
         result = []
         for i in range(100):
             for y in range(10):
-                result.append(['1.2.%s.%s' % (y, i), i+3])
+                result.append(['1.2.%s.%s' % (y, i), i + 3])
 
         main_oids = tuple(['1.2.%s' % i for i in range(10)])
         oids_to_poll = main_oids
@@ -261,6 +264,7 @@ class TestSnmpParser(unittest.TestCase):
 
         s = pstats.Stats("Profile.prof")
         s.strip_dirs().sort_stats("time").print_stats()
+
 
 if __name__ == "__main__":
     unittest.main()
