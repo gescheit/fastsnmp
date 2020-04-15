@@ -160,6 +160,8 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
                     data, remotehost = socket_map[fileno].recvfrom(socksize)
                     ts = time()
                     host_ip = remotehost[0]
+                    if ":" not in host_ip:
+                        host_ip = "::ffff:" + host_ip
                     try:
                         pdudata_reqid, error_status, error_index, var_bind_list = snmp_parser.msg_decode(data)
                     except Exception as e:
