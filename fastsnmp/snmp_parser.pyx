@@ -1,8 +1,5 @@
 # cython: nonecheck=False, boundscheck=False, wraparound=False, language_level=3
 # cython: c_string_type=str, c_string_encoding=ascii
-# cython: profile=True
-# adds doc-strings for sphinx
-# -*- coding: utf-8 -*-
 # based on https://pypi.python.org/pypi/libsnmp/
 
 # X.690
@@ -12,6 +9,7 @@ import cython
 from cpython.tuple cimport PyTuple_New, PyTuple_SET_ITEM
 from cpython.int cimport PyInt_FromLong
 from cpython.ref cimport Py_INCREF
+from cpython.unicode cimport PyUnicode_DecodeASCII
 from libc.stdio cimport sprintf
 from libc.string cimport memcpy
 from itertools import cycle
@@ -151,6 +149,19 @@ cdef struct SID12_t:
 cdef SID12_ti *sid12i = [{'SID1': 0, 'SID2': 0},{'SID1': 0, 'SID2': 1},{'SID1': 0, 'SID2': 2},{'SID1': 0, 'SID2': 3},{'SID1': 0, 'SID2': 4},{'SID1': 0, 'SID2': 5},{'SID1': 0, 'SID2': 6},{'SID1': 0, 'SID2': 7},{'SID1': 0, 'SID2': 8},{'SID1': 0, 'SID2': 9},{'SID1': 0, 'SID2': 10},{'SID1': 0, 'SID2': 11},{'SID1': 0, 'SID2': 12},{'SID1': 0, 'SID2': 13},{'SID1': 0, 'SID2': 14},{'SID1': 0, 'SID2': 15},{'SID1': 0, 'SID2': 16},{'SID1': 0, 'SID2': 17},{'SID1': 0, 'SID2': 18},{'SID1': 0, 'SID2': 19},{'SID1': 0, 'SID2': 20},{'SID1': 0, 'SID2': 21},{'SID1': 0, 'SID2': 22},{'SID1': 0, 'SID2': 23},{'SID1': 0, 'SID2': 24},{'SID1': 0, 'SID2': 25},{'SID1': 0, 'SID2': 26},{'SID1': 0, 'SID2': 27},{'SID1': 0, 'SID2': 28},{'SID1': 0, 'SID2': 29},{'SID1': 0, 'SID2': 30},{'SID1': 0, 'SID2': 31},{'SID1': 0, 'SID2': 32},{'SID1': 0, 'SID2': 33},{'SID1': 0, 'SID2': 34},{'SID1': 0, 'SID2': 35},{'SID1': 0, 'SID2': 36},{'SID1': 0, 'SID2': 37},{'SID1': 0, 'SID2': 38},{'SID1': 0, 'SID2': 39},{'SID1': 1, 'SID2': 0},{'SID1': 1, 'SID2': 1},{'SID1': 1, 'SID2': 2},{'SID1': 1, 'SID2': 3},{'SID1': 1, 'SID2': 4},{'SID1': 1, 'SID2': 5},{'SID1': 1, 'SID2': 6},{'SID1': 1, 'SID2': 7},{'SID1': 1, 'SID2': 8},{'SID1': 1, 'SID2': 9},{'SID1': 1, 'SID2': 10},{'SID1': 1, 'SID2': 11},{'SID1': 1, 'SID2': 12},{'SID1': 1, 'SID2': 13},{'SID1': 1, 'SID2': 14},{'SID1': 1, 'SID2': 15},{'SID1': 1, 'SID2': 16},{'SID1': 1, 'SID2': 17},{'SID1': 1, 'SID2': 18},{'SID1': 1, 'SID2': 19},{'SID1': 1, 'SID2': 20},{'SID1': 1, 'SID2': 21},{'SID1': 1, 'SID2': 22},{'SID1': 1, 'SID2': 23},{'SID1': 1, 'SID2': 24},{'SID1': 1, 'SID2': 25},{'SID1': 1, 'SID2': 26},{'SID1': 1, 'SID2': 27},{'SID1': 1, 'SID2': 28},{'SID1': 1, 'SID2': 29},{'SID1': 1, 'SID2': 30},{'SID1': 1, 'SID2': 31},{'SID1': 1, 'SID2': 32},{'SID1': 1, 'SID2': 33},{'SID1': 1, 'SID2': 34},{'SID1': 1, 'SID2': 35},{'SID1': 1, 'SID2': 36},{'SID1': 1, 'SID2': 37},{'SID1': 1, 'SID2': 38},{'SID1': 1, 'SID2': 39},{'SID1': 2, 'SID2': 0},{'SID1': 2, 'SID2': 1},{'SID1': 2, 'SID2': 2},{'SID1': 2, 'SID2': 3},{'SID1': 2, 'SID2': 4},{'SID1': 2, 'SID2': 5},{'SID1': 2, 'SID2': 6},{'SID1': 2, 'SID2': 7},{'SID1': 2, 'SID2': 8},{'SID1': 2, 'SID2': 9},{'SID1': 2, 'SID2': 10},{'SID1': 2, 'SID2': 11},{'SID1': 2, 'SID2': 12},{'SID1': 2, 'SID2': 13},{'SID1': 2, 'SID2': 14},{'SID1': 2, 'SID2': 15},{'SID1': 2, 'SID2': 16},{'SID1': 2, 'SID2': 17},{'SID1': 2, 'SID2': 18},{'SID1': 2, 'SID2': 19},{'SID1': 2, 'SID2': 20},{'SID1': 2, 'SID2': 21},{'SID1': 2, 'SID2': 22},{'SID1': 2, 'SID2': 23},{'SID1': 2, 'SID2': 24},{'SID1': 2, 'SID2': 25},{'SID1': 2, 'SID2': 26},{'SID1': 2, 'SID2': 27},{'SID1': 2, 'SID2': 28},{'SID1': 2, 'SID2': 29},{'SID1': 2, 'SID2': 30},{'SID1': 2, 'SID2': 31},{'SID1': 2, 'SID2': 32},{'SID1': 2, 'SID2': 33},{'SID1': 2, 'SID2': 34},{'SID1': 2, 'SID2': 35},{'SID1': 2, 'SID2': 36},{'SID1': 2, 'SID2': 37},{'SID1': 2, 'SID2': 38},{'SID1': 2, 'SID2': 39}]
 cdef SID12_t *sid12s = [{'str': b'0.0\x00', 'strlen': 3},{'str': b'0.1\x00', 'strlen': 3},{'str': b'0.2\x00', 'strlen': 3},{'str': b'0.3\x00', 'strlen': 3},{'str': b'0.4\x00', 'strlen': 3},{'str': b'0.5\x00', 'strlen': 3},{'str': b'0.6\x00', 'strlen': 3},{'str': b'0.7\x00', 'strlen': 3},{'str': b'0.8\x00', 'strlen': 3},{'str': b'0.9\x00', 'strlen': 3},{'str': b'0.10', 'strlen': 4},{'str': b'0.11', 'strlen': 4},{'str': b'0.12', 'strlen': 4},{'str': b'0.13', 'strlen': 4},{'str': b'0.14', 'strlen': 4},{'str': b'0.15', 'strlen': 4},{'str': b'0.16', 'strlen': 4},{'str': b'0.17', 'strlen': 4},{'str': b'0.18', 'strlen': 4},{'str': b'0.19', 'strlen': 4},{'str': b'0.20', 'strlen': 4},{'str': b'0.21', 'strlen': 4},{'str': b'0.22', 'strlen': 4},{'str': b'0.23', 'strlen': 4},{'str': b'0.24', 'strlen': 4},{'str': b'0.25', 'strlen': 4},{'str': b'0.26', 'strlen': 4},{'str': b'0.27', 'strlen': 4},{'str': b'0.28', 'strlen': 4},{'str': b'0.29', 'strlen': 4},{'str': b'0.30', 'strlen': 4},{'str': b'0.31', 'strlen': 4},{'str': b'0.32', 'strlen': 4},{'str': b'0.33', 'strlen': 4},{'str': b'0.34', 'strlen': 4},{'str': b'0.35', 'strlen': 4},{'str': b'0.36', 'strlen': 4},{'str': b'0.37', 'strlen': 4},{'str': b'0.38', 'strlen': 4},{'str': b'0.39', 'strlen': 4},{'str': b'1.0\x00', 'strlen': 3},{'str': b'1.1\x00', 'strlen': 3},{'str': b'1.2\x00', 'strlen': 3},{'str': b'1.3\x00', 'strlen': 3},{'str': b'1.4\x00', 'strlen': 3},{'str': b'1.5\x00', 'strlen': 3},{'str': b'1.6\x00', 'strlen': 3},{'str': b'1.7\x00', 'strlen': 3},{'str': b'1.8\x00', 'strlen': 3},{'str': b'1.9\x00', 'strlen': 3},{'str': b'1.10', 'strlen': 4},{'str': b'1.11', 'strlen': 4},{'str': b'1.12', 'strlen': 4},{'str': b'1.13', 'strlen': 4},{'str': b'1.14', 'strlen': 4},{'str': b'1.15', 'strlen': 4},{'str': b'1.16', 'strlen': 4},{'str': b'1.17', 'strlen': 4},{'str': b'1.18', 'strlen': 4},{'str': b'1.19', 'strlen': 4},{'str': b'1.20', 'strlen': 4},{'str': b'1.21', 'strlen': 4},{'str': b'1.22', 'strlen': 4},{'str': b'1.23', 'strlen': 4},{'str': b'1.24', 'strlen': 4},{'str': b'1.25', 'strlen': 4},{'str': b'1.26', 'strlen': 4},{'str': b'1.27', 'strlen': 4},{'str': b'1.28', 'strlen': 4},{'str': b'1.29', 'strlen': 4},{'str': b'1.30', 'strlen': 4},{'str': b'1.31', 'strlen': 4},{'str': b'1.32', 'strlen': 4},{'str': b'1.33', 'strlen': 4},{'str': b'1.34', 'strlen': 4},{'str': b'1.35', 'strlen': 4},{'str': b'1.36', 'strlen': 4},{'str': b'1.37', 'strlen': 4},{'str': b'1.38', 'strlen': 4},{'str': b'1.39', 'strlen': 4},{'str': b'2.0\x00', 'strlen': 3},{'str': b'2.1\x00', 'strlen': 3},{'str': b'2.2\x00', 'strlen': 3},{'str': b'2.3\x00', 'strlen': 3},{'str': b'2.4\x00', 'strlen': 3},{'str': b'2.5\x00', 'strlen': 3},{'str': b'2.6\x00', 'strlen': 3},{'str': b'2.7\x00', 'strlen': 3},{'str': b'2.8\x00', 'strlen': 3},{'str': b'2.9\x00', 'strlen': 3},{'str': b'2.10', 'strlen': 4},{'str': b'2.11', 'strlen': 4},{'str': b'2.12', 'strlen': 4},{'str': b'2.13', 'strlen': 4},{'str': b'2.14', 'strlen': 4},{'str': b'2.15', 'strlen': 4},{'str': b'2.16', 'strlen': 4},{'str': b'2.17', 'strlen': 4},{'str': b'2.18', 'strlen': 4},{'str': b'2.19', 'strlen': 4},{'str': b'2.20', 'strlen': 4},{'str': b'2.21', 'strlen': 4},{'str': b'2.22', 'strlen': 4},{'str': b'2.23', 'strlen': 4},{'str': b'2.24', 'strlen': 4},{'str': b'2.25', 'strlen': 4},{'str': b'2.26', 'strlen': 4},{'str': b'2.27', 'strlen': 4},{'str': b'2.28', 'strlen': 4},{'str': b'2.29', 'strlen': 4},{'str': b'2.30', 'strlen': 4},{'str': b'2.31', 'strlen': 4},{'str': b'2.32', 'strlen': 4},{'str': b'2.33', 'strlen': 4},{'str': b'2.34', 'strlen': 4},{'str': b'2.35', 'strlen': 4},{'str': b'2.36', 'strlen': 4},{'str': b'2.37', 'strlen': 4},{'str': b'2.38', 'strlen': 4},{'str': b'2.39', 'strlen': 4},]
 
+cdef char **INT_TO_STRING = [
+    b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9',
+    b'10', b'11', b'12', b'13', b'14', b'15', b'16', b'17', b'18', b'19',
+    b'20', b'21', b'22', b'23', b'24', b'25', b'26', b'27', b'28', b'29',
+    b'30', b'31', b'32', b'33', b'34', b'35', b'36', b'37', b'38', b'39',
+    b'40', b'41', b'42', b'43', b'44', b'45', b'46', b'47', b'48', b'49',
+    b'50', b'51', b'52', b'53', b'54', b'55', b'56', b'57', b'58', b'59',
+    b'60', b'61', b'62', b'63', b'64', b'65', b'66', b'67', b'68', b'69',
+    b'70', b'71', b'72', b'73', b'74', b'75', b'76', b'77', b'78', b'79',
+    b'80', b'81', b'82', b'83', b'84', b'85', b'86', b'87', b'88', b'89',
+    b'90', b'91', b'92', b'93', b'94', b'95', b'96', b'97', b'98', b'99',
+]
+
 cdef inline int primitive_decode(char *stream, size_t stream_len, uint64_t *result, size_t *result_len):
     cdef size_t i
     cdef uint8_t sid
@@ -171,8 +182,10 @@ cdef inline int primitive_decode(char *stream, size_t stream_len, uint64_t *resu
 
 cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, char *out, size_t *out_length) except -1:
     cdef uint64_t result[122]
-    cdef size_t n, ret_len, sid12_enc_len, result_len=0
+    cdef uint64_t oid_part
+    cdef size_t n, tmp_n, cpy_len, ret_len, sid12_enc_len, result_len=0
     cdef SID12_t tmp_sid
+    cdef char *oid_part_char
 
     if <size_t>stream[0] > 127:
         return -1
@@ -188,7 +201,20 @@ cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, cha
     primitive_decode((<char *>stream)+1, stream_len-1, result, &result_len)
 
     for i in range(result_len):
-        n = sprintf(out, ".%ld", result[i])
+        oid_part = result[i]
+        out[0] = b'.'
+        n = 1
+        if oid_part < 100:
+            oid_part_char = INT_TO_STRING[oid_part]
+            if oid_part < 10:
+                cpy_len = 1
+            else:
+                cpy_len = 2
+            n += cpy_len
+            memcpy(out+1, oid_part_char, cpy_len)
+        else:
+            tmp_n = sprintf(out, "%ld", oid_part)
+            n += tmp_n
         out += n
         out_length[0] += n
     return 0
@@ -496,7 +522,7 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
     cdef const unsigned char *stream_char = stream
     cdef list objects=[], tmp_list_val
     cdef tuple tmp_tuple_val
-    cdef str tmp_objectid
+    cdef str object_str
 
     cdef char ret_str[MAX_OID_LEN_STR]
     cdef size_t ret_length
@@ -519,7 +545,10 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             objects.append(tmp_uint_val)
         elif tag == ASN_U_OBJECTID:
             objectid_decode_str(stream_char, length, ret_str, &ret_length)
-            objects.append(<str>ret_str[:ret_length])
+            if ret_length > MAX_OID_LEN_STR:
+                raise Exception("too long oid")
+            object_str = PyUnicode_DecodeASCII(ret_str, ret_length, 'ignore')
+            objects.append(object_str)
         elif tag == ASN_U_NULL:
             objects.append(None)
         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
@@ -542,7 +571,7 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
     return objects
 
 
-cdef int length_decode_c(const unsigned char *stream, size_t *length, size_t *enc_len):
+cdef inline int length_decode_c(const unsigned char *stream, size_t *length, size_t *enc_len):
     """
     X.690 8,1,3
     """
