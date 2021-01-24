@@ -5,6 +5,9 @@ import pstats
 import cProfile
 from fastsnmp import snmp_parser
 
+OID1 = "1.2.1"
+OID2 = "1.2.2"
+OID3 = "1.2.3"
 
 class TestSnmpParser(unittest.TestCase):
     strs = [
@@ -245,6 +248,22 @@ class TestSnmpParser(unittest.TestCase):
         expected_res = [['1.2.1', '1', 1], ['1.2.2', '1', 1], ['1.2.3', '1', 1], ['1.2.1', '2', 1], ['1.2.2', '2', 1],
                         ['1.2.3', '2', 1], ['1.2.2', '3', 1], ['1.2.3', '3', 1], ['1.2.2', '4', 1], ['1.2.3', '4', 1]]
         expected_oids_to_poll = (None, '1.2.2.4', '1.2.3.4')
+        result, next_oids_to_poll = snmp_parser.parse_varbind(result, main_oids, prev_oids_to_poll)
+        self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
+        self.assertEqual(result, expected_res)
+
+    def test_parse_varbind_with_none(self):
+        result = [[OID1 + '.1', None], [OID2 + '.1', 1], [OID3 + '.1', 1],
+                  [OID1 + '.2', 1], [OID2 + '.2', None], [OID3 + '.2', 1],
+                  [OID1 + '.3', 1], [OID2 + '.3', 1], [OID3 + '.3', None],
+                  ]
+        main_oids = (OID1, OID2, OID3)
+        prev_oids_to_poll = (OID1, OID2, OID3)
+        expected_res = [[OID1, '1', None], [OID2, '1', 1], [OID3, '1', 1],
+                        [OID1, '2', 1], [OID2, '2', None], [OID3, '2', 1],
+                        [OID1, '3', 1], [OID2, '3', 1], [OID3, '3', None],
+                        ]
+        expected_oids_to_poll = (OID1 + '.3', OID2 + '.3', OID3 + '.3')
         result, next_oids_to_poll = snmp_parser.parse_varbind(result, main_oids, prev_oids_to_poll)
         self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
         self.assertEqual(result, expected_res)

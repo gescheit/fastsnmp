@@ -838,8 +838,6 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
         if not isinstance(oid, str):
             raise VarBindContentException("expected oid in str. got %r" % oid)
         main_oids_pos = next(main_oids_positions)
-        if value is None:
-            skip_column[main_oids_pos] = True
         if main_oids_pos in skip_column:
             continue
         main_oid = orig_main_oids_doted[main_oids_pos]
