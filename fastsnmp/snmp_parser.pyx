@@ -37,6 +37,7 @@ class NoSuchObject:
 class EndOfMibView:
     pass
 
+end_of_mib_view = EndOfMibView()
 
 DEF _UNIVERSAL = 0x00
 DEF _APPLICATION = 0x40
@@ -565,6 +566,8 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             if len(opaque_obj) != 1:
                 raise Exception("opaque len %s != 1" % len(opaque_obj))
             objects.append(opaque_obj[0])
+        elif tag == ASN_U_END_OF_MIB_VIEW:
+            objects.append(end_of_mib_view)
         elif tag == ASN_U_FLOAT:
             bytes_val = <bytes> stream_char[:length]
             if length == 4:
@@ -862,6 +865,8 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
         if not isinstance(oid, str):
             raise VarBindContentException("expected oid in str. got %r" % oid)
         main_oids_pos = next(main_oids_positions)
+        if value is end_of_mib_view:
+            skip_column[main_oids_pos] = True
         if main_oids_pos in skip_column:
             continue
         main_oid = orig_main_oids_doted[main_oids_pos]

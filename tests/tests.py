@@ -268,6 +268,22 @@ class TestSnmpParser(unittest.TestCase):
         self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
         self.assertEqual(result, expected_res)
 
+    def test_parse_varbind_with_end_of_mib(self):
+        in_data = [[OID1 + '.1', 1], [OID2 + '.1', 1], [OID3 + '.1', 1],
+                   [OID1 + '.1', snmp_parser.end_of_mib_view], [OID2 + '.1', snmp_parser.end_of_mib_view], [OID3 + '.2', 1],
+                  ]
+        main_oids = (OID1, OID2, OID3)
+        prev_oids_to_poll = (OID1, OID2, OID3)
+        expected_res = [[OID1, '1', 1],
+                        [OID2, '1', 1],
+                        [OID3, '1', 1],
+                        [OID3, '2', 1],
+                        ]
+        expected_oids_to_poll = (None, None, OID3 + ".2")
+        result, next_oids_to_poll = snmp_parser.parse_varbind(in_data, main_oids, prev_oids_to_poll)
+        self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
+        self.assertEqual(result, expected_res)
+
     def test_check_is_growing(self):
         test_data = [
             ['1', '2', True],
