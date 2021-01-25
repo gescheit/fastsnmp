@@ -119,186 +119,172 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
             job_queue.put((ip, reqid))
 
     # preparation of sockets
-    socket_map = {}
     epoll = poll()
-    socket_count = min((MAX_SOCKETS_COUNT, len(target_info_r)))
-    for _ in range(socket_count):
-        new_sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-        new_sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, False)
-        new_sock.bind(("::", 0))
-        socket_map[new_sock.fileno()] = new_sock
-        epoll.register(new_sock, POLLOUT)
+    new_sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+    new_sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, False)
+    new_sock.bind(("::", 0))
+    new_sock.setblocking(False)
+    epoll.register(new_sock, POLLIN)
 
     # main loop
     while True:
-        try:
-            events = epoll.poll(0.1)
-            for fileno, event in events:
-                if event & POLLOUT:
-                    fdfmt = POLLIN
-                    if not job_queue.empty():
-                        host, pdudata_reqid = job_queue.get()
-                        oids_to_poll, main_oids = varbinds_cache[host][pdudata_reqid]
-                        q = (pdudata_reqid, oids_to_poll)
-                        if q in reqid_to_msg:
-                            message = reqid_to_msg[q]
-                        else:
-                            message = snmp_parser.msg_encode(pdudata_reqid, community, oids_to_poll, max_repetitions=20,
-                                                             msg_type=msg_type)
-                            reqid_to_msg[q] = message
-                        socket_map[fileno].sendto(message, (host, 161))
+        events = epoll.poll(0.01)
+        if not job_queue.empty():
+            host, pdudata_reqid = job_queue.get()
+            oids_to_poll, main_oids = varbinds_cache[host][pdudata_reqid]
+            q = (pdudata_reqid, oids_to_poll)
+            if q in reqid_to_msg:
+                message = reqid_to_msg[q]
+            else:
+                message = snmp_parser.msg_encode(pdudata_reqid, community, oids_to_poll, max_repetitions=5,
+                                                 msg_type=msg_type)
+                reqid_to_msg[q] = message
+            new_sock.sendto(message, (host, 161))
 
-                        pending_query[(host, pdudata_reqid)] = int(time())
+            pending_query[(host, pdudata_reqid)] = int(time())
 
-                        if DEBUG:
-                            logger.debug('sendto %s reqid=%s get oids=%s', host, pdudata_reqid, oids_to_poll)
-                        job_queue.task_done()
-                    if not job_queue.empty():
-                        fdfmt = fdfmt | POLLOUT
-                    epoll.modify(fileno, fdfmt)
-                elif event & POLLIN:
-                    data, remotehost = socket_map[fileno].recvfrom(socksize)
-                    ts = time()
-                    host_ip = remotehost[0]
-                    if ":" not in host_ip:
-                        host_ip = "::ffff:" + host_ip
-                    try:
-                        pdudata_reqid, error_status, error_index, var_bind_list = snmp_parser.msg_decode(data)
-                    except Exception as e:
-                        logger.critical("%r. unable to decode PDU from %s. data=%r", e, host_ip, data)
-                        continue
+            if DEBUG:
+                logger.debug('sendto %s reqid=%s get oids=%s', host, pdudata_reqid, oids_to_poll)
+            job_queue.task_done()
 
-                    if pending_query.pop((host_ip, pdudata_reqid), None) is None:
-                        if DEBUG:
-                            logger.debug("received answer after timeout from %s reqid=%s", host_ip, pdudata_reqid)
-                        continue
+        for fileno, event in events:
+            if event & POLLERR:
+                logger.critical('socket error')
+                raise Exception('epoll error')
+            while True:
+                try:
+                    data, remotehost = new_sock.recvfrom(socksize)
+                except BlockingIOError:
+                    break
+                ts = time()
+                host_ip = remotehost[0]
+                if ":" not in host_ip:
+                    host_ip = "::ffff:" + host_ip
+                try:
+                    pdudata_reqid, error_status, error_index, var_bind_list = snmp_parser.msg_decode(data)
+                except Exception as e:
+                    logger.critical("%r. unable to decode PDU from %s. data=%r", e, host_ip, data)
+                    continue
 
-                    if error_status:
-                        logger.error('%s get error_status %s at %s. query=%s',
-                                     target_info[host_ip],
-                                     error_status, error_index,
-                                     varbinds_cache[host_ip][pdudata_reqid][0])
-                        continue
+                if pending_query.pop((host_ip, pdudata_reqid), None) is None:
                     if DEBUG:
-                        logger.debug('%s recv reqid=%s' % (host_ip, pdudata_reqid))
-                    if pdudata_reqid not in varbinds_cache[host_ip]:
+                        logger.debug("received answer after timeout from %s reqid=%s", host_ip, pdudata_reqid)
+                    continue
+
+                if error_status:
+                    logger.error('%s get error_status %s at %s. query=%s',
+                                 target_info[host_ip],
+                                 error_status, error_index,
+                                 varbinds_cache[host_ip][pdudata_reqid][0])
+                    continue
+                if DEBUG:
+                    logger.debug('%s recv reqid=%s' % (host_ip, pdudata_reqid))
+                if pdudata_reqid not in varbinds_cache[host_ip]:
+                    if DEBUG:
+                        logger.debug('received unknown reqid=%s for host=%s. skipping', pdudata_reqid, host_ip)
+                    continue
+                oids_to_poll, main_oids = varbinds_cache[host_ip][pdudata_reqid]
+
+                main_oids_len = len(main_oids)
+                main_oids_positions = cycle(range(main_oids_len))
+                var_bind_list_len = len(var_bind_list)
+
+                skip_column = {}
+                # if some oid in requested oids is not supported, column with it is index will
+                # be filled with another oid. need to skip
+                last_seen_index = {}
+
+                for var_bind_pos in range(var_bind_list_len):
+                    oid, value = var_bind_list[var_bind_pos]
+                    # oids in received var_bind_list in round-robin order respectively query
+                    main_oids_pos = next(main_oids_positions)
+                    if value is None or value is snmp_parser.end_of_mib_view:
                         if DEBUG:
-                            logger.debug('received unknown reqid=%s for host=%s. skipping', pdudata_reqid, host_ip)
+                            logger.debug('found none value %s %s %s' % (host_ip, oid, value))
+                        skip_column[main_oids_pos] = True
+                    if main_oids_pos in skip_column:
                         continue
-                    oids_to_poll, main_oids = varbinds_cache[host_ip][pdudata_reqid]
-
-                    main_oids_len = len(main_oids)
-                    main_oids_positions = cycle(range(main_oids_len))
-                    var_bind_list_len = len(var_bind_list)
-
-                    skip_column = {}
-                    # if some oid in requested oids is not supported, column with it is index will
-                    # be filled with another oid. need to skip
-                    last_seen_index = {}
-
-                    for var_bind_pos in range(var_bind_list_len):
-                        oid, value = var_bind_list[var_bind_pos]
-                        # oids in received var_bind_list in round-robin order respectively query
-                        main_oids_pos = next(main_oids_positions)
-                        if value is None:
-                            if DEBUG:
-                                logger.debug('found none value %s %s %s' % (host_ip, oid, value))
-                            skip_column[main_oids_pos] = True
-                        if main_oids_pos in skip_column:
-                            continue
-                        main_oid = main_oids[main_oids_pos]
-                        if msg_type == "GetBulk":
-                            if oid.startswith(main_oid + '.'):
-                                index_part = oid[len(main_oid) + 1:]
-                                last_seen_index[main_oids_pos] = index_part
-                                if include_ts:
-                                    yield (target_info[host_ip], main_oid, index_part, value, ts)
-                                else:
-                                    yield (target_info[host_ip], main_oid, index_part, value)
+                    main_oid = main_oids[main_oids_pos]
+                    if msg_type == "GetBulk":
+                        if oid.startswith(main_oid + '.'):
+                            index_part = oid[len(main_oid) + 1:]
+                            last_seen_index[main_oids_pos] = index_part
+                            if include_ts:
+                                yield (target_info[host_ip], main_oid, index_part, value, ts)
                             else:
-                                if DEBUG:
-                                    logger.debug(
-                                        'host_ip=%s column_pos=%s skip oid %s=%s, reqid=%s. Not found in %s' % (host_ip,
-                                                                                                                main_oids_pos,
-                                                                                                                oid,
-                                                                                                                value,
-                                                                                                                pdudata_reqid,
-                                                                                                                main_oids))
-                                    logger.debug('vp=%s oid=%s main_oid=%s main_oids_pos=%s main_oids=%s', var_bind_pos,
-                                                 oid, main_oid, main_oids_pos, main_oids)
-                                skip_column[main_oids_pos] = True
-                                if len(skip_column) == var_bind_list_len:
-                                    break
+                                yield (target_info[host_ip], main_oid, index_part, value)
                         else:
-                            yield (target_info[host_ip], main_oid, "", value)
+                            if DEBUG:
+                                logger.debug(
+                                    'host_ip=%s column_pos=%s skip oid %s=%s, reqid=%s. Not found in %s' % (host_ip,
+                                                                                                            main_oids_pos,
+                                                                                                            oid,
+                                                                                                            value,
+                                                                                                            pdudata_reqid,
+                                                                                                            main_oids))
+                                logger.debug('vp=%s oid=%s main_oid=%s main_oids_pos=%s main_oids=%s', var_bind_pos,
+                                             oid, main_oid, main_oids_pos, main_oids)
                             skip_column[main_oids_pos] = True
-                    if len(skip_column) < main_oids_len:
-                        if len(skip_column):
-                            oids_to_poll = list()
-                            new_main_oids = list()
-                            for pos in range(main_oids_len):
-                                if pos in skip_column:
-                                    continue
-                                oids_to_poll.append("%s.%s" % (main_oids[pos], last_seen_index[pos]))
-                                new_main_oids.append(main_oids[pos])
-                            oids_to_poll = tuple(oids_to_poll)
-                            new_main_oids = tuple(new_main_oids)
-                        else:
-                            oids_to_poll = tuple(
-                                "%s.%s" % (main_oids[p], last_seen_index[p]) for p in range(main_oids_len))
-                            new_main_oids = main_oids
-
-                        oid_group = (oids_to_poll, new_main_oids)
-
-                        if oid_group in varbinds_cache[host_ip]:
-                            next_reqid = varbinds_cache[host_ip][oid_group]
-                        else:
-                            next_reqid = pdudata_reqid + 10
-                            varbinds_cache[host_ip][next_reqid] = oid_group
-                            varbinds_cache[host_ip].by_oids[oid_group] = next_reqid
-                        job_queue.put((host_ip, next_reqid))
+                            if len(skip_column) == var_bind_list_len:
+                                break
                     else:
-                        if DEBUG:
-                            logger.debug('found not interested in oid=%s value=%s host=%s reqid=%s' % (
-                            oid, value, host_ip, pdudata_reqid))
-
-                    epoll.modify(fileno, POLLOUT | POLLIN)
-                elif event & POLLERR:
-                    logger.critical('socket error')
-                    raise Exception('epoll error')
-            if not events and job_queue.empty() and not pending_query:
-                break
-
-            if pending_query:  # check timeouts
-                cur_time = int(time())
-                timeouted_querys = []
-                for query, query_time in pending_query.items():
-                    attempt = retried_req.get(query, 1)
-                    if attempt == 1:
-                        query_timeout = attempt * timeout
+                        yield (target_info[host_ip], main_oid, "", value)
+                        skip_column[main_oids_pos] = True
+                if len(skip_column) < main_oids_len:
+                    if len(skip_column):
+                        oids_to_poll = list()
+                        new_main_oids = list()
+                        for pos in range(main_oids_len):
+                            if pos in skip_column:
+                                continue
+                            oids_to_poll.append("%s.%s" % (main_oids[pos], last_seen_index[pos]))
+                            new_main_oids.append(main_oids[pos])
+                        oids_to_poll = tuple(oids_to_poll)
+                        new_main_oids = tuple(new_main_oids)
                     else:
-                        query_timeout = attempt * backoff * timeout
-                    if cur_time - query_time > query_timeout:
-                        timeouted_querys.append(query)
-                        if DEBUG:
-                            logger.warning('timeout %s > %s. attempt=%s, %s', cur_time - query_time, query_timeout,
-                                           attempt, query)
-                for timeouted_query in timeouted_querys:
-                    if timeouted_query not in retried_req or retried_req[timeouted_query] < retry:
-                        if DEBUG:
-                            logger.debug('resend %s', timeouted_query)
-                        job_queue.put(timeouted_query)
-                        retried_req[timeouted_query] += 1
-                    else:
-                        logger.warning("%s ip=%s query timeout for OID's: %s",
-                                       target_info[timeouted_query[0]],
-                                       timeouted_query[0],
-                                       varbinds_cache[timeouted_query[0]][timeouted_query[1]][0])
-                    del pending_query[timeouted_query]
-            if not job_queue.empty():
-                sockets_write_count = min(job_queue.qsize(), len(socket_map))
-                for sock in list(socket_map.values())[0:sockets_write_count]:
-                    epoll.modify(sock, POLLOUT | POLLIN)
+                        oids_to_poll = tuple(
+                            "%s.%s" % (main_oids[p], last_seen_index[p]) for p in range(main_oids_len))
+                        new_main_oids = main_oids
 
-        except InterruptedError:  # signal in syscall. suppressed by default on python 3.5
-            pass
+                    oid_group = (oids_to_poll, new_main_oids)
+
+                    if oid_group in varbinds_cache[host_ip]:
+                        next_reqid = varbinds_cache[host_ip][oid_group]
+                    else:
+                        next_reqid = pdudata_reqid + 10
+                        varbinds_cache[host_ip][next_reqid] = oid_group
+                        varbinds_cache[host_ip].by_oids[oid_group] = next_reqid
+                    job_queue.put((host_ip, next_reqid))
+                else:
+                    if DEBUG:
+                        logger.debug('found not interesting oid=%s value=%s host=%s reqid=%s' % (
+                        oid, value, host_ip, pdudata_reqid))
+
+        if pending_query:  # check timeouts
+            cur_time = int(time())
+            timeouted_querys = []
+            for query, query_time in pending_query.items():
+                attempt = retried_req.get(query, 1)
+                if attempt == 1:
+                    query_timeout = attempt * timeout
+                else:
+                    query_timeout = attempt * backoff * timeout
+                if cur_time - query_time > query_timeout:
+                    timeouted_querys.append(query)
+                    if DEBUG:
+                        logger.warning('timeout %s > %s. attempt=%s, %s', cur_time - query_time, query_timeout,
+                                       attempt, query)
+            for timeouted_query in timeouted_querys:
+                if timeouted_query not in retried_req or retried_req[timeouted_query] < retry:
+                    if DEBUG:
+                        logger.debug('resend %s', timeouted_query)
+                    job_queue.put(timeouted_query)
+                    retried_req[timeouted_query] += 1
+                else:
+                    logger.warning("%s ip=%s query timeout for OID's: %s",
+                                   target_info[timeouted_query[0]],
+                                   timeouted_query[0],
+                                   varbinds_cache[timeouted_query[0]][timeouted_query[1]][0])
+                del pending_query[timeouted_query]
+        elif job_queue.empty():
+            break
