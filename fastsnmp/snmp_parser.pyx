@@ -14,7 +14,7 @@ from libc.stdio cimport sprintf
 from libc.string cimport memcpy
 from itertools import cycle
 from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t, int64_t, int8_t, INT64_MAX
-
+import struct
 DEF MAX_OID_LEN_STR=500
 DEF MAX_INT_LEN=30
 class SNMPException(Exception):
@@ -101,6 +101,8 @@ DEF ASN_U_SEQUENCE = _UNIVERSAL | ASN_TAG_FORMAT_CONSTRUCTED | 0x10  # 48
 DEF ASN_U_NO_SUCH_OBJECT = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x0  # 128
 DEF ASN_U_NO_SUCH_INSTANCE = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x1  # 129
 DEF ASN_U_END_OF_MIB_VIEW = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x2  # 130
+
+DEF ASN_U_FLOAT = 40824 # 40824
 
 DEF ASN_U_INTEGER_BYTE = bytes([ASN_U_INTEGER])
 DEF ASN_U_OCTETSTRING_BYTE = bytes([ASN_U_OCTETSTRING])
@@ -556,9 +558,19 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             if tmp_list_val is not None:
                 objects.append(tmp_list_val)
         elif tag == ASN_U_OCTETSTRING or tag == ASN_A_IPADDRESS:
-            # bytes_val = c_octetstring_decode(stream_char, length)
             bytes_val = <bytes> stream_char[:length]
             objects.append(bytes_val)
+        elif tag == ASN_A_OPAQUE:
+            opaque_obj = sequence_decode_c(stream_char, length)
+            if len(opaque_obj) != 1:
+                raise Exception("opaque len %s != 1" % len(opaque_obj))
+            objects.append(opaque_obj[0])
+        elif tag == ASN_U_FLOAT:
+            bytes_val = <bytes> stream_char[:length]
+            if length == 4:
+                objects.append(struct.unpack('>f', bytes_val)[0])
+            else:
+                raise NotImplementedError("unknown float len %s" % length)
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
         elif tag == ASN_U_EOC:
@@ -633,11 +645,23 @@ cdef inline int tag_decode_c(const unsigned char *stream, uint64_t *tag, size_t 
     Decode a BER tag field, returning the tag and the remainder
     of the stream
     """
+    cdef uint64_t htag=0
+    cdef size_t henc_len=0
+    cdef uint8_t tagp
 
-    tag[0] = <uint8_t>stream[0]  # low-tag-number form
+    tag[0] = <uint8_t> stream[0]  # low-tag-number form
     enc_len[0] = 1
-    if tag[0] & 0x1F == 0x1F:  # high-tag-number form
-        return -1
+    if tag[0] & 0x1F == 0x1F: # 8.1.2.4 high-tag-number form
+        htag = tag[0]
+        while True:
+            tagp = stream[henc_len + 1]
+            henc_len += 1
+            htag <<= 8
+            htag |= tagp & 0x79
+            if tagp & 0x80 == 0:
+                break
+        enc_len[0] += henc_len
+        tag[0] = htag
 
     return 0
 
