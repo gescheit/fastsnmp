@@ -213,7 +213,7 @@ cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, cha
             n += cpy_len
             memcpy(out+1, oid_part_char, cpy_len)
         else:
-            tmp_n = sprintf(out, "%ld", oid_part)
+            tmp_n = sprintf(out+1, "%llu", oid_part)
             n += tmp_n
         out += n
         out_length[0] += n
