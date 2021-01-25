@@ -18,5 +18,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.7'
+      - name: Install Tox
+        run: python3 -m pip install tox
       - name: Run Tox
         run: python3 -m tox
