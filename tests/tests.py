@@ -5,6 +5,10 @@ import pstats
 import cProfile
 from fastsnmp import snmp_parser
 
+OID1 = "1.2.1"
+OID2 = "1.2.2"
+OID3 = "1.2.3"
+
 
 class TestSnmpParser(unittest.TestCase):
     strs = [
@@ -22,21 +26,26 @@ class TestSnmpParser(unittest.TestCase):
         [1, b'\x01'],
         [2, b'\x02'],
         [128, b'\x00\x80'],
+        [136, b'\x00\x88'],
+        [160, b'\x00\xA0'],
         [256, b'\x01\x00'],
-        [4294970001, b'\x01\x00\x00\n\x91'],
+        [32767, b'\x7f\xff'],
+        [4294970001, b'\x01\x00\x00\x0a\x91'],
         [17179869184, b'\x04\x00\x00\x00\x00'],
         [2568068810643379472, b'\x23\xa3\x9c\xfa\x21\x28\x95\x10'],
-        [18446744073709551615, b'\x00\xff\xff\xff\xff\xff\xff\xff\xff'],
+        [18446744073709551615, b'\x00\xff\xff\xff\xff\xff\xff\xff\xff'], # max uint64
         [523160, b'\x07\xfb\x98'],
     ]
     object_ids = [
         ["1.2", b'\x2a'],
+        # ["2.99.3", b'\x88\x37\x03\x16'],  # T-REC-X.690-201508 example
         ["1.2.128", b'\x2a\x81\x00'],
         ["1.2.128.128", b'\x2a\x81\x00\x81\x00'],
         ["1.2.256", b'\x2a\x82\x00'],
         ["1.2.65536", b'\x2a\x84\x80\x00'],
         ["1.2.99999", b'\x2a\x86\x8d\x1f'],
         ['1.3.268633409', b'\x2b\x81\x80\x8c\x8a\x41'],
+        ['1.3.6.1.2.1.3.1.1.3.4.1.192.168.1.255', b'\x2b\x06\x01\x02\x01\x03\x01\x01\x03\x04\x01\x81\x40\x81\x28\x01\x81\x7f'],
     ]
     tags = [
         [(67, 1), b'\x43'],
@@ -52,17 +61,17 @@ class TestSnmpParser(unittest.TestCase):
     def test_integer_encode(self):
         for i, enc in self.ints:
             int_encoded = snmp_parser.integer_encode(i)
-            self.assertEqual(int_encoded, enc)
+            self.assertEqual(int_encoded, enc, "encode %s" % i)
 
     def test_integer_decode(self):
         for i, enc in self.ints:
             int_decoded = snmp_parser.integer_decode(enc)
-            self.assertEqual(int_decoded, i)
+            self.assertEqual(int_decoded, i, "encode %s" % i)
 
     def test_counter64_encode(self):
         for i, enc in self.uints:
             int_encoded = snmp_parser.uinteger_encode(i)
-            self.assertEqual(int_encoded, enc)
+            self.assertEqual(int_encoded, enc, "encode %s" % i)
 
     def test_counter64_decode(self):
         for i, enc in self.uints:
@@ -77,7 +86,7 @@ class TestSnmpParser(unittest.TestCase):
     def test_oid_encoder(self):
         for str_oid, enc in self.object_ids:
             oid_encoded = snmp_parser.objectid_encode(str_oid)
-            self.assertEqual(enc, bytes(oid_encoded))
+            self.assertEqual(enc, bytes(oid_encoded), "testing %s" % str_oid)
 
     def test_oid_decoder(self):
         for str_oid, enc in self.object_ids:
@@ -217,6 +226,39 @@ class TestSnmpParser(unittest.TestCase):
         msg_decoded = snmp_parser.msg_decode(msg)
         self.assertEqual(encoded, msg_decoded)
 
+    def test_decode2(self):
+        msg = b'0\x81\xa6\x02\x01\x01\x04\x06public\xa2\x81\x98\x02\x03\x07\xc80\x02\x01\x00\x02\x01\x000\x81\x8a0' \
+              b'\x19\x06\x11+\x06\x01\x02\x01\x03\x01\x01\x03\x04\x01\x81@\x81(\x01\x01@\x04\xc0\xa8\x01\x010\x1a' \
+              b'\x06\x12+\x06\x01\x02\x01\x03\x01\x01\x03\x04\x01\x81@\x81(\x01\x81\x1a@\x04\xc0\xa8\x01\x9a0\x1a' \
+              b'\x06\x12+\x06\x01\x02\x01\x03\x01\x01\x03\x04\x01\x81@\x81(\x01\x815@\x04\xc0\xa8\x01\xb50\x1a\x06' \
+              b'\x12+\x06\x01\x02\x01\x03\x01\x01\x03\x04\x01\x81@\x81(\x01\x81<@\x04\xc0\xa8\x01\xbc0\x19\x06\x11+' \
+              b'\x06\x01\x02\x01\x03\x01\x01\x03\x04\x01\x81`\x00\x00\x81{@\x04\xe0\x00\x00\xfb'
+        encoded = (510000, 0, 0, [
+            ['1.3.6.1.2.1.3.1.1.3.4.1.192.168.1.1', b'\xc0\xa8\x01\x01'],
+            ['1.3.6.1.2.1.3.1.1.3.4.1.192.168.1.154', b'\xc0\xa8\x01\x9a'],
+            ['1.3.6.1.2.1.3.1.1.3.4.1.192.168.1.181', b'\xc0\xa8\x01\xb5'],
+            ['1.3.6.1.2.1.3.1.1.3.4.1.192.168.1.188', b'\xc0\xa8\x01\xbc'],
+            ['1.3.6.1.2.1.3.1.1.3.4.1.224.0.0.251', b'\xe0\x00\x00\xfb']])
+
+        msg_decoded = snmp_parser.msg_decode(msg)
+        self.assertEqual(encoded, msg_decoded)
+
+    def test_decode3(self):
+        msg = b'0\x81\x83\x02\x01\x01\x04\x06public\xa2v\x02\x03?\x8fT\x02\x01\x00\x02\x01\x000i0' \
+              b'\x11\x06\x0b+\x06\x01\x04\x01\x8fe\n\x01\x05\x01\x02\x02\x00\x8f0\x11\x06\x0b+\x06' \
+              b'\x01\x04\x01\x8fe\n\x01\x05\x02\x02\x02\x00\xe20\x11\x06\x0b+\x06\x01\x04\x01\x8fe' \
+              b'\n\x01\x05\x03\x02\x02\x01j0\x16\x06\x0b+\x06\x01\x04\x01\x8fe\n\x01\x06\x01D\x07' \
+              b'\x9fx\x04?\xb8@\x000\x16\x06\x0b+\x06\x01\x04\x01\x8fe\n\x01\x06\x02D\x07\x9fx\x04@' \
+              b'\x10\xd8\x00'
+        encoded = (4165460, 0, 0, [
+            ['1.3.6.1.4.1.2021.10.1.5.1', 143], ['1.3.6.1.4.1.2021.10.1.5.2', 226],
+            ['1.3.6.1.4.1.2021.10.1.5.3', 362], ['1.3.6.1.4.1.2021.10.1.6.1', 1.439453125],
+            ['1.3.6.1.4.1.2021.10.1.6.2', 2.26318359375]]
+                   )
+
+        msg_decoded = snmp_parser.msg_decode(msg)
+        self.assertEqual(encoded, msg_decoded)
+
     def test_parse_varbind(self):
         result = [['1.2.1.1', 1], ['1.2.2.1', 1], ['1.2.3.1', 1],
                   ['1.2.1.2', 1], ['1.2.2.2', 1], ['1.2.3.2', 1],
@@ -246,6 +288,38 @@ class TestSnmpParser(unittest.TestCase):
                         ['1.2.3', '2', 1], ['1.2.2', '3', 1], ['1.2.3', '3', 1], ['1.2.2', '4', 1], ['1.2.3', '4', 1]]
         expected_oids_to_poll = (None, '1.2.2.4', '1.2.3.4')
         result, next_oids_to_poll = snmp_parser.parse_varbind(result, main_oids, prev_oids_to_poll)
+        self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
+        self.assertEqual(result, expected_res)
+
+    def test_parse_varbind_with_none(self):
+        result = [[OID1 + '.1', None], [OID2 + '.1', 1], [OID3 + '.1', 1],
+                  [OID1 + '.2', 1], [OID2 + '.2', None], [OID3 + '.2', 1],
+                  [OID1 + '.3', 1], [OID2 + '.3', 1], [OID3 + '.3', None],
+                  ]
+        main_oids = (OID1, OID2, OID3)
+        prev_oids_to_poll = (OID1, OID2, OID3)
+        expected_res = [[OID1, '1', None], [OID2, '1', 1], [OID3, '1', 1],
+                        [OID1, '2', 1], [OID2, '2', None], [OID3, '2', 1],
+                        [OID1, '3', 1], [OID2, '3', 1], [OID3, '3', None],
+                        ]
+        expected_oids_to_poll = (OID1 + '.3', OID2 + '.3', OID3 + '.3')
+        result, next_oids_to_poll = snmp_parser.parse_varbind(result, main_oids, prev_oids_to_poll)
+        self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
+        self.assertEqual(result, expected_res)
+
+    def test_parse_varbind_with_end_of_mib(self):
+        in_data = [[OID1 + '.1', 1], [OID2 + '.1', 1], [OID3 + '.1', 1],
+                   [OID1 + '.1', snmp_parser.end_of_mib_view], [OID2 + '.1', snmp_parser.end_of_mib_view], [OID3 + '.2', 1],
+                  ]
+        main_oids = (OID1, OID2, OID3)
+        prev_oids_to_poll = (OID1, OID2, OID3)
+        expected_res = [[OID1, '1', 1],
+                        [OID2, '1', 1],
+                        [OID3, '1', 1],
+                        [OID3, '2', 1],
+                        ]
+        expected_oids_to_poll = (None, None, OID3 + ".2")
+        result, next_oids_to_poll = snmp_parser.parse_varbind(in_data, main_oids, prev_oids_to_poll)
         self.assertEqual(next_oids_to_poll, expected_oids_to_poll)
         self.assertEqual(result, expected_res)
 

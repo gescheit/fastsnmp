@@ -14,7 +14,7 @@ from libc.stdio cimport sprintf
 from libc.string cimport memcpy
 from itertools import cycle
 from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t, int64_t, int8_t, INT64_MAX
-
+import struct
 DEF MAX_OID_LEN_STR=500
 DEF MAX_INT_LEN=30
 class SNMPException(Exception):
@@ -37,6 +37,7 @@ class NoSuchObject:
 class EndOfMibView:
     pass
 
+end_of_mib_view = EndOfMibView()
 
 DEF _UNIVERSAL = 0x00
 DEF _APPLICATION = 0x40
@@ -101,6 +102,8 @@ DEF ASN_U_SEQUENCE = _UNIVERSAL | ASN_TAG_FORMAT_CONSTRUCTED | 0x10  # 48
 DEF ASN_U_NO_SUCH_OBJECT = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x0  # 128
 DEF ASN_U_NO_SUCH_INSTANCE = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x1  # 129
 DEF ASN_U_END_OF_MIB_VIEW = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x2  # 130
+
+DEF ASN_U_FLOAT = 40824 # 40824
 
 DEF ASN_U_INTEGER_BYTE = bytes([ASN_U_INTEGER])
 DEF ASN_U_OCTETSTRING_BYTE = bytes([ASN_U_OCTETSTRING])
@@ -213,7 +216,7 @@ cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, cha
             n += cpy_len
             memcpy(out+1, oid_part_char, cpy_len)
         else:
-            tmp_n = sprintf(out, "%ld", oid_part)
+            tmp_n = sprintf(out+1, "%llu", oid_part)
             n += tmp_n
         out += n
         out_length[0] += n
@@ -259,7 +262,7 @@ cdef inline int objectid_decode_c(char *stream, size_t stream_len, uint64_t *res
     return 0
 
 @cython.cdivision(True)
-cdef inline int primitive_encode(uint64_t *value, char *result_ptr) except -1:
+cdef inline int primitive_encode7(uint64_t *value, char *result_ptr) except -1:
     """
     Primitive encoding
     """
@@ -307,16 +310,6 @@ cdef inline int primitive_encode(uint64_t *value, char *result_ptr) except -1:
         result_ptr[5] = value[0] >> 7 | 0x80
         result_ptr[6] = value[0] & 0x7f
         size = 7
-    elif value[0] < <uint64_t>0x100000000000000:  # 56 bit
-        result_ptr[0] = value[0] >> 49 & 0x7f | 0x80
-        result_ptr[1] = value[0] >> 42 & 0x7f | 0x80
-        result_ptr[2] = value[0] >> 35 & 0x7f | 0x80
-        result_ptr[3] = value[0] >> 28 & 0x7f | 0x80
-        result_ptr[4] = value[0] >> 21 & 0x7f | 0x80
-        result_ptr[5] = value[0] >> 14 & 0x7f | 0x80
-        result_ptr[6] = value[0] >> 7 | 0x80
-        result_ptr[7] = value[0] & 0x7f
-        size = 7
     elif value[0] < <uint64_t>0x8000000000000000:  # 63 bit
         result_ptr[0] = value[0] >> 56 & 0x7f | 0x80
         result_ptr[1] = value[0] >> 49 & 0x7f | 0x80
@@ -329,16 +322,66 @@ cdef inline int primitive_encode(uint64_t *value, char *result_ptr) except -1:
         result_ptr[8] = value[0] & 0x7f
         size = 8
     else:  # 64 bit
-        result_ptr[0] = value[0] >> 56 & 0x7f | 0x80
-        result_ptr[1] = value[0] >> 49 & 0x7f | 0x80
-        result_ptr[2] = value[0] >> 42 & 0x7f | 0x80
-        result_ptr[3] = value[0] >> 35 & 0x7f | 0x80
-        result_ptr[4] = value[0] >> 28 & 0x7f | 0x80
-        result_ptr[5] = value[0] >> 21 & 0x7f | 0x80
-        result_ptr[6] = value[0] >> 14 & 0x7f | 0x80
-        result_ptr[7] = value[0] >> 7 | 0x80
-        result_ptr[8] = value[0] & 0x7f
-        result_ptr[9] = 0
+        return -1
+    return size
+
+
+@cython.cdivision(True)
+cdef inline int primitive_encode(uint64_t *value, char *result_ptr) except -1:
+    """
+    Primitive encoding
+    """
+    cdef unsigned int size = 0
+
+    if value[0] < <uint64_t>0x80:  # 7 bit
+        result_ptr[0] = value[0]
+        size = 1
+    elif value[0] < <uint64_t>0x8000:  # 15 bit
+        result_ptr[0] = value[0] >> 8 & 0xFF
+        result_ptr[1] = value[0] & 0xFF
+        size = 2
+    elif value[0] < <uint64_t>0x800000:  # 23 bit
+        result_ptr[0] = value[0] >> 8 & 0xFF
+        result_ptr[1] = value[0] >> 16 & 0xFF
+        result_ptr[2] = value[0] & 0xFF
+        size = 3
+    elif value[0] < <uint64_t>0x80000000:  # 31 bit
+        result_ptr[0] = value[0] >> 8 & 0xFF
+        result_ptr[1] = value[0] >> 16 & 0xFF
+        result_ptr[2] = value[0] >> 24 & 0xFF
+        result_ptr[3] = value[0] & 0xFF
+        size = 4
+    elif value[0] < <uint64_t>0x8000000000:  # 39 bit
+        result_ptr[0] = value[0] >> 8 & 0xFF
+        result_ptr[1] = value[0] >> 16 & 0xFF
+        result_ptr[2] = value[0] >> 24 & 0xFF
+        result_ptr[3] = value[0] >> 32 & 0xFF
+        result_ptr[4] = value[0] & 0xFF
+        size = 5
+    elif value[0] < <uint64_t>0x800000000000:  # 47 bit
+        result_ptr[0] = value[0] >> 8 & 0xFF
+        result_ptr[1] = value[0] >> 16 & 0xFF
+        result_ptr[2] = value[0] >> 24 & 0xFF
+        result_ptr[3] = value[0] >> 32 & 0xFF
+        result_ptr[4] = value[0] >> 40 & 0xFF
+        result_ptr[5] = value[0] & 0xFF
+        size = 6
+    elif value[0] < <uint64_t>0x80000000000000:  # 55 bit
+        result_ptr[0] = value[0] >> 8 & 0xFF
+        result_ptr[1] = value[0] >> 16 & 0xFF
+        result_ptr[2] = value[0] >> 24 & 0xFF
+        result_ptr[3] = value[0] >> 32 & 0xFF
+        result_ptr[4] = value[0] >> 40 & 0xFF
+        result_ptr[5] = value[0] >> 48 & 0xFF
+        result_ptr[6] = value[0] & 0xFF
+        size = 7
+    elif value[0] < <uint64_t>0x8000000000000000:  # 63 bit
+        memcpy(result_ptr, value, 8)
+        size = 9
+        size = 8
+    else:  # 64 bit
+        result_ptr[0] = 0
+        memcpy(result_ptr+1, value, 8)
         size = 9
     return size
 
@@ -368,7 +411,7 @@ cdef inline int objectid_encode_array(uint64_t *subids, uint32_t subids_len,
 
     for i in range(2, subids_len):
         subid = subids[i]
-        sid_len = primitive_encode(&subid, result_ptr)
+        sid_len = primitive_encode7(&subid, result_ptr)
         object_len[0] += sid_len
         result_ptr = result_ptr+sid_len
     return retval
@@ -556,9 +599,21 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             if tmp_list_val is not None:
                 objects.append(tmp_list_val)
         elif tag == ASN_U_OCTETSTRING or tag == ASN_A_IPADDRESS:
-            # bytes_val = c_octetstring_decode(stream_char, length)
             bytes_val = <bytes> stream_char[:length]
             objects.append(bytes_val)
+        elif tag == ASN_A_OPAQUE:
+            opaque_obj = sequence_decode_c(stream_char, length)
+            if len(opaque_obj) != 1:
+                raise Exception("opaque len %s != 1" % len(opaque_obj))
+            objects.append(opaque_obj[0])
+        elif tag == ASN_U_END_OF_MIB_VIEW:
+            objects.append(end_of_mib_view)
+        elif tag == ASN_U_FLOAT:
+            bytes_val = <bytes> stream_char[:length]
+            if length == 4:
+                objects.append(struct.unpack('>f', bytes_val)[0])
+            else:
+                raise NotImplementedError("unknown float len %s" % length)
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
         elif tag == ASN_U_EOC:
@@ -633,11 +688,23 @@ cdef inline int tag_decode_c(const unsigned char *stream, uint64_t *tag, size_t 
     Decode a BER tag field, returning the tag and the remainder
     of the stream
     """
+    cdef uint64_t htag=0
+    cdef size_t henc_len=0
+    cdef uint8_t tagp
 
-    tag[0] = <uint8_t>stream[0]  # low-tag-number form
+    tag[0] = <uint8_t> stream[0]  # low-tag-number form
     enc_len[0] = 1
-    if tag[0] & 0x1F == 0x1F:  # high-tag-number form
-        return -1
+    if tag[0] & 0x1F == 0x1F: # 8.1.2.4 high-tag-number form
+        htag = tag[0]
+        while True:
+            tagp = stream[henc_len + 1]
+            henc_len += 1
+            htag <<= 8
+            htag |= tagp & 0x79
+            if tagp & 0x80 == 0:
+                break
+        enc_len[0] += henc_len
+        tag[0] = htag
 
     return 0
 
@@ -838,7 +905,7 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
         if not isinstance(oid, str):
             raise VarBindContentException("expected oid in str. got %r" % oid)
         main_oids_pos = next(main_oids_positions)
-        if value is None:
+        if value is end_of_mib_view:
             skip_column[main_oids_pos] = True
         if main_oids_pos in skip_column:
             continue
