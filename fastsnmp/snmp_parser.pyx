@@ -617,7 +617,7 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
         elif tag == ASN_U_EOC:
-            return
+            raise Exception("end of content")
         else:
             raise NotImplementedError("unknown tag=%s" % tag)
 
