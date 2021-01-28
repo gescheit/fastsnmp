@@ -13,7 +13,7 @@ from cpython.unicode cimport PyUnicode_DecodeASCII
 from libc.stdio cimport sprintf
 from libc.string cimport memcpy
 from itertools import cycle
-from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t, int64_t, int8_t, INT64_MAX
+from libc.stdint cimport uint64_t, uint32_t, uint8_t, int64_t, INT64_MAX
 import struct
 DEF MAX_OID_LEN_STR=500
 DEF MAX_INT_LEN=30
