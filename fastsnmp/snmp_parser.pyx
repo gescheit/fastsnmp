@@ -579,7 +579,9 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
         length_decode_c(stream_char, &length, &encode_length)
         stream_char += encode_length
         current_stream_pos += encode_length
-        assert (current_stream_pos + length) <= stream_len
+        if (current_stream_pos + length) > stream_len:
+            raise Exception("out of len. current_stream_pos=%s length=%s stream_len=%s tag=%s" %
+                            (current_stream_pos, length, stream_len, tag))
         if tag == ASN_U_INTEGER:
             tmp_int_val = integer_decode_c(stream_char, &length)
             objects.append(tmp_int_val)
