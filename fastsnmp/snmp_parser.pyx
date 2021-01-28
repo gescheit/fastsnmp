@@ -706,9 +706,9 @@ cdef inline int tag_decode_c(const unsigned char *stream, uint64_t *tag, size_t 
         htag = tag[0]
         while True:
             tagp = stream[henc_len + 1]
-            henc_len += 1
             htag <<= 8
-            htag |= tagp & 0x79
+            htag |= tagp
+            henc_len += 1
             if tagp & 0x80 == 0:
                 break
         enc_len[0] += henc_len
