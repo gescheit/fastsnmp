@@ -617,6 +617,11 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
                 objects.append(struct.unpack('>f', bytes_val)[0])
             else:
                 raise NotImplementedError("unknown float len %s" % length)
+        elif tag == ASN_OPAQUE_BOOL:
+            if stream_char[0] == b'\x01':
+                objects.append(True)
+            else:
+                objects.append(False)
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
         elif tag == ASN_U_EOC:
