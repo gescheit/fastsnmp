@@ -103,7 +103,8 @@ DEF ASN_U_NO_SUCH_OBJECT = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMI
 DEF ASN_U_NO_SUCH_INSTANCE = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x1  # 129
 DEF ASN_U_END_OF_MIB_VIEW = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x2  # 130
 
-DEF ASN_U_FLOAT = 40824 # 40824
+DEF ASN_OPAQUE_FLOAT = 40824 # 40824
+DEF ASN_OPAQUE_BOOL = 7937 # 7937
 
 DEF ASN_U_INTEGER_BYTE = bytes([ASN_U_INTEGER])
 DEF ASN_U_OCTETSTRING_BYTE = bytes([ASN_U_OCTETSTRING])
@@ -608,7 +609,7 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             objects.append(opaque_obj[0])
         elif tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(end_of_mib_view)
-        elif tag == ASN_U_FLOAT:
+        elif tag == ASN_OPAQUE_FLOAT:
             bytes_val = <bytes> stream_char[:length]
             if length == 4:
                 objects.append(struct.unpack('>f', bytes_val)[0])
