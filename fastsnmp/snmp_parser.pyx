@@ -13,7 +13,7 @@ from cpython.unicode cimport PyUnicode_DecodeASCII
 from libc.stdio cimport sprintf
 from libc.string cimport memcpy
 from itertools import cycle
-from libc.stdint cimport uint64_t, int64_t, uint32_t, uint8_t, int64_t, int8_t, INT64_MAX
+from libc.stdint cimport uint64_t, uint32_t, uint8_t, int64_t, INT64_MAX
 import struct
 DEF MAX_OID_LEN_STR=500
 DEF MAX_INT_LEN=30
@@ -103,7 +103,8 @@ DEF ASN_U_NO_SUCH_OBJECT = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMI
 DEF ASN_U_NO_SUCH_INSTANCE = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x1  # 129
 DEF ASN_U_END_OF_MIB_VIEW = _UNIVERSAL | _CONTEXT_SPECIFIC | ASN_TAG_FORMAT_PRIMITIVE | 0x2  # 130
 
-DEF ASN_U_FLOAT = 40824 # 40824
+DEF ASN_OPAQUE_FLOAT = 40824 # 40824
+DEF ASN_OPAQUE_BOOL = 7937 # 7937
 
 DEF ASN_U_INTEGER_BYTE = bytes([ASN_U_INTEGER])
 DEF ASN_U_OCTETSTRING_BYTE = bytes([ASN_U_OCTETSTRING])
@@ -578,7 +579,9 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
         length_decode_c(stream_char, &length, &encode_length)
         stream_char += encode_length
         current_stream_pos += encode_length
-        assert (current_stream_pos + length) <= stream_len
+        if (current_stream_pos + length) > stream_len:
+            raise Exception("out of len. current_stream_pos=%s length=%s stream_len=%s tag=%s" %
+                            (current_stream_pos, length, stream_len, tag))
         if tag == ASN_U_INTEGER:
             tmp_int_val = integer_decode_c(stream_char, &length)
             objects.append(tmp_int_val)
@@ -608,16 +611,21 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             objects.append(opaque_obj[0])
         elif tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(end_of_mib_view)
-        elif tag == ASN_U_FLOAT:
+        elif tag == ASN_OPAQUE_FLOAT:
             bytes_val = <bytes> stream_char[:length]
             if length == 4:
                 objects.append(struct.unpack('>f', bytes_val)[0])
             else:
                 raise NotImplementedError("unknown float len %s" % length)
+        elif tag == ASN_OPAQUE_BOOL:
+            if stream_char[0] == b'\x01':
+                objects.append(True)
+            else:
+                objects.append(False)
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
         elif tag == ASN_U_EOC:
-            return
+            raise Exception("end of content")
         else:
             raise NotImplementedError("unknown tag=%s" % tag)
 
@@ -698,9 +706,9 @@ cdef inline int tag_decode_c(const unsigned char *stream, uint64_t *tag, size_t 
         htag = tag[0]
         while True:
             tagp = stream[henc_len + 1]
-            henc_len += 1
             htag <<= 8
-            htag |= tagp & 0x79
+            htag |= tagp
+            henc_len += 1
             if tagp & 0x80 == 0:
                 break
         enc_len[0] += henc_len
