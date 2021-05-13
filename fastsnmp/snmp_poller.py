@@ -149,7 +149,7 @@ def poller(hosts, oids_groups, community, timeout=3, backoff=2, retry=2, msg_typ
             pending_query[pdudata_reqid] = int(time())
 
             if DEBUG:
-                logger.debug('sendto %s reqid=%s get oids=%s', host, pdudata_reqid, oids_to_poll)
+                logger.debug('sendto %s reqid=%s get oids=%s', dst_ip, pdudata_reqid, oids_to_poll)
             job_queue.task_done()
 
         for fileno, event in events:
