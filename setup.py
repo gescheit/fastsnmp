@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-__version__ = '0.9'
+__version__ = '0.10'
 from distutils.core import setup
 from distutils.extension import Extension
 
@@ -24,13 +24,6 @@ ext = '.pyx' if USE_CYTHON else '.c'
 extensions = [Extension("fastsnmp.snmp_parser", ["fastsnmp/snmp_parser" + ext])]
 
 
-try:
-    from pypandoc import convert
-    read_md = lambda f: convert(f, 'rst')
-except ImportError:
-    print("warning: pypandoc module not found, could not convert Markdown to RST")
-    read_md = lambda f: open(f, 'r').read()
-
 if __name__ == "__main__":
     if USE_CYTHON:
         from Cython.Build import cythonize
@@ -46,7 +39,8 @@ if __name__ == "__main__":
           author_email='gescheit12@gmail.com',
           classifiers=classifiers,
           platforms=['Linux'],
-          long_description=read_md('README.md'),
+          long_description=open('README.md', 'r').read(),
+          long_description_content_type='text/markdown',
           keywords="SNMP poller parser library coder decoder",
           description="SNMP poller oriented to poll bunch of hosts in short time. "
                       "Package include poller and SNMP library",
