@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 __version__ = '0.10'
-from distutils.core import setup
-from distutils.extension import Extension
+
+from setuptools import setup, Extension
 
 classifiers = [
     'Development Status :: 4 - Beta',
@@ -23,10 +23,10 @@ else:
 ext = '.pyx' if USE_CYTHON else '.c'
 extensions = [Extension("fastsnmp.snmp_parser", ["fastsnmp/snmp_parser" + ext])]
 
-
 if __name__ == "__main__":
     if USE_CYTHON:
         from Cython.Build import cythonize
+
         extensions = cythonize(extensions)
     setup(name='fastsnmp',
           ext_modules=extensions,
