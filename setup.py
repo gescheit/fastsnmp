@@ -6,7 +6,7 @@ from setuptools import setup, Extension
 classifiers = [
     'Development Status :: 4 - Beta',
     'Operating System :: POSIX :: Linux',
-    'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+    'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 3 :: Only',
     'Topic :: System :: Networking :: Monitoring',
 ]
@@ -34,7 +34,7 @@ if __name__ == "__main__":
           author="Aleksandr Balezin",
           packages=['fastsnmp'],
           package_data={'lib': ['*.pyx', '*.c', 'README.md', 'examples/*.py']},
-          license='GPLv2',
+          license='MIT',
           url='https://github.com/gescheit/fastsnmp',
           author_email='gescheit12@gmail.com',
           classifiers=classifiers,
