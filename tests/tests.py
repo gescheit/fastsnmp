@@ -58,6 +58,15 @@ class TestSnmpParser(unittest.TestCase):
         [(1256, 3), b'\x82\x04\xe8'],
     ]
 
+    varbinds = [
+        [("1.2", "Null", None), b'0\x05\x06\x01*\x05\x00']
+    ]
+
+    def test_varbinds_encode(self):
+        for dec, enc_exp in self.varbinds:
+            enc_res = snmp_parser.encode_varbind("1.2", "Null", None)
+            self.assertEqual(enc_res, enc_exp, "varbind encode %s" % str(dec))
+
     def test_integer_encode(self):
         for i, enc in self.ints:
             int_encoded = snmp_parser.integer_encode(i)
