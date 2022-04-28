@@ -331,47 +331,61 @@ cdef inline int primitive_encode7(uint64_t *value, char *result_ptr) except -1:
         return -1
     return size
 
+cdef inline uint64_t primitive_size(uint64_t value):
+    """
+    Primitive size
+    """
+    if value < <uint64_t>0x80:  # 7 bit
+        return <uint64_t>1
+    elif value < <uint64_t>0x8000:  # 15 bit
+        return <uint64_t>2
+    elif value < <uint64_t>0x800000:  # 23 bit
+        return <uint64_t>3
+    elif value < <uint64_t>0x80000000:  # 31 bit
+        return <uint64_t>4
+    elif value < <uint64_t>0x8000000000:  # 39 bit
+        return <uint64_t>5
+    elif value < <uint64_t>0x800000000000:  # 47 bit
+        return <uint64_t>6
+    elif value < <uint64_t>0x80000000000000:  # 55 bit
+        return <uint64_t>7
+    elif value < <uint64_t>0x8000000000000000:  # 63 bit
+        return <uint64_t>8
+    else:  # 64 bit
+        return <uint64_t>9
 
-cdef inline int primitive_encode(uint64_t *value, char *result_ptr):
+cdef inline void primitive_encode(uint64_t *value, uint8_t size, char *result_ptr):
     """
     Primitive encoding
     """
-    cdef unsigned int size = 0
-
-    if value[0] < <uint64_t>0x80:  # 7 bit
+    if size == 1:  # 7 bit
         result_ptr[0] = value[0]
-        size = 1
-    elif value[0] < <uint64_t>0x8000:  # 15 bit
+    elif size == 2:  # 15 bit
         result_ptr[0] = value[0] >> 8 & 0xFF
         result_ptr[1] = value[0] & 0xFF
-        size = 2
-    elif value[0] < <uint64_t>0x800000:  # 23 bit
+    elif size == 3:  # 23 bit
         result_ptr[0] = value[0] >> 16 & 0xFF
         result_ptr[1] = value[0] >> 8 & 0xFF
         result_ptr[2] = value[0] & 0xFF
-        size = 3
-    elif value[0] < <uint64_t>0x80000000:  # 31 bit
+    elif size == 4:  # 31 bit
         result_ptr[0] = value[0] >> 24 & 0xFF
         result_ptr[1] = value[0] >> 16 & 0xFF
         result_ptr[2] = value[0] >> 8 & 0xFF
         result_ptr[3] = value[0] & 0xFF
-        size = 4
-    elif value[0] < <uint64_t>0x8000000000:  # 39 bit
+    elif size == 5:  # 39 bit
         result_ptr[0] = value[0] >> 32 & 0xFF
         result_ptr[1] = value[0] >> 24 & 0xFF
         result_ptr[2] = value[0] >> 16 & 0xFF
         result_ptr[3] = value[0] >> 8 & 0xFF
         result_ptr[4] = value[0] & 0xFF
-        size = 5
-    elif value[0] < <uint64_t>0x800000000000:  # 47 bit
+    elif size == 6:  # 47 bit
         result_ptr[0] = value[0] >> 40 & 0xFF
         result_ptr[1] = value[0] >> 32 & 0xFF
         result_ptr[2] = value[0] >> 24 & 0xFF
         result_ptr[3] = value[0] >> 16 & 0xFF
         result_ptr[4] = value[0] >> 8 & 0xFF
         result_ptr[5] = value[0] & 0xFF
-        size = 6
-    elif value[0] < <uint64_t>0x80000000000000:  # 55 bit
+    elif size == 7:  # 55 bit
         result_ptr[0] = value[0] >> 48 & 0xFF
         result_ptr[1] = value[0] >> 40 & 0xFF
         result_ptr[2] = value[0] >> 32 & 0xFF
@@ -379,8 +393,7 @@ cdef inline int primitive_encode(uint64_t *value, char *result_ptr):
         result_ptr[4] = value[0] >> 16 & 0xFF
         result_ptr[5] = value[0] >> 8 & 0xFF
         result_ptr[6] = value[0] & 0xFF
-        size = 7
-    elif value[0] < <uint64_t>0x8000000000000000:  # 63 bit
+    elif size == 8:  # 63 bit
         result_ptr[0] = value[0] >> 56 & 0xFF
         result_ptr[1] = value[0] >> 48 & 0xFF
         result_ptr[2] = value[0] >> 40 & 0xFF
@@ -389,8 +402,7 @@ cdef inline int primitive_encode(uint64_t *value, char *result_ptr):
         result_ptr[5] = value[0] >> 16 & 0xFF
         result_ptr[6] = value[0] >> 8 & 0xFF
         result_ptr[7] = value[0] & 0xFF
-        size = 8
-    else:  # 64 bit
+    else:  # size == 9 64 bit
         result_ptr[0] = 0
         result_ptr[1] = value[0] >> 56 & 0xFF
         result_ptr[2] = value[0] >> 48 & 0xFF
@@ -400,11 +412,8 @@ cdef inline int primitive_encode(uint64_t *value, char *result_ptr):
         result_ptr[6] = value[0] >> 16 & 0xFF
         result_ptr[7] = value[0] >> 8 & 0xFF
         result_ptr[8] = value[0] & 0xFF
-        size = 9
-    return size
 
 
-@cython.cdivision(True)
 cdef inline int objectid_encode_array(uint64_t *subids, uint32_t subids_len,
                                       char *result, size_t *object_len):
     cdef uint32_t clen
@@ -493,13 +502,11 @@ cdef inline void integer_encode_c(const int64_t value, char *data, uint64_t *dat
     # little -> big
     cdef uint64_t slen, i
     cdef uint64_t mod_value = value
+    cdef uint8_t size
     if value < 0:
         mod_value = ~value + 1
-    slen = primitive_encode(<uint64_t*> &mod_value, data)
-    if value < 0:
-        # copy the bytes from value to data backwards
-        for i in range(0, slen):
-            data[slen - i - 1] = (<char *> &value)[i]
+    slen = primitive_size(mod_value)
+    primitive_encode(<uint64_t*> &value, slen, data)
     data_len[0] = slen
 
 
@@ -507,7 +514,8 @@ def uinteger_encode(uint64_t value):
     # little -> big
     cdef size_t slen, i
     cdef char[MAX_INT_LEN] res
-    slen = primitive_encode(&value, res)
+    slen = primitive_size(value)
+    primitive_encode(&value, slen, res)
     return <bytes> res[:slen]
 
 def uinteger_decode(bytes stream not None):

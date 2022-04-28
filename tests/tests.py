@@ -20,7 +20,6 @@ class TestSnmpParser(unittest.TestCase):
         [-1, b'\xff'],
         [-136, b'\xff\x78'],
         [-1390, b'\xfa\x92'],
-        [-1390, b'\xfa\x92'],
         [-429_497_000, b'\xe6feX'],
         [-4_294_970_001, b'\xfe\xff\xff\xf5o'],
         [4_294_970_001, b'\x01\x00\x00\n\x91'],
