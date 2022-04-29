@@ -9,6 +9,7 @@ import cython
 from cpython.tuple cimport PyTuple_New, PyTuple_SET_ITEM
 from cpython.int cimport PyInt_FromLong
 from cpython.ref cimport Py_INCREF
+from cpython.exc cimport PyErr_SetString
 from cpython.unicode cimport PyUnicode_DecodeASCII
 from libc.stdio cimport sprintf
 from libc.string cimport memcpy
@@ -191,7 +192,11 @@ cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, cha
     cdef SID12_t tmp_sid
     cdef char *oid_part_char
 
+    if stream_len <= 0:
+        PyErr_SetString(SNMPException, "empty stream")
+        return -1
     if <size_t>stream[0] > 127:
+        PyErr_SetString(SNMPException, "invalid oid encoding")
         return -1
 
     tmp_sid = sid12s[<size_t>stream[0]]
@@ -262,7 +267,6 @@ cdef inline int objectid_decode_c(char *stream, size_t stream_len, uint64_t *res
 
     return 0
 
-@cython.cdivision(True)
 cdef inline int primitive_encode7(uint64_t *value, char *result_ptr) except -1:
     """
     Primitive encoding
@@ -323,71 +327,93 @@ cdef inline int primitive_encode7(uint64_t *value, char *result_ptr) except -1:
         result_ptr[8] = value[0] & 0x7f
         size = 8
     else:  # 64 bit
+        PyErr_SetString(OverflowError, "value too long")
         return -1
     return size
 
+cdef inline uint64_t primitive_size(uint64_t value):
+    """
+    Primitive size
+    """
+    if value < <uint64_t>0x80:  # 7 bit
+        return <uint64_t>1
+    elif value < <uint64_t>0x8000:  # 15 bit
+        return <uint64_t>2
+    elif value < <uint64_t>0x800000:  # 23 bit
+        return <uint64_t>3
+    elif value < <uint64_t>0x80000000:  # 31 bit
+        return <uint64_t>4
+    elif value < <uint64_t>0x8000000000:  # 39 bit
+        return <uint64_t>5
+    elif value < <uint64_t>0x800000000000:  # 47 bit
+        return <uint64_t>6
+    elif value < <uint64_t>0x80000000000000:  # 55 bit
+        return <uint64_t>7
+    elif value < <uint64_t>0x8000000000000000:  # 63 bit
+        return <uint64_t>8
+    else:  # 64 bit
+        return <uint64_t>9
 
-@cython.cdivision(True)
-cdef inline int primitive_encode(uint64_t *value, char *result_ptr) except -1:
+cdef inline void primitive_encode(uint64_t *value, uint8_t size, char *result_ptr):
     """
     Primitive encoding
     """
-    cdef unsigned int size = 0
-
-    if value[0] < <uint64_t>0x80:  # 7 bit
+    if size == 1:  # 7 bit
         result_ptr[0] = value[0]
-        size = 1
-    elif value[0] < <uint64_t>0x8000:  # 15 bit
+    elif size == 2:  # 15 bit
         result_ptr[0] = value[0] >> 8 & 0xFF
         result_ptr[1] = value[0] & 0xFF
-        size = 2
-    elif value[0] < <uint64_t>0x800000:  # 23 bit
-        result_ptr[0] = value[0] >> 8 & 0xFF
-        result_ptr[1] = value[0] >> 16 & 0xFF
+    elif size == 3:  # 23 bit
+        result_ptr[0] = value[0] >> 16 & 0xFF
+        result_ptr[1] = value[0] >> 8 & 0xFF
         result_ptr[2] = value[0] & 0xFF
-        size = 3
-    elif value[0] < <uint64_t>0x80000000:  # 31 bit
-        result_ptr[0] = value[0] >> 8 & 0xFF
+    elif size == 4:  # 31 bit
+        result_ptr[0] = value[0] >> 24 & 0xFF
         result_ptr[1] = value[0] >> 16 & 0xFF
-        result_ptr[2] = value[0] >> 24 & 0xFF
+        result_ptr[2] = value[0] >> 8 & 0xFF
         result_ptr[3] = value[0] & 0xFF
-        size = 4
-    elif value[0] < <uint64_t>0x8000000000:  # 39 bit
-        result_ptr[0] = value[0] >> 8 & 0xFF
-        result_ptr[1] = value[0] >> 16 & 0xFF
-        result_ptr[2] = value[0] >> 24 & 0xFF
-        result_ptr[3] = value[0] >> 32 & 0xFF
+    elif size == 5:  # 39 bit
+        result_ptr[0] = value[0] >> 32 & 0xFF
+        result_ptr[1] = value[0] >> 24 & 0xFF
+        result_ptr[2] = value[0] >> 16 & 0xFF
+        result_ptr[3] = value[0] >> 8 & 0xFF
         result_ptr[4] = value[0] & 0xFF
-        size = 5
-    elif value[0] < <uint64_t>0x800000000000:  # 47 bit
-        result_ptr[0] = value[0] >> 8 & 0xFF
-        result_ptr[1] = value[0] >> 16 & 0xFF
+    elif size == 6:  # 47 bit
+        result_ptr[0] = value[0] >> 40 & 0xFF
+        result_ptr[1] = value[0] >> 32 & 0xFF
         result_ptr[2] = value[0] >> 24 & 0xFF
-        result_ptr[3] = value[0] >> 32 & 0xFF
-        result_ptr[4] = value[0] >> 40 & 0xFF
+        result_ptr[3] = value[0] >> 16 & 0xFF
+        result_ptr[4] = value[0] >> 8 & 0xFF
         result_ptr[5] = value[0] & 0xFF
-        size = 6
-    elif value[0] < <uint64_t>0x80000000000000:  # 55 bit
-        result_ptr[0] = value[0] >> 8 & 0xFF
-        result_ptr[1] = value[0] >> 16 & 0xFF
-        result_ptr[2] = value[0] >> 24 & 0xFF
-        result_ptr[3] = value[0] >> 32 & 0xFF
-        result_ptr[4] = value[0] >> 40 & 0xFF
-        result_ptr[5] = value[0] >> 48 & 0xFF
+    elif size == 7:  # 55 bit
+        result_ptr[0] = value[0] >> 48 & 0xFF
+        result_ptr[1] = value[0] >> 40 & 0xFF
+        result_ptr[2] = value[0] >> 32 & 0xFF
+        result_ptr[3] = value[0] >> 24 & 0xFF
+        result_ptr[4] = value[0] >> 16 & 0xFF
+        result_ptr[5] = value[0] >> 8 & 0xFF
         result_ptr[6] = value[0] & 0xFF
-        size = 7
-    elif value[0] < <uint64_t>0x8000000000000000:  # 63 bit
-        memcpy(result_ptr, value, 8)
-        size = 9
-        size = 8
-    else:  # 64 bit
+    elif size == 8:  # 63 bit
+        result_ptr[0] = value[0] >> 56 & 0xFF
+        result_ptr[1] = value[0] >> 48 & 0xFF
+        result_ptr[2] = value[0] >> 40 & 0xFF
+        result_ptr[3] = value[0] >> 32 & 0xFF
+        result_ptr[4] = value[0] >> 24 & 0xFF
+        result_ptr[5] = value[0] >> 16 & 0xFF
+        result_ptr[6] = value[0] >> 8 & 0xFF
+        result_ptr[7] = value[0] & 0xFF
+    else:  # size == 9 64 bit
         result_ptr[0] = 0
-        memcpy(result_ptr+1, value, 8)
-        size = 9
-    return size
+        result_ptr[1] = value[0] >> 56 & 0xFF
+        result_ptr[2] = value[0] >> 48 & 0xFF
+        result_ptr[3] = value[0] >> 40 & 0xFF
+        result_ptr[4] = value[0] >> 32 & 0xFF
+        result_ptr[5] = value[0] >> 24 & 0xFF
+        result_ptr[6] = value[0] >> 16 & 0xFF
+        result_ptr[7] = value[0] >> 8 & 0xFF
+        result_ptr[8] = value[0] & 0xFF
 
 
-@cython.cdivision(True)
 cdef inline int objectid_encode_array(uint64_t *subids, uint32_t subids_len,
                                       char *result, size_t *object_len):
     cdef uint32_t clen
@@ -476,12 +502,11 @@ cdef inline void integer_encode_c(const int64_t value, char *data, uint64_t *dat
     # little -> big
     cdef uint64_t slen, i
     cdef uint64_t mod_value = value
+    cdef uint8_t size
     if value < 0:
         mod_value = ~value + 1
-    slen = primitive_encode(<uint64_t*> &mod_value, data)
-    # copy the bytes from value to data backwards
-    for i in range(0, slen):
-        data[slen - i - 1] = (<char *> &value)[i]
+    slen = primitive_size(mod_value)
+    primitive_encode(<uint64_t*> &value, slen, data)
     data_len[0] = slen
 
 
@@ -489,11 +514,8 @@ def uinteger_encode(uint64_t value):
     # little -> big
     cdef size_t slen, i
     cdef char[MAX_INT_LEN] res
-    slen = primitive_encode(&value, res)
-
-    # copy the bytes from value to data backwards
-    for i in range(0, slen):
-        res[slen - i - 1] = (<char *> &value)[i]
+    slen = primitive_size(value)
+    primitive_encode(&value, slen, res)
     return <bytes> res[:slen]
 
 def uinteger_decode(bytes stream not None):
