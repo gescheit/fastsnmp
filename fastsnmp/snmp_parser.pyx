@@ -18,12 +18,19 @@ from libc.stdint cimport uint64_t, uint32_t, uint8_t, int64_t, INT64_MAX
 import struct
 DEF MAX_OID_LEN_STR=500
 DEF MAX_INT_LEN=30
+
+
 class SNMPException(Exception):
     pass
 
 
 class VarBindUnpackException(SNMPException):
     pass
+
+
+class DecodeException(SNMPException):
+    def __init__(self, part):
+        self.part = part
 
 
 class VarBindContentException(SNMPException):
@@ -185,7 +192,7 @@ cdef inline int primitive_decode(char *stream, size_t stream_len, uint64_t *resu
     return retval
 
 
-cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, char *out, size_t *out_length) except -1:
+cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, char *out, size_t *out_length):
     cdef uint64_t result[122]
     cdef uint64_t oid_part
     cdef size_t n, tmp_n, cpy_len, ret_len, sid12_enc_len, result_len=0
@@ -193,11 +200,9 @@ cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, cha
     cdef char *oid_part_char
 
     if stream_len <= 0:
-        PyErr_SetString(SNMPException, "empty stream")
         return -1
     if <size_t>stream[0] > 127:
-        PyErr_SetString(SNMPException, "invalid oid encoding")
-        return -1
+        return -2
 
     tmp_sid = sid12s[<size_t>stream[0]]
 
@@ -232,9 +237,16 @@ cdef int objectid_decode_str(const unsigned char *stream, size_t stream_len, cha
 def objectid_decode(stream):
     cdef const unsigned char *stream_char = stream
     cdef size_t stream_len = len(stream)
+    if stream_len <= 0:
+        raise SNMPException("empty stream")
+
     cdef char ret_str[MAX_OID_LEN_STR]
     cdef size_t ret_length
-    objectid_decode_str(stream_char, stream_len, ret_str, &ret_length)
+    cdef int ret
+
+    ret = objectid_decode_str(stream_char, stream_len, ret_str, &ret_length)
+    if ret != 0:
+        raise SNMPException("invalid stream: objectid_decode_str err = (%s)" % (ret,))
     return <str>ret_str[:ret_length]
 
 
@@ -569,10 +581,12 @@ def sequence_decode(bytes stream not None) -> list:
     cdef const unsigned char * stream_char = stream
     cdef size_t stream_len = len(stream)
     cdef list ret
-    ret = sequence_decode_c(stream_char, stream_len)
+    ret, ex = sequence_decode_c(stream_char, stream_len)
+    if ex:
+        raise ex
     return ret
 
-cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len):
+cdef tuple sequence_decode_c(const unsigned char *stream, const size_t stream_len):
     """
     Decode input stream into as sequence
 
@@ -589,6 +603,8 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
     cdef list objects=[], tmp_list_val
     cdef tuple tmp_tuple_val
     cdef str object_str
+    cdef int ret
+    cdef Exception ex
 
     cdef char ret_str[MAX_OID_LEN_STR]
     cdef size_t ret_length
@@ -598,12 +614,15 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
         tag_decode_c(stream_char, &tag, &encode_length)
         stream_char += encode_length
         current_stream_pos += encode_length
+
         length_decode_c(stream_char, &length, &encode_length)
         stream_char += encode_length
         current_stream_pos += encode_length
+
         if (current_stream_pos + length) > stream_len:
-            raise Exception("out of len. current_stream_pos=%s length=%s stream_len=%s tag=%s" %
+            return objects, Exception("out of len. current_stream_pos=%s length=%s stream_len=%s tag=%s" %
                             (current_stream_pos, length, stream_len, tag))
+
         if tag == ASN_U_INTEGER:
             tmp_int_val = integer_decode_c(stream_char, &length)
             objects.append(tmp_int_val)
@@ -612,25 +631,31 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             tmp_uint_val = uinteger_decode_c(stream_char, &length)
             objects.append(tmp_uint_val)
         elif tag == ASN_U_OBJECTID:
-            objectid_decode_str(stream_char, length, ret_str, &ret_length)
+            ret = objectid_decode_str(stream_char, length, ret_str, &ret_length)
+            if ret != 0:
+                return objects, Exception("invalid oid: objectid_decode_str err == %s" % (ret,))
             if ret_length > MAX_OID_LEN_STR:
-                raise Exception("too long oid")
+                return objects, Exception("too long oid")
             object_str = PyUnicode_DecodeASCII(ret_str, ret_length, 'ignore')
             objects.append(object_str)
         elif tag == ASN_U_NULL:
             objects.append(None)
         elif tag == ASN_U_SEQUENCE or tag == ASN_SNMP_RESPONSE or tag == ASN_SNMP_GETBULK:
-            tmp_list_val = sequence_decode_c(stream_char, length)
+            tmp_list_val, ex = sequence_decode_c(stream_char, length)
             if tmp_list_val is not None:
                 objects.append(tmp_list_val)
+            if ex:
+                return objects, ex
         elif tag == ASN_U_OCTETSTRING or tag == ASN_A_IPADDRESS:
             bytes_val = <bytes> stream_char[:length]
             objects.append(bytes_val)
         elif tag == ASN_A_OPAQUE:
-            opaque_obj = sequence_decode_c(stream_char, length)
-            if len(opaque_obj) != 1:
-                raise Exception("opaque len %s != 1" % len(opaque_obj))
+            opaque_obj, ex = sequence_decode_c(stream_char, length)
+            if opaque_obj and len(opaque_obj) != 1:
+                return objects, Exception("opaque len %s != 1" % len(opaque_obj))
             objects.append(opaque_obj[0])
+            if ex:
+                return objects, ex
         elif tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(end_of_mib_view)
         elif tag == ASN_OPAQUE_FLOAT:
@@ -638,7 +663,7 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
             if length == 4:
                 objects.append(struct.unpack('>f', bytes_val)[0])
             else:
-                raise NotImplementedError("unknown float len %s" % length)
+                return objects, NotImplementedError("unknown float len %s" % length)
         elif tag == ASN_OPAQUE_BOOL:
             if stream_char[0] == b'\x01':
                 objects.append(True)
@@ -647,13 +672,13 @@ cdef list sequence_decode_c(const unsigned char *stream, const size_t stream_len
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
         elif tag == ASN_U_EOC:
-            raise Exception("end of content")
+            return objects, Exception("end of content")
         else:
-            raise NotImplementedError("unknown tag=%s" % tag)
+            return objects, NotImplementedError("unknown tag=%s" % tag)
 
         current_stream_pos += length
         stream_char += length
-    return objects
+    return objects, None
 
 
 cdef inline int length_decode_c(const unsigned char *stream, size_t *length, size_t *enc_len):
@@ -888,8 +913,11 @@ def msg_decode(stream):
     stream_ptr += encode_length
     length_decode_c(stream_ptr, &length, &encode_length)
     stream_ptr += encode_length
-    snmp_ver, community, data = sequence_decode_c(stream_ptr, length)
+    ret = sequence_decode_c(stream_ptr, length)
+    (snmp_ver, community, data), ex = ret
     req_id, error_status, error_index, varbinds = data
+    if ex:
+        raise DecodeException(data) from ex
     return req_id, error_status, error_index, varbinds
 
 def check_is_growing(str oid_start not None, str oid_finish not None):

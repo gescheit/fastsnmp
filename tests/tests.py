@@ -367,7 +367,7 @@ class TestSnmpParser(unittest.TestCase):
 
     def test_simple_fuzzy_testing(self):
         test_data = (
-            b'0\x82\x05\xc9\x02\x01\x01\x04\x04znoc\xa2\x82\x05\xbc\x02\x01$\x02\x01\x00\x02\x01\x00'
+            b'0\x82\x05\xc9\x02\x01\x01\x04\x04xxxx\xa2\x82\x05\xbc\x02\x01$\x02\x01\x00\x02\x01\x00'
             b'0\x82\x05\xaf0\x82\x00\x10\x06\x0b+\x06\x01\x04\x01\xdet\n\x02\x01\x00\x02\x01\x010\x82'
             b'\x00\x10\x06\x0b+\x06\x01\x04\x01\xdet\n\x02\x01\x00\x02\x01\x010\x82\x00\x10\x06\x0b+\x06'
             b'\x01\x04\x01\xdet\n\x02\x01\x00\x02\x01\x010\x82\x00\x10\x06\x0b+\x06\x01\x04\x01\xdet\n'
@@ -420,11 +420,21 @@ class TestSnmpParser(unittest.TestCase):
             b'+\x06\x01\x04\x01\xdet\n\x02\x04\x00\x04\nMy Company0\x82\x00\x19\x06\x0b+\x06\x01\x04\x01\xdet'
             b'\n\x02\x04\x00\x04\nMy Company0\x82\x00\x19\x06\x0b+\x06\x01\x04\x01\xdet\n\x02\x04'
         )
+        partials = 0
         for i in range(1, len(test_data)):
             part = test_data[:i]
             log.debug(f"try data len={len(part)}")
-            with self.assertRaises(Exception):
+            try:
                 snmp_parser.msg_decode(part)
+            except snmp_parser.DecodeException as dex:
+                self.assertIsNotNone(dex.part)
+                req_id, error_status, error_index, varbinds = dex.part
+                partials += 1
+            except Exception:
+                pass
+            else:
+                self.assertTrue(False, "unreachable")
+        self.assertTrue(partials > 0)
 
 
 if __name__ == "__main__":
