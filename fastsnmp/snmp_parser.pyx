@@ -478,11 +478,11 @@ def objectid_encode(oid):
 
     if ret != 0:
         if ret == -1:
-            raise Exception("wrong SID1")
+            raise SNMPException("wrong SID1")
         elif ret == -2:
-            raise Exception("wrong SID2")
+            raise SNMPException("wrong SID2")
         elif ret == -3:
-            raise Exception("long SID1 is not supported")
+            raise SNMPException("long SID1 is not supported")
 
     return <bytes>result[:object_len]
 
@@ -620,7 +620,7 @@ cdef tuple sequence_decode_c(const unsigned char *stream, const size_t stream_le
         current_stream_pos += encode_length
 
         if (current_stream_pos + length) > stream_len:
-            return objects, Exception("out of len. current_stream_pos=%s length=%s stream_len=%s tag=%s" %
+            return objects, SNMPException("out of len. current_stream_pos=%s length=%s stream_len=%s tag=%s" %
                             (current_stream_pos, length, stream_len, tag))
 
         if tag == ASN_U_INTEGER:
@@ -633,9 +633,9 @@ cdef tuple sequence_decode_c(const unsigned char *stream, const size_t stream_le
         elif tag == ASN_U_OBJECTID:
             ret = objectid_decode_str(stream_char, length, ret_str, &ret_length)
             if ret != 0:
-                return objects, Exception("invalid oid: objectid_decode_str err == %s" % (ret,))
+                return objects, SNMPException("invalid oid: objectid_decode_str err == %s" % (ret,))
             if ret_length > MAX_OID_LEN_STR:
-                return objects, Exception("too long oid")
+                return objects, SNMPException("too long oid")
             object_str = PyUnicode_DecodeASCII(ret_str, ret_length, 'ignore')
             objects.append(object_str)
         elif tag == ASN_U_NULL:
@@ -652,7 +652,7 @@ cdef tuple sequence_decode_c(const unsigned char *stream, const size_t stream_le
         elif tag == ASN_A_OPAQUE:
             opaque_obj, ex = sequence_decode_c(stream_char, length)
             if opaque_obj and len(opaque_obj) != 1:
-                return objects, Exception("opaque len %s != 1" % len(opaque_obj))
+                return objects, SNMPException("opaque len %s != 1" % len(opaque_obj))
             objects.append(opaque_obj[0])
             if ex:
                 return objects, ex
@@ -672,7 +672,7 @@ cdef tuple sequence_decode_c(const unsigned char *stream, const size_t stream_le
         elif tag == ASN_U_NO_SUCH_OBJECT or tag == ASN_U_NO_SUCH_INSTANCE or tag == ASN_U_END_OF_MIB_VIEW:
             objects.append(None)
         elif tag == ASN_U_EOC:
-            return objects, Exception("end of content")
+            return objects, SNMPException("end of content")
         else:
             return objects, NotImplementedError("unknown tag=%s" % tag)
 
@@ -776,7 +776,7 @@ def value_encode(value=None, value_type='Null'):
     """
     if value_type == 'Null':
         if value is not None:
-            raise Exception('value must be None for Null type!')
+            raise SNMPException('value must be None for Null type!')
         return b''
     elif value_type == "Integer":
         return integer_encode(value)
@@ -858,7 +858,7 @@ def msg_encode(req_id, community, varbinds, msg_type="GetBulk", max_repetitions=
 
     if msg_type == "GetBulk":
         if max_repetitions < 1:
-            raise Exception("max_repetitions must be higher than %s" % max_repetitions)
+            raise SNMPException("max_repetitions must be higher than %s" % max_repetitions)
         non_repeaters_value = integer_encode(non_repeaters)
         non_repeaters_type = ASN_U_INTEGER_BYTE
         non_repeaters_len = length_encode(len(non_repeaters_value))
@@ -987,13 +987,13 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
                     continue
                 next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
                 if not check_is_growing(first_seen_index[pos], last_seen_index[pos]):
-                    raise Exception("not increasing %s vs %s for %s" % (last_seen_index[pos],
+                    raise SNMPException("not increasing %s vs %s for %s" % (last_seen_index[pos],
                                                                         first_seen_index[pos],
                                                                         orig_main_oids[pos]))
         else:
             for pos in rest_oids_positions:
                 if not check_is_growing(first_seen_index[pos], last_seen_index[pos]):
-                    raise Exception("not increasing %s vs %s for %s" % (last_seen_index[pos],
+                    raise SNMPException("not increasing %s vs %s for %s" % (last_seen_index[pos],
                                                                         first_seen_index[pos],
                                                                         orig_main_oids[pos]))
             next_oids = [
