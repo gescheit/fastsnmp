@@ -913,11 +913,18 @@ def msg_decode(stream):
     stream_ptr += encode_length
     length_decode_c(stream_ptr, &length, &encode_length)
     stream_ptr += encode_length
-    ret = sequence_decode_c(stream_ptr, length)
-    (snmp_ver, community, data), ex = ret
-    req_id, error_status, error_index, varbinds = data
-    if ex:
-        raise DecodeException(data) from ex
+    ret, ex = sequence_decode_c(stream_ptr, length)
+    try:
+        snmp_ver, community, data = ret
+        req_id, error_status, error_index, varbinds = data
+    except:
+        if ex:
+            raise ex
+        raise
+    else:
+        if ex:
+            raise DecodeException(data) from ex
+
     return req_id, error_status, error_index, varbinds
 
 def check_is_growing(str oid_start not None, str oid_finish not None):
