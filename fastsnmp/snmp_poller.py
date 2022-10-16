@@ -131,6 +131,7 @@ def poller(hosts: List[str], oids_groups: List[List[str]], community: str, timeo
         if isinstance(oids_group, list):
             oids_group = tuple(oids_group)
         for fqdn, ips in target_info_r.items():
+            oids_group = [x.strip(".") for x in oids_group]
             reqid_to_target[start_reqid] = Job(name=fqdn, ip=ips[0], oids_to_poll=oids_group, main_oids=oids_group)
             job_queue.put(start_reqid)
             start_reqid += reqid_step
