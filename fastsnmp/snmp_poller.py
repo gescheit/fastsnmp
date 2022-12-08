@@ -128,6 +128,8 @@ def poller(hosts: List[str], oids_groups: List[List[str]], community: str, timeo
         start_reqid = random.randint(1, 30000)
 
     for oids_group in oids_groups:
+        if not isinstance(oids_group, (tuple, list)):
+            raise Exception("unexpected type of %s. expected list or tuple" % oids_group)
         if isinstance(oids_group, list):
             oids_group = tuple(oids_group)
         for fqdn, ips in target_info_r.items():
