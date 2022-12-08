@@ -2,11 +2,10 @@ import asyncio
 import socket
 
 
-@asyncio.coroutine
-def async_resolve(host, loop):
+async def async_resolve(host, loop):
     ips = set()
     try:
-        addrinfo = yield from loop.getaddrinfo(host, 0, family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        addrinfo = await loop.getaddrinfo(host, 0, family=socket.AF_INET, type=socket.SOCK_DGRAM)
         for addr in addrinfo:
             ips.add(addr[4][0])
     except socket.gaierror:
@@ -14,12 +13,11 @@ def async_resolve(host, loop):
     return {host: tuple(ips)}
 
 
-@asyncio.coroutine
-def async_resolve_mass(hosts):
+async def async_resolve_mass(hosts):
     res = dict()
     loop = asyncio.get_event_loop()
     jobs = list(async_resolve(host, loop) for host in hosts)
-    jobs_res = yield from asyncio.wait(jobs)
+    jobs_res = await asyncio.wait(jobs)
     for job_res in jobs_res[0]:
         res.update(job_res.result())
     return res

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-__version__ = '0.11'
+__version__ = '0.12'
 
 from setuptools import setup, Extension
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     if USE_CYTHON:
         from Cython.Build import cythonize
 
-        extensions = cythonize(extensions)
+        extensions = cythonize(extensions, compiler_directives={"cdivision": True})
     setup(name='fastsnmp',
           ext_modules=extensions,
           version=__version__,
