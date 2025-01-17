@@ -992,17 +992,19 @@ def parse_varbind(list var_bind_list not None, tuple orig_main_oids not None, tu
             for pos in rest_oids_positions:
                 if pos in skip_column:
                     continue
-                next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
                 if not check_is_growing(first_seen_index[pos], last_seen_index[pos]):
-                    raise SNMPException("not increasing %s vs %s for %s" % (last_seen_index[pos],
-                                                                        first_seen_index[pos],
-                                                                        orig_main_oids[pos]))
+                    return result, tuple(next_oids)
+                    # raise SNMPException("not increasing %s vs %s for %s" % (last_seen_index[pos],
+                    #                                                     first_seen_index[pos],
+                    #                                                     orig_main_oids[pos]))
+                next_oids[pos] = "%s.%s" % (orig_main_oids[pos], last_seen_index[pos])
         else:
             for pos in rest_oids_positions:
                 if not check_is_growing(first_seen_index[pos], last_seen_index[pos]):
-                    raise SNMPException("not increasing %s vs %s for %s" % (last_seen_index[pos],
-                                                                        first_seen_index[pos],
-                                                                        orig_main_oids[pos]))
+                    return result, tuple(next_oids)
+                    # raise SNMPException("not increasing %s vs %s for %s" % (last_seen_index[pos],
+                    #                                                     first_seen_index[pos],
+                    #                                                     orig_main_oids[pos]))
             next_oids = [
                 "%s.%s" % (orig_main_oids[p], last_seen_index[p]) for p in rest_oids_positions]
     return result, tuple(next_oids)
