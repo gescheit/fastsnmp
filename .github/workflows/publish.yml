@@ -26,6 +26,9 @@ jobs:
       - name: Install pypa/build
         run: python3 -mpip install --user build setuptools cython
 
+      - name: Build cython
+        run: python3 setup.py build_ext
+
       - name: Build a binary wheel and a source tarball
         run: python3 -m build
         env:
