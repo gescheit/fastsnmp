@@ -7,7 +7,7 @@
 
 import cython
 from cpython.tuple cimport PyTuple_New, PyTuple_SET_ITEM
-from cpython.int cimport PyInt_FromLong
+from cpython.long cimport PyLong_FromLong
 from cpython.ref cimport Py_INCREF
 from cpython.exc cimport PyErr_SetString
 from cpython.unicode cimport PyUnicode_DecodeASCII
@@ -258,7 +258,7 @@ cdef inline tuple objectid_decode_tuple(char *stream, size_t stream_len):
     ret = PyTuple_New(result_len)
 
     for i in range(result_len):
-        val = PyInt_FromLong(result[i])
+        val = PyLong_FromLong(result[i])
         Py_INCREF(val)
         PyTuple_SET_ITEM(ret, i, val)
     return ret
