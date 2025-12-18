@@ -7,7 +7,7 @@
 
 import cython
 from cpython.tuple cimport PyTuple_New, PyTuple_SET_ITEM
-from cpython.int cimport PyLong_FromLong
+from cpython.long cimport PyLong_FromLong
 from cpython.ref cimport Py_INCREF
 from cpython.exc cimport PyErr_SetString
 from cpython.unicode cimport PyUnicode_DecodeASCII
