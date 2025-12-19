@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-__version__ = '0.15'
+__version__ = '0.16'
 
 from setuptools import setup, Extension
 
